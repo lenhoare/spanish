@@ -58,6 +58,12 @@ func _run() -> void:
 	if Game.current_island == 3:
 		await _island4(p, cam)
 		return
+	if Game.current_island == 4:
+		await _island5(p, cam)
+		return
+	if Game.current_island == 5:
+		await _island6(p, cam)
+		return
 
 	# Movement checks: run forward, jump, use the spring.
 	var start := p.global_position
@@ -565,6 +571,269 @@ func _island4(p: CharacterBody3D, cam) -> void:
 	_teleport(p, cam, front, cam.yaw)
 	await _wait(0.8)
 	print("RECYCLER with items: question open=%s (want true)" % Game.ui_open)
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+	print("SWEETS: %d / %d" % [Game.sweets, Game.total_sweets])
+	get_tree().quit()
+
+
+## Island 5: El circuito (real jumps between every piece) and the tourist's quest.
+func _island5(p: CharacterBody3D, cam) -> void:
+	var w = main.world
+	var ci: Node3D = w.circuit
+	print("ISLAND5: sweets total=%d quest items=%d" % [Game.total_sweets, Game.ingredients_total])
+	var fwd: Vector3 = ci.global_transform.basis.x
+	var course_yaw := atan2(-fwd.x, -fwd.z)
+	_teleport(p, cam, ci.to_global(Vector3(-3, 0.3, 0)), course_yaw)
+	cam.pitch = deg_to_rad(-16)
+	await _wait(1.2)
+	await _shot("i5_01_circuit")
+	# Start: walk over the start line.
+	Input.action_press("move_forward")
+	await _wait(0.5)
+	Input.action_release("move_forward")
+	await _wait(0.3)
+	print("START: running=%s time=%.1f" % [ci.running, ci.time_left])
+	await _shot("i5_02_timer")
+	# Real jumps like a player: aim at the next piece, let go of forward once above it.
+	ci.running = false
+	ci._cool = 9999.0     # keep the start line from restarting the clock during the hops
+	var hop := func(src: Vector3, dst: Vector3, label: String) -> bool:
+		_teleport(p, cam, ci.to_global(src + Vector3(0, 0.3, 0)), 0.0)
+		var tg: Vector3 = ci.to_global(dst)
+		var dirv: Vector3 = tg - p.global_position
+		cam.yaw = atan2(-dirv.x, -dirv.z)
+		await _wait(0.35)
+		Input.action_press("jump")
+		Input.action_press("move_forward")
+		for i in 60:
+			await get_tree().physics_frame
+			if i == 18:
+				Input.action_release("jump")
+			var hd := Vector2(p.global_position.x - tg.x, p.global_position.z - tg.z).length()
+			if hd < 0.35:
+				Input.action_release("move_forward")
+		Input.action_release("move_forward")
+		Input.action_release("jump")
+		await _wait(0.5)
+		var l: Vector3 = ci.to_local(p.global_position)
+		var good: bool = p.is_on_floor() and Vector2(l.x - dst.x, l.z - dst.z).length() < 1.0 and l.y > dst.y - 0.3
+		if not good:
+			print("  HOP FAILED %s: landed at local %s floor=%s" % [label, l, p.is_on_floor()])
+		return good
+	var pieces := [
+		[Vector3(2.5, 0.0, 0), Vector3(5.5, 0.0, 0.6), "pad -> stone 1"],
+		[Vector3(5.5, 0.0, 0.6), Vector3(8.1, 0.0, -0.6), "stone 1 -> stone 2"],
+		[Vector3(8.1, 0.0, -0.6), Vector3(10.7, 0.0, 0.6), "stone 2 -> stone 3"],
+		[Vector3(10.7, 0.0, 0.6), Vector3(13.3, 0.0, 0), "stone 3 -> dock"],
+		[Vector3(13.3, 0.0, 0), Vector3(15.8, 0.0, 0), "over hurdle 1"],
+		[Vector3(15.8, 0.0, 0), Vector3(18.3, 0.0, 0), "over hurdle 2"],
+		[Vector3(18.3, 0.0, 0), Vector3(20.8, 0.0, 0), "over hurdle 3"],
+		[Vector3(20.8, 0.0, 0), Vector3(22.0, 0.8, 0), "dock -> step"],
+		[Vector3(22.0, 0.8, 0), Vector3(23.6, 0.93, 0), "step -> beam"],
+		[Vector3(29.0, 0.93, 0), Vector3(30.5, 1.3, 0), "beam -> post 1"],
+		[Vector3(30.5, 1.3, 0), Vector3(32.8, 2.0, 0), "post 1 -> post 2"],
+		[Vector3(32.8, 2.0, 0), Vector3(35.0, 2.7, 0), "post 2 -> post 3"],
+	]
+	var ok := 0
+	for pc in pieces:
+		var landed: bool = await hop.call(pc[0], pc[1], pc[2])
+		if landed:
+			ok += 1
+	print("HOPS: %d / %d landed" % [ok, pieces.size()])
+	# Walk the beam end to end.
+	_teleport(p, cam, ci.to_global(Vector3(23.2, 1.2, 0)), course_yaw)
+	await _wait(0.4)
+	Input.action_press("move_forward")
+	await _wait(0.8)
+	Input.action_release("move_forward")
+	await _wait(0.3)
+	var lb: Vector3 = ci.to_local(p.global_position)
+	print("BEAM: walked to local x=%.1f still on beam=%s" % [lb.x, p.is_on_floor() and lb.y > 0.8])
+	# Can we stand on the sliding platform at all?
+	_teleport(p, cam, ci._mover.global_position + Vector3(0, 0.6, 0), course_yaw)
+	await _wait(0.6)
+	print("  STAND on mover: floor=%s local %s mover %s" % [p.is_on_floor(), ci.to_local(p.global_position), ci._mover.position])
+	# Post 3 -> sliding platform (when it's lined up), then platform -> finish.
+	while absf(ci._mover.position.z) > 0.3 or cos(ci._mover_t * ci.MOVER_SPEED) < 0:
+		await get_tree().physics_frame
+	var got_on: bool = await hop.call(Vector3(35.0, 2.7, 0), Vector3(38.8, 2.7, ci._mover.position.z + 0.8), "post 3 -> sliding platform")
+	print("MOVER: on platform=%s" % got_on)
+	ci._cool = 0.0
+	ci.running = true
+	ci.time_left = 20.0
+	var made_it: bool = await hop.call(Vector3(39.9, 2.7, ci._mover.position.z), Vector3(44.5, 2.7, 0), "sliding platform -> finish")
+	await _wait(0.5)
+	print("FINISH: done=%s sweet visible=%s" % [ci.done, ci.sweet.visible])
+	await _shot("i5_03_finish")
+	_teleport(p, cam, ci.sweet.global_position + Vector3(0, 0.3, 0.2), course_yaw)
+	await _wait(0.6)
+	print("CIRCUIT SWEET: question open=%s (want true)" % Game.ui_open)
+	await _shot("i5_04_question")
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+
+	# Tourist quest.
+	var stall: Node3D = w.cafe
+	var front: Vector3 = stall.to_global(Vector3(0, 0.2, 2.3))
+	var back_off: Vector3 = front + (front - stall.global_position).normalized() * 4.0
+	var to_stall: Vector3 = stall.global_position - back_off
+	_teleport(p, cam, back_off, atan2(-to_stall.x, -to_stall.z))
+	cam.pitch = deg_to_rad(-12)
+	await _wait(1.0)
+	await _shot("i5_05_souvenir_stall")
+	for item in w.QUESTS.tourist.items:
+		_teleport(p, cam, item[3] + Vector3(0, 0.3, 0), 0.0)
+		await _wait(0.5)
+	print("ITEMS: %s" % [Game.ingredients])
+	_teleport(p, cam, back_off, atan2(-to_stall.x, -to_stall.z))
+	await _wait(0.4)
+	_teleport(p, cam, front, cam.yaw)
+	await _wait(0.8)
+	print("TOURIST with items: question open=%s (want true)" % Game.ui_open)
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+	print("SWEETS: %d / %d" % [Game.sweets, Game.total_sweets])
+	get_tree().quit()
+
+
+## A real jump from one spot to another (global positions), aiming and letting go like a player.
+func _hop(p: CharacterBody3D, cam, src: Vector3, dst: Vector3) -> bool:
+	_teleport(p, cam, src + Vector3(0, 0.3, 0), 0.0)
+	var dirv := dst - src
+	cam.yaw = atan2(-dirv.x, -dirv.z)
+	await _wait(0.35)
+	Input.action_press("jump")
+	Input.action_press("move_forward")
+	for i in 60:
+		await get_tree().physics_frame
+		if i == 18:
+			Input.action_release("jump")
+		if Vector2(p.global_position.x - dst.x, p.global_position.z - dst.z).length() < 0.35:
+			Input.action_release("move_forward")
+	Input.action_release("move_forward")
+	Input.action_release("jump")
+	await _wait(0.5)
+	return p.is_on_floor() and Vector2(p.global_position.x - dst.x, p.global_position.z - dst.z).length() < 1.0 and p.global_position.y > dst.y - 0.3
+
+
+## Island 6: routine pads, speedboat to La Torre and the climb, La profesora.
+func _island6(p: CharacterBody3D, cam) -> void:
+	var w = main.world
+	print("ISLAND6: sweets total=%d quest items=%d" % [Game.total_sweets, Game.ingredients_total])
+	var r: Node3D = w.routine
+	var hut: Node3D = r.hut
+	var look: Vector3 = hut.global_position - r.to_global(Vector3(0, 0, 9))
+	_teleport(p, cam, r.to_global(Vector3(0, 0.3, 9.0)), atan2(-look.x, -look.z))
+	cam.pitch = deg_to_rad(-22)
+	await _wait(1.2)
+	await _shot("i6_01_routine")
+	# Wrong first pad, then the right order.
+	_teleport(p, cam, r.to_global(r.SPOTS["me ducho"] + Vector3(0, 0.4, 0)), cam.yaw)
+	await _wait(1.3)
+	print("ROUTINE wrong pad: next=%d (want 0)" % r._next)
+	for phrase in r.ORDER:
+		_teleport(p, cam, r.to_global(Vector3(0, 0.4, 9.0)), cam.yaw)
+		await _wait(0.2)
+		_teleport(p, cam, r.to_global(r.SPOTS[phrase] + Vector3(0, 0.4, 0)), cam.yaw)
+		await _wait(0.35)
+	print("ROUTINE: solved=%s door open=%s" % [r.done, hut.opened])
+	await _wait(1.2)
+	await _shot("i6_02_routine_open")
+	# Walk in through the door.
+	_teleport(p, cam, hut.to_global(Vector3(0, 0.3, 6.5)), atan2(-look.x, -look.z))
+	Input.action_press("move_forward")
+	await _wait(1.6)
+	Input.action_release("move_forward")
+	await _wait(0.6)
+	print("ROUTINE SWEET: question open=%s (want true)" % Game.ui_open)
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+
+	# Speedboat to La Torre.
+	var boat: Node3D = w.speedboat
+	var d: Vector3 = w.SPEED_DIR
+	_teleport(p, cam, d * (w.MAIN_R + 3.0) + Vector3(0, 0.3, 0), atan2(-d.x, -d.z))
+	cam.pitch = deg_to_rad(-14)
+	await _wait(1.0)
+	await _shot("i6_03_speed_jetty")
+	_teleport(p, cam, boat.global_position + Vector3(0, 1.5, 0), cam.yaw)
+	await _wait(0.5)
+	print("SPEEDBOAT: riding=%s" % (p.vehicle == boat))
+	var goal := Vector2(w.TOWER_ISLE.x, w.TOWER_ISLE.z)
+	var t0 := Time.get_ticks_msec()
+	var reached := false
+	Input.action_press("move_forward")
+	for i in 300:
+		var bp := Vector2(boat.global_position.x, boat.global_position.z)
+		var to := goal - bp
+		cam.yaw = atan2(-to.x, -to.y)
+		if i == 20:
+			await _shot("i6_04_speeding")
+		if to.length() - w.TOWER_ISLE_R < 4.5:
+			reached = true
+			break
+		await _wait(0.1)
+	Input.action_release("move_forward")
+	print("SPEED RUN: reached La Torre=%s in %.1f s" % [reached, (Time.get_ticks_msec() - t0) / 1000.0])
+	await _wait(2.0)
+	print("  boat speed after letting go 2s: %.1f" % boat.vel.length())
+	Input.action_press("jump")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("jump")
+	await _wait(1.0)
+	print("LAND on La Torre isle: riding=%s" % (p.vehicle != null))
+	await _shot("i6_05_tower")
+	# Climb: ground -> plank 0 -> ... -> plank 10 -> lookout, all real jumps.
+	var steps := []
+	for i in 11:
+		var a := i * deg_to_rad(40)
+		var y: float = 1.1 + i * ((w.TOWER_TOP - 1.2 - 1.1) / 10.0)
+		steps.append(w.TOWER_ISLE + Vector3(cos(a) * 3.8, y + 0.1, sin(a) * 3.8))
+	var ok := 0
+	var first_from: Vector3 = w.TOWER_ISLE + Vector3(5.3, 0.0, -1.8)
+	if await _hop(p, cam, first_from, steps[0]):
+		ok += 1
+	else:
+		print("  CLIMB FAILED ground -> plank 0 (at %s)" % p.global_position)
+	for i in range(1, steps.size()):
+		if await _hop(p, cam, steps[i - 1], steps[i]):
+			ok += 1
+		else:
+			print("  CLIMB FAILED plank %d -> %d (at %s)" % [i - 1, i, p.global_position])
+	var top_ok: bool = await _hop(p, cam, steps[-1], w.TOWER_ISLE + Vector3(0.9, w.TOWER_TOP, 0.9))
+	print("CLIMB: %d / %d planks, onto the lookout=%s, question open=%s" % [ok, steps.size(), top_ok, Game.ui_open])
+	await _shot("i6_06_top")
+	if not Game.ui_open:
+		_teleport(p, cam, w.TOWER_ISLE + Vector3(0.6, w.TOWER_TOP + 0.3, 0.6), 0.0)
+		await _wait(0.6)
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+
+	# La profesora.
+	var stall: Node3D = w.cafe
+	var front: Vector3 = stall.to_global(Vector3(0, 0.2, 2.3))
+	var back_off: Vector3 = front + (front - stall.global_position).normalized() * 4.0
+	var to_stall: Vector3 = stall.global_position - back_off
+	_teleport(p, cam, back_off, atan2(-to_stall.x, -to_stall.z))
+	cam.pitch = deg_to_rad(-12)
+	await _wait(1.0)
+	await _shot("i6_07_escuela")
+	for item in w.QUESTS.teacher.items:
+		_teleport(p, cam, item[3] + Vector3(0, 0.3, 0), 0.0)
+		await _wait(0.5)
+	print("ITEMS: %s" % [Game.ingredients])
+	_teleport(p, cam, back_off, atan2(-to_stall.x, -to_stall.z))
+	await _wait(0.4)
+	_teleport(p, cam, front, cam.yaw)
+	await _wait(0.8)
+	print("TEACHER with items: question open=%s (want true)" % Game.ui_open)
 	if Game.ui_open:
 		main.ui._question_done.emit("correct")
 		await _wait(1.2)

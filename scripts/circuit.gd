@@ -7,6 +7,8 @@ extends Node3D
 
 const TIME_LIMIT := 30.0
 const FINISH_X := 46.0
+const MOVER_SPEED := 0.75
+const MOVER_HOME := Vector3(38.8, 2.7, 0)
 
 signal finished
 
@@ -66,10 +68,10 @@ func setup() -> void:
 	# 5. A platform sliding side to side.
 	_mover = AnimatableBody3D.new()
 	add_child(_mover)
-	_mover.position = Vector3(38.8, 2.7, 0)
+	_mover.position = MOVER_HOME
 	var mm := MeshInstance3D.new()
 	var mbox := BoxMesh.new()
-	mbox.size = Vector3(2.4, 0.3, 2.4)
+	mbox.size = Vector3(2.8, 0.3, 2.8)
 	mbox.material = _paint
 	mm.mesh = mbox
 	mm.position.y = -0.15
@@ -94,7 +96,7 @@ func sweet_spot() -> Vector3:
 
 func _physics_process(delta: float) -> void:
 	_mover_t += delta
-	_mover.position.z = sin(_mover_t * 1.2) * 2.6
+	_mover.position = MOVER_HOME + Vector3(0, 0, sin(_mover_t * MOVER_SPEED) * 2.4)
 	_cool -= delta
 	if not running:
 		return

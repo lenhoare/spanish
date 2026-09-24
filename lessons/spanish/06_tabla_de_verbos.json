@@ -19,6 +19,10 @@
         "markdown": "# Preterite (past)\n| | bailar | comer | escribir | ir / ser | hacer | tener | ver |\n|---|---|---|---|---|---|---|---|\n| yo | bailé | comí | escribí | fui | hice | tuve | vi |\n| tú | bailaste | comiste | escribiste | fuiste | hiciste | tuviste | viste |\n| él/ella | bailó | comió | escribió | fue | hizo | tuvo | vio |\n| nosotros | bailamos | comimos | escribimos | fuimos | hicimos | tuvimos | vimos |\n| vosotros | bailasteis | comisteis | escribisteis | fuisteis | hicisteis | tuvisteis | visteis |\n| ellos/ellas | bailaron | comieron | escribieron | fueron | hicieron | tuvieron | vieron |"
       },
       {
+        "title": "Mi rutina",
+        "markdown": "# La rutina diaria\nReflexive verbs for your morning (in alphabetical order - you work out the right order!)\n\n| Spanish | English |\n|---|---|\n| desayuno | I have breakfast |\n| me despierto | I wake up |\n| me ducho | I have a shower |\n| me levanto | I get up |\n| me visto | I get dressed |\n\nUseful words to put them in order: **primero** (first), **luego** (then),\n**después** (afterwards), **más tarde** (later), **finalmente** (finally)"
+      },
+      {
         "title": "Minidiccionario",
         "markdown": "# Key words\n| Spanish | English | Spanish | English |\n|---|---|---|---|\n| ahorrar | to save money | mientras | while |\n| anoche | last night | nunca | never |\n| ayer | yesterday | el país | country |\n| bastante | quite, enough | según | according to |\n| cada | each, every | el siglo | century |\n| demasiado | too much | sin embargo | however |\n| el edificio | building | ya | already |\n| hasta | until | el vecino | neighbour |"
       }
@@ -92,7 +96,8 @@
       ],
       "correct": 0,
       "hint": "Minidiccionario - page 4.",
-      "explanation": "El siglo = century."
+      "explanation": "El siglo = century.",
+      "level": 1
     },
     {
       "id": "s6-ahorrar",
@@ -105,7 +110,8 @@
       ],
       "correct": 0,
       "hint": "Minidiccionario - page 4.",
-      "explanation": "Ahorrar = to save money."
+      "explanation": "Ahorrar = to save money.",
+      "level": 1
     },
     {
       "id": "s6-vecino",
@@ -118,7 +124,8 @@
       ],
       "correct": 0,
       "hint": "Minidiccionario - page 4.",
-      "explanation": "El vecino = neighbour."
+      "explanation": "El vecino = neighbour.",
+      "level": 2
     },
     {
       "id": "s6-sinembargo",
@@ -131,7 +138,8 @@
       ],
       "correct": 0,
       "hint": "Minidiccionario - page 4.",
-      "explanation": "Sin embargo = however."
+      "explanation": "Sin embargo = however.",
+      "level": 2
     },
     {
       "id": "s6-hizo",
@@ -144,7 +152,61 @@
       ],
       "correct": 0,
       "hint": "Preterite table - page 3.",
-      "explanation": "Hizo."
+      "explanation": "Hizo.",
+      "level": 3
+    },
+    {
+      "id": "s6-hicimos",
+      "question": "Ayer nosotros ____ una tarta de chocolate. (hacer)",
+      "choices": [
+        "hicimos",
+        "hacemos",
+        "hice",
+        "hicieron"
+      ],
+      "correct": 0,
+      "hint": "Ayer = past; nosotros row of hacer - page 3.",
+      "explanation": "Hicimos una tarta de chocolate.",
+      "level": 3
+    }
+  ],
+  "sweets": [
+    {
+      "id": "s6-sweet-rutina",
+      "question": "La rutina challenge! Translate into Spanish:\n\"I wake up, I get up and I have a shower.\"",
+      "answers": [
+        "me despierto me levanto y me ducho",
+        "me despierto, me levanto y me ducho",
+        "yo me despierto me levanto y me ducho"
+      ],
+      "hint": "Reflexive verbs - see 'Mi rutina' and the ducharse table (page 2).",
+      "explanation": "¡Perfecto! Me despierto, me levanto y me ducho.",
+      "kind": "routine"
+    },
+    {
+      "id": "s6-sweet-torre",
+      "question": "Top of the tower - the final challenge! Translate into Spanish:\n\"Yesterday I did my homework and I went to the cinema.\"",
+      "answers": [
+        "ayer hice los deberes y fui al cine",
+        "hice los deberes ayer y fui al cine",
+        "ayer yo hice los deberes y fui al cine",
+        "ayer hice mis deberes y fui al cine"
+      ],
+      "hint": "Preterite irregulars: hacer -> hice, ir -> fui (page 3). Homework = los deberes.",
+      "explanation": "¡Campeón! Ayer hice los deberes y fui al cine.",
+      "kind": "tower"
+    },
+    {
+      "id": "s6-sweet-profe",
+      "question": "La profesora asks: \"¿Qué vas a hacer mañana?\"\nAnswer in Spanish: \"Tomorrow I am going to study Spanish.\"",
+      "answers": [
+        "mañana voy a estudiar español",
+        "voy a estudiar español mañana",
+        "mañana yo voy a estudiar español"
+      ],
+      "hint": "Near future: voy a + infinitive (page 2).",
+      "explanation": "¡Muy bien! Mañana voy a estudiar español.",
+      "kind": "teacher"
     }
   ],
   "prize": {

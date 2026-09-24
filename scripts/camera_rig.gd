@@ -11,6 +11,7 @@ var _arm: SpringArm3D
 var camera: Camera3D
 var _dragging := false
 var _drag_index := -1
+var _zoomed := false     # the player used the mouse wheel; respect their zoom
 
 
 func _ready() -> void:
@@ -51,7 +52,13 @@ func _process(delta: float) -> void:
 			var diff := wrapf(move_yaw - yaw, -PI, PI)
 			if absf(diff) < PI * 0.75:
 				yaw += diff * 0.6 * delta
-	rotation = Vector3(pitch, yaw, 0)
+	# In a boat: pull back and look down a bit more, so the boat doesn't fill the screen.
+	var in_boat: bool = "vehicle" in target and target.vehicle != null
+	var want_len := distance * (1.7 if in_boat else 1.0)
+	if not _zoomed:
+		_arm.spring_length = lerpf(_arm.spring_length, want_len, 1.0 - exp(-3.0 * delta))
+	var want_pitch := deg_to_rad(-30.0) if in_boat else pitch
+	rotation = Vector3(lerp_angle(rotation.x, want_pitch, 1.0 - exp(-4.0 * delta)) if in_boat or absf(rotation.x - pitch) > 0.01 else pitch, yaw, 0)
 	if "camera_yaw" in target:
 		target.camera_yaw = yaw
 
@@ -76,8 +83,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT:
 			_dragging = event.pressed
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			_zoomed = true
 			_arm.spring_length = clampf(_arm.spring_length - 0.5, 4.0, 12.0)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			_zoomed = true
 			_arm.spring_length = clampf(_arm.spring_length + 0.5, 4.0, 12.0)
 	elif event is InputEventMouseMotion and _dragging:
 		_rotate_by(event.relative * 0.006)

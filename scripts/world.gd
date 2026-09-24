@@ -31,7 +31,12 @@ const SECRET_ISLAND := Vector3(-66, 0, -50)
 const SECRET_R := 5.0
 const WHITE_SHIP := Vector3(70, -2.2, 56)      # far out to the south-east, opposite Isla Secreta
 const CIRCUIT_DIR := Vector3(-0.6, 0, -0.8)    # El circuito runs out to sea from the far north-west shore
-
+const ROUTINE_HUT := Vector3(-20, 0, -16)       # La rutina diaria puzzle hut, far north-west
+const SPEED_DIR := Vector3(0.951, 0, -0.309)   # the speedboat jetty points east-north-east
+const TOWER_ISLE := Vector3(80, 0, -42)        # La Torre, far out to the east
+const TOWER_ISLE_R := 6.5
+const TOWER_SCALE := 1.4
+const TOWER_TOP := 14.8                        # lookout platform height
 ## Characters with a 3-item fetch quest (lesson sweet "kind" -> set-up). Items are
 ## [spanish name, model, scale, where it's hidden]. All speech is Spanish only.
 const QUESTS := {
@@ -83,6 +88,18 @@ const QUESTS := {
 			["una figurita", "skate/character-skate-boy", 1.3, Vector3(17.2, 2.7, 16)],  # middle floating islet
 		],
 	},
+	"teacher": {
+		"sign": "La Escuela", "character": "character-female-a", "hat": "",
+		"speaker": "La profesora", "greeting": "¡Hola! Soy profesora.\n¡Necesito mis cosas!",
+		"thanks": "¡Muy bien!\n¡Toma un dulce!", "awning": Color(0.55, 0.35, 0.85),
+		"reward": "food/cupcake", "reward_scale": 3.2, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"counter": [["furniture/books", 9.0, -1.6], ["food/apple", 3.0, 1.4]],
+		"items": [
+			["un libro", "furniture/books", 11.0, Vector3(-11.4, 1.0, -19.6)],           # on the little hill
+			["unas gafas", "characters/aid-glasses", 6.0, Vector3(38.5, 0, 11.5)],      # east island
+			["una taza de café", "food/cup-coffee", 3.0, Vector3(16.6, 5.0, -9.4)],     # top of the tower (spring!)
+		],
+	},
 }
 
 ## Where cards go, easiest first.
@@ -112,7 +129,7 @@ const THEMES := {
 	"sunset":   {"grass": Color(0.9, 0.58, 0.2),   "dirt": Color(0.82, 0.38, 0.32), "sand": Color(1.0, 0.82, 0.66),  "sky": Color(0.93, 0.45, 0.5),  "horizon": Color(1.0, 0.82, 0.6),  "deep": Color(0.35, 0.3, 0.7),   "shallow": Color(0.95, 0.55, 0.55), "trees": ["tree", "tree", "tree-pine"]},
 	"mint":     {"grass": Color(0.16, 0.55, 0.42), "dirt": Color(0.3, 0.5, 0.68),   "sand": Color(0.9, 0.93, 0.78), "sky": Color(0.25, 0.68, 0.9),  "horizon": Color(0.82, 1.0, 0.95), "deep": Color(0.05, 0.45, 0.65), "shallow": Color(0.2, 0.78, 0.82),  "trees": ["tree", "tree-pine", "tree-pine-small"]},
 	"lavender": {"grass": Color(0.56, 0.42, 0.86), "dirt": Color(0.5, 0.38, 0.75),  "sand": Color(0.96, 0.87, 1.0),  "sky": Color(0.45, 0.4, 0.92),  "horizon": Color(0.92, 0.84, 1.0), "deep": Color(0.25, 0.25, 0.75), "shallow": Color(0.45, 0.55, 0.95), "trees": ["tree", "tree", "tree-pine-small"]},
-	"candy":    {"grass": Color(0.93, 0.42, 0.64), "dirt": Color(0.96, 0.8, 0.5),   "sand": Color(1.0, 0.94, 0.82),  "sky": Color(0.5, 0.62, 1.0),   "horizon": Color(1.0, 0.86, 0.93), "deep": Color(0.3, 0.45, 0.9),  "shallow": Color(0.55, 0.78, 1.0),  "trees": ["tree", "tree", "tree-pine"]},
+	"candy":    {"grass": Color(0.82, 0.33, 0.55), "dirt": Color(0.9, 0.7, 0.45),   "sand": Color(1.0, 0.94, 0.82),  "sky": Color(0.5, 0.62, 1.0),   "horizon": Color(1.0, 0.86, 0.93), "deep": Color(0.3, 0.45, 0.9),  "shallow": Color(0.55, 0.78, 1.0),  "trees": ["tree", "tree", "tree-pine"]},
 	"snow":     {"grass": Color(0.84, 0.89, 0.97), "dirt": Color(0.58, 0.68, 0.85), "sand": Color(0.85, 0.9, 0.98),  "sky": Color(0.42, 0.58, 0.85), "horizon": Color(0.9, 0.95, 1.0),  "deep": Color(0.1, 0.3, 0.55),   "shallow": Color(0.4, 0.65, 0.85),  "trees": ["tree-snow", "tree-pine-snow", "tree-pine-snow-small"]},
 }
 
@@ -127,6 +144,8 @@ var healthy_field: Node3D
 var skateboard: AnimatableBody3D
 var rowboat: Node3D
 var circuit: Node3D
+var routine: Node3D
+var speedboat: Node3D
 var cards: Array[Node3D] = []
 var chests: Array[Node3D] = []
 var sweets: Array[Node3D] = []
@@ -300,7 +319,13 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 			"circuit":
 				if circuit == null:
 					_build_circuit(q)
-			"chef", "trainer", "recycler", "tourist":
+			"routine":
+				if routine == null:
+					_build_routine(q)
+			"tower":
+				if speedboat == null:
+					_build_tower_trip(q)
+			"chef", "trainer", "recycler", "tourist", "teacher":
 				if not _has_sweet_at(CAFE):
 					_build_quest(q, QUESTS[str(q.kind)])
 			"healthy_field":
@@ -560,6 +585,141 @@ func _build_white_ship(q: Dictionary) -> void:
 	if rowboat:
 		rowboat.shores.append([Vector3(WHITE_SHIP.x, deck.y, WHITE_SHIP.z), 4.0, deck])
 		rowboat.blockers.append([Vector2(WHITE_SHIP.x, WHITE_SHIP.z), 4.2])
+
+
+## La rutina diaria: a hut whose door opens when the routine pads are stepped on in order.
+func _build_routine(q: Dictionary) -> void:
+	var hut := Node3D.new()
+	hut.set_script(preload("res://scripts/sweet_shop.gd"))
+	add_child(hut)
+	hut.position = ROUTINE_HUT
+	var to_centre := -ROUTINE_HUT.normalized()
+	hut.rotation.y = atan2(to_centre.x, to_centre.z)
+	hut.setup("La rutina", false, Color(0.55, 0.75, 1.0), Color(0.3, 0.45, 0.9))
+	_add_sweet(q, "food/cupcake", ROUTINE_HUT + Vector3(0, 0.1, 0), ROUTINE_HUT)
+	routine = Node3D.new()
+	routine.set_script(preload("res://scripts/routine_pads.gd"))
+	hut.add_child(routine)
+	routine.position = Vector3(0, 0, 5.0)
+	routine.setup()
+	routine.hut = hut
+	_keep(ROUTINE_HUT, 6.0)
+	for k in range(4, 13, 2):
+		_keep(ROUTINE_HUT + to_centre * k, 5.5)
+
+
+## The speedboat trip: a jetty on the east shore, a fast boat, rocks to dodge, and La Torre -
+## a tall pirate tower on a far island with planks spiralling up to a lookout on top.
+func _build_tower_trip(q: Dictionary) -> void:
+	var d := SPEED_DIR
+	var side := Vector3(-d.z, 0, d.x)
+	_jetty(d * (MAIN_R - 2.0), d * (MAIN_R + 7.0))
+	for k in range(int(MAIN_R) - 6, int(MAIN_R) + 1, 2):
+		_keep(d * k, 2.6)
+	var sign := Props.place(self, "sign", d * (MAIN_R - 3.5) + side * 2.4, atan2(d.x, d.z) + PI, 2.5, "box")
+	var sl := Label3D.new()
+	sl.text = "¡A la torre!"
+	sl.font_size = 36
+	sl.pixel_size = 0.005
+	sl.modulate = Color(0.2, 0.3, 0.6)
+	sl.position = Vector3(0, 1.1, 0.22)
+	sign.add_child(sl)
+
+	# La Torre on its island.
+	_island(TOWER_ISLE, TOWER_ISLE_R)
+	var tower := Props.place(self, "pirate/tower-complete-large", TOWER_ISLE, 0.3, TOWER_SCALE, "cyl")
+	tower.add_to_group("solid_ground")
+	var wood := Props.mat(Color(0.72, 0.5, 0.33))
+	var steps := 11
+	var r := 3.8
+	var y0 := 1.1
+	var dy := (TOWER_TOP - 1.2 - y0) / (steps - 1)
+	for i in steps:
+		var a := i * deg_to_rad(40)
+		var p := TOWER_ISLE + Vector3(cos(a) * r, y0 + i * dy, sin(a) * r)
+		var b := StaticBody3D.new()
+		b.add_to_group("solid_ground")
+		add_child(b)
+		b.position = p
+		b.rotation.y = -a
+		var box := BoxMesh.new()
+		box.size = Vector3(1.0, 0.2, 1.5)
+		box.material = wood
+		var mi := MeshInstance3D.new()
+		mi.mesh = box
+		b.add_child(mi)
+		var cs := CollisionShape3D.new()
+		var sh := BoxShape3D.new()
+		sh.size = box.size
+		cs.shape = sh
+		b.add_child(cs)
+		if i % 3 == 1:
+			_star(p + Vector3(0, 0.8, 0))
+	# Lookout platform on top.
+	var top := StaticBody3D.new()
+	top.add_to_group("solid_ground")
+	add_child(top)
+	top.position = TOWER_ISLE + Vector3(0, TOWER_TOP, 0)
+	var disc := CylinderMesh.new()
+	disc.top_radius = 3.1
+	disc.bottom_radius = 2.6
+	disc.height = 0.4
+	disc.material = wood
+	var dmi := MeshInstance3D.new()
+	dmi.mesh = disc
+	dmi.position.y = -0.2
+	top.add_child(dmi)
+	var dcs := CollisionShape3D.new()
+	var dsh := CylinderShape3D.new()
+	dsh.radius = 3.1
+	dsh.height = 0.4
+	dcs.shape = dsh
+	dcs.position.y = -0.2
+	top.add_child(dcs)
+	var flag := Props.model("pirate/flag-pirate-high")
+	flag.scale = Vector3.ONE * 1.4
+	flag.position = Vector3(-1.4, 0, -1.4)
+	top.add_child(flag)
+	_add_sweet(q, "food/donut-sprinkles", TOWER_ISLE + Vector3(0.6, TOWER_TOP, 0.6), TOWER_ISLE, 5.0)
+	var lbl := Label3D.new()
+	lbl.text = "La Torre"
+	lbl.font = preload("res://scripts/ui.gd").ui_font(700)
+	lbl.font_size = 96
+	lbl.pixel_size = 0.01
+	lbl.outline_size = 20
+	lbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	lbl.outline_modulate = Color(0.25, 0.3, 0.6)
+	lbl.position = TOWER_ISLE + Vector3(0, TOWER_TOP + 4.5, 0)
+	add_child(lbl)
+	for j in 3:
+		var a2 := 1.4 + j * 1.9
+		Props.place(self, "pirate/palm-detailed-bend", TOWER_ISLE + Vector3(cos(a2), 0, sin(a2)) * 5.2, _rng.randf() * TAU, 1.2, "cyl")
+
+	# The speedboat: fast, with spray.
+	speedboat = Node3D.new()
+	speedboat.set_script(preload("res://scripts/rowboat.gd"))
+	add_child(speedboat)
+	speedboat.global_position = d * (MAIN_R + 9.5) + side * 0.4
+	speedboat.rotation.y = atan2(-d.x, -d.z)
+	speedboat.boat_name = "speedboat"
+	speedboat.seat_offset = Vector3(0, 0.75, 0.9)
+	speedboat.current_mul = 2.0
+	speedboat.DRAG = 6.0       # lets go of the throttle = quick stop, so you can hop out
+	speedboat.setup("water/boat-speed-a", 2.2, PI, 14.0, 7.0)
+	speedboat.add_wake()
+	speedboat.shores = [[Vector3.ZERO, MAIN_R], [TOWER_ISLE, TOWER_ISLE_R], [EAST_ISLAND, 5.0], [WEST_ISLAND, 5.0], [PRIZE_CENTER, 6.0]]
+	for s in speedboat.shores:
+		speedboat.blockers.append([Vector2(s[0].x, s[0].z), s[1] + 2.2])
+	# Rocks scattered across the route - no buoys this time.
+	var start := Vector2(speedboat.global_position.x, speedboat.global_position.z)
+	var goal := Vector2(TOWER_ISLE.x, TOWER_ISLE.z)
+	var path := goal - start
+	var across := Vector2(-path.y, path.x).normalized()
+	for i in 6:
+		var t := (i + 1) / 7.0
+		var at := start + path * t + across * (5.5 if i % 2 == 0 else -3.5) * (1.0 if i % 3 != 2 else -1.0)
+		Props.place(self, "pirate/rocks-a" if i % 2 == 0 else "pirate/rocks-b", Vector3(at.x, -1.6, at.y), _rng.randf() * TAU, 1.2, "")
+		speedboat.blockers.append([at, 2.8])
 
 
 ## El circuito: a timed obstacle course running out over the sea from the far shore.

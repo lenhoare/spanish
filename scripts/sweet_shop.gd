@@ -8,6 +8,7 @@ const WALL_H := 3.2
 const DOOR_W := 2.4
 
 var opened := false
+var needs_key := true   # false: something else (e.g. a puzzle) opens the door
 
 var _door_pivot: Node3D
 var _door_body: StaticBody3D
@@ -15,10 +16,11 @@ var _lock: Node3D
 var _nag := 0.0
 
 
-func setup() -> void:
+func setup(sign_text := "Tienda de dulces", key_needed := true, stripe := Color(1.0, 0.55, 0.72), roof_col := Color(0.93, 0.3, 0.45)) -> void:
+	needs_key = key_needed
 	var cream := Props.mat(Color(1.0, 0.95, 0.85))
-	var pink := Props.mat(Color(1.0, 0.55, 0.72))
-	var roof_mat := Props.mat(Color(0.93, 0.3, 0.45))
+	var pink := Props.mat(stripe)
+	var roof_mat := Props.mat(roof_col)
 
 	var body := StaticBody3D.new()
 	body.add_to_group("solid_ground")
@@ -96,7 +98,7 @@ func setup() -> void:
 
 	# Sign
 	var sign := Label3D.new()
-	sign.text = "Tienda de dulces"
+	sign.text = sign_text
 	sign.font = preload("res://scripts/ui.gd").ui_font(700)
 	sign.font_size = 72
 	sign.pixel_size = 0.006
@@ -149,17 +151,29 @@ func _process(delta: float) -> void:
 func _on_door(body: Node) -> void:
 	if opened or not body.is_in_group("player"):
 		return
+	if not needs_key:
+		if _nag <= 0:
+			_nag = 3.0
+			Game.sfx("wrong", 1.2, -6)
+			Game.show_toast("¡Cerrado! Step on the pads in the right order to open it.")
+		return
 	if not Game.has_key:
 		if _nag <= 0:
 			_nag = 3.0
 			Game.sfx("wrong", 1.2, -6)
 			Game.show_toast("The sweet shop is locked! Find the key somewhere on the island...")
 		return
-	opened = true
 	Game.has_key = false
 	Game.key_changed.emit()
-	Game.sfx("build", 0.9)
 	Game.show_toast("Click! The key opens the sweet shop!")
+	open_door()
+
+
+func open_door() -> void:
+	if opened:
+		return
+	opened = true
+	Game.sfx("build", 0.9)
 	var t := create_tween()
 	t.tween_property(_lock, "position:y", 3.0, 0.3)
 	t.parallel().tween_property(_lock, "scale", Vector3.ONE * 0.01, 0.3)

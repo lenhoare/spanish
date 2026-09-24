@@ -4,9 +4,12 @@ extends Node3D
 ## Jump near any shore to hop out onto the land. The bow points along local -Z.
 
 const SEA_Y := -1.3
-const ROW_SPEED := 7.0
-const ACCEL := 3.5
-const DRAG := 1.2
+var ROW_SPEED := 7.0
+var ACCEL := 3.5
+var seat_offset := Vector3(0, 0.6, 0.4)
+var current_mul := 1.0
+var boat_name := "boat"
+var DRAG := 1.2        # how quickly the boat slows when you stop steering
 const CURRENT := Vector3(1.3, 0, 0.9)     # drifts you back towards the main island's coast
 const WORLD_LIMIT := 110.0
 
@@ -22,13 +25,18 @@ var _t := 0.0
 var _board_cd := 0.0
 var _exit_cd := 0.0
 var _told := false
+var _wake: CPUParticles3D
 
 
-func setup() -> void:
+## Defaults make the rowing boat; the speedboat passes its own model and numbers.
+func setup(model := "water/boat-row-large", scale := 2.2, model_yaw := 0.0, speed := 7.0, accel := 3.5) -> void:
 	add_to_group("rowboat")
-	_model = Props.model("water/boat-row-large")
-	_model.scale = Vector3.ONE * 2.2
+	ROW_SPEED = speed
+	ACCEL = accel
+	_model = Props.model(model)
+	_model.scale = Vector3.ONE * scale
 	_model.position.y = -0.35
+	_model.rotation.y = model_yaw
 	add_child(_model)
 	global_position.y = SEA_Y
 	# Jump (or walk) into the boat to climb aboard.
@@ -43,8 +51,29 @@ func setup() -> void:
 	area.body_entered.connect(_on_body)
 
 
+## White spray behind a fast boat.
+func add_wake() -> void:
+	_wake = CPUParticles3D.new()
+	_wake.amount = 40
+	_wake.lifetime = 0.9
+	_wake.direction = Vector3(0, 1, 1)
+	_wake.spread = 35
+	_wake.initial_velocity_min = 2.0
+	_wake.initial_velocity_max = 4.0
+	_wake.gravity = Vector3(0, -6, 0)
+	var m := SphereMesh.new()
+	m.radius = 0.14
+	m.height = 0.28
+	m.radial_segments = 6
+	m.rings = 3
+	m.material = Props.unshaded(Color(1, 1, 1, 0.85))
+	_wake.mesh = m
+	_wake.position = Vector3(0, 0.1, 3.6)
+	_wake.emitting = false
+	add_child(_wake)
+
 func seat() -> Vector3:
-	return to_global(Vector3(0, 0.6, 0.4))
+	return to_global(seat_offset)
 
 
 func _on_body(body: Node) -> void:
@@ -60,7 +89,10 @@ func board(body: CharacterBody3D) -> void:
 	Game.sfx("thud", 1.4, -6.0)
 	if not _told:
 		_told = true
-		Game.show_toast("¡A remar! Steer with the joystick. Jump near land to get out.")
+		if boat_name == "speedboat":
+			Game.show_toast("¡Vamos! Steer with the joystick. Jump near land to get out.")
+		else:
+			Game.show_toast("¡A remar! Steer with the joystick. Jump near land to get out.")
 
 
 func _physics_process(delta: float) -> void:
@@ -83,13 +115,15 @@ func _physics_process(delta: float) -> void:
 		vel = vel.move_toward(Vector3.ZERO, DRAG * delta)
 	# The current only matters out in open water.
 	if rider and _nearest_shore_gap() > 6.0:
-		vel += CURRENT * delta * 0.5
+		vel += CURRENT * delta * 0.5 * current_mul
 	global_position += vel * delta
 	_collide()
 	# Face where we're going, and bob on the waves.
 	if vel.length() > 0.4:
 		rotation.y = lerp_angle(rotation.y, atan2(-vel.x, -vel.z), 1.0 - exp(-3.0 * delta))
 	global_position.y = SEA_Y + sin(_t * 1.7) * 0.08
+	if _wake:
+		_wake.emitting = vel.length() > 3.0
 	_model.rotation.z = sin(_t * 1.3) * 0.04
 	_model.rotation.x = sin(_t * 1.1 + 1.0) * 0.03
 
