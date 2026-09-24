@@ -6,6 +6,10 @@ signal claimed
 var _star: Node3D
 var _t := 0.0
 var _done := false
+## Returns true when the prize may be claimed (the bridge is finished). Set by the world.
+var can_claim := Callable()
+var _gifted := false
+var _nag := 0.0
 
 
 func setup(prize_name: String) -> void:
@@ -77,6 +81,7 @@ func setup(prize_name: String) -> void:
 
 func _process(delta: float) -> void:
 	_t += delta
+	_nag -= delta
 	if not _done:
 		_star.rotation.y += delta * 1.5
 		_star.position.y = 1.4 + sin(_t * 2.0) * 0.2
@@ -84,6 +89,18 @@ func _process(delta: float) -> void:
 
 func _on_body(body: Node) -> void:
 	if _done or not body.is_in_group("player"):
+		return
+	if can_claim.is_valid() and not can_claim.call():
+		# Sneaked here by boat before finishing the bridge!
+		if not _gifted:
+			_gifted = true
+			Game.add_coins(10)
+			Game.sfx("correct")
+			Game.show_toast("¡Qué astuto! A sneaky sailor! +10 coins... but the prize needs the bridge finished first.")
+		elif _nag <= 0:
+			Game.sfx("wrong", 1.2, -6)
+			Game.show_toast("Finish the bridge first - answer the question cards!")
+		_nag = 3.0
 		return
 	_done = true
 	var t := create_tween()

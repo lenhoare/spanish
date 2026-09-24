@@ -57,7 +57,7 @@ func setup(config: Dictionary) -> void:
 	sign.position = Vector3(0, 2.7, -1.0)
 	add_child(sign)
 	for deco in cfg.get("counter", []):     # [model, scale, x]
-		var d: Node3D = _dumbbell() if deco[0] == "dumbbell" else Props.model(deco[0])
+		var d: Node3D = _dumbbell() if deco[0] == "dumbbell" else (_bins() if deco[0] == "bins" else Props.model(deco[0]))
 		d.scale = Vector3.ONE * deco[1]
 		d.position = Vector3(deco[2], 1.22, 1.2 + (deco[3] if deco.size() > 3 else 0.0))
 		add_child(d)
@@ -160,6 +160,20 @@ static func _spanish_list(items: Array) -> String:
 	if items.size() == 1:
 		return items[0]
 	return ", ".join(items.slice(0, items.size() - 1)) + " y " + items[-1]
+
+
+## Three little recycling bins: yellow (plástico), blue (papel), green (vidrio).
+func _bins() -> Node3D:
+	var n := Node3D.new()
+	var cols := [Color(1.0, 0.82, 0.2), Color(0.25, 0.5, 0.95), Color(0.25, 0.7, 0.3)]
+	for i in 3:
+		var bin := BoxMesh.new()
+		bin.size = Vector3(0.45, 0.6, 0.45)
+		var b := _part(n, bin, Vector3(-0.55 + i * 0.55, 0.3, 0), Props.mat(cols[i]))
+		var lid := BoxMesh.new()
+		lid.size = Vector3(0.52, 0.08, 0.52)
+		_part(b, lid, Vector3(0, 0.33, 0), Props.mat((cols[i] as Color).darkened(0.25)))
+	return n
 
 
 ## A chunky dumbbell (Kenney has none), lying on the counter.

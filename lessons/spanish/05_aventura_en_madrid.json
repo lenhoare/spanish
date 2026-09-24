@@ -97,7 +97,8 @@
       ],
       "correct": 0,
       "hint": "Page 5 - souvenirs.",
-      "explanation": "Un llavero = a key ring."
+      "explanation": "Un llavero = a key ring.",
+      "level": 1
     },
     {
       "id": "s5-hambre",
@@ -110,33 +111,8 @@
       ],
       "correct": 0,
       "hint": "Page 5 - greetings.",
-      "explanation": "Tener hambre = to be hungry."
-    },
-    {
-      "id": "s5-vosotros",
-      "question": "Talking to TWO friends informally, you use...",
-      "choices": [
-        "vosotros",
-        "ustedes",
-        "usted",
-        "tú"
-      ],
-      "correct": 0,
-      "hint": "Page 2 - the table.",
-      "explanation": "Vosotros/as = you (plural, informal)."
-    },
-    {
-      "id": "s5-hizo",
-      "question": "Preterite of hacer for él / ella:",
-      "choices": [
-        "hizo",
-        "hice",
-        "hació",
-        "hacía"
-      ],
-      "correct": 0,
-      "hint": "Page 3.",
-      "explanation": "Hizo."
+      "explanation": "Tener hambre = to be hungry.",
+      "level": 1
     },
     {
       "id": "s5-sorpresa",
@@ -149,7 +125,76 @@
       ],
       "correct": 0,
       "hint": "Page 5 - exclamations.",
-      "explanation": "¡Qué sorpresa! = What a surprise!"
+      "explanation": "¡Qué sorpresa! = What a surprise!",
+      "level": 2
+    },
+    {
+      "id": "s5-vosotros",
+      "question": "Talking to TWO friends informally, you use...",
+      "choices": [
+        "vosotros",
+        "ustedes",
+        "usted",
+        "tú"
+      ],
+      "correct": 0,
+      "hint": "Page 2 - the table.",
+      "explanation": "Vosotros/as = you (plural, informal).",
+      "level": 2
+    },
+    {
+      "id": "s5-hizo",
+      "question": "Preterite of hacer for él / ella:",
+      "choices": [
+        "hizo",
+        "hice",
+        "hació",
+        "hacía"
+      ],
+      "correct": 0,
+      "hint": "Page 3.",
+      "explanation": "Hizo.",
+      "level": 3
+    },
+    {
+      "id": "s5-fuimos",
+      "question": "Ayer mis amigos y yo ____ al Museo Reina Sofía. (ir)",
+      "choices": [
+        "fuimos",
+        "fueron",
+        "fui",
+        "vamos"
+      ],
+      "correct": 0,
+      "hint": "'Mis amigos y yo' = we, and ayer means past - page 3.",
+      "explanation": "Fuimos - the 'we' form of ir in the preterite.",
+      "level": 3
+    }
+  ],
+  "sweets": [
+    {
+      "id": "s5-sweet-cine",
+      "question": "Circuit champion! Translate into Spanish:\n\"Yesterday I went to the cinema and I saw a film.\"",
+      "answers": [
+        "ayer fui al cine y vi una película",
+        "fui al cine ayer y vi una película",
+        "ayer yo fui al cine y vi una película"
+      ],
+      "hint": "Irregular preterite: ir -> fui, ver -> vi (page 3).",
+      "explanation": "¡Qué guay! Ayer fui al cine y vi una película.",
+      "kind": "circuit"
+    },
+    {
+      "id": "s5-sweet-recuerdos",
+      "question": "La turista asks: \"¿Qué compraste en Madrid?\"\nAnswer in Spanish: \"I bought a key ring and a cup.\"",
+      "answers": [
+        "compré un llavero y una taza",
+        "yo compré un llavero y una taza",
+        "compré una taza y un llavero"
+      ],
+      "hint": "comprar is a regular -ar verb: 'I bought' = compré (like hablé). Souvenirs are on page 5.",
+      "explanation": "¡Qué bonito! Compré un llavero y una taza.",
+      "kind": "tourist"
     }
   ],
   "prize": {

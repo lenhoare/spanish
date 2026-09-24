@@ -31,6 +31,7 @@ var _squash_tween: Tween
 var _frozen_anim := ""
 var _spring_rise := false  # springs give full height even if jump isn't held
 var _dazed := 0.0          # after being knocked back, controls ignored briefly
+var vehicle: Node3D         # set while sitting in the rowing boat
 
 
 func setup(character_name: String, spawn: Vector3, display_name := "") -> void:
@@ -117,6 +118,9 @@ func setup(character_name: String, spawn: Vector3, display_name := "") -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if vehicle:
+		_ride_step()
+		return
 	var input := Vector2.ZERO
 	_dazed -= delta
 	if not Game.ui_open and _dazed <= 0:
@@ -202,6 +206,32 @@ func knockback(v: Vector3) -> void:
 	for i in 3:
 		t.tween_callback(func(): _model.visible = false).set_delay(0.06)
 		t.tween_callback(func(): _model.visible = true).set_delay(0.06)
+
+
+## Sit in a vehicle (the rowing boat): the vehicle moves us from now on.
+func ride(v: Node3D) -> void:
+	vehicle = v
+	velocity = Vector3.ZERO
+	_shadow.visible = false
+	_frozen_anim = "sit"
+	if _anim and _anim.has_animation("sit"):
+		_anim.play("sit", 0.15)
+
+
+func unride(land_at: Vector3) -> void:
+	vehicle = null
+	_frozen_anim = ""
+	global_position = land_at
+	velocity = Vector3(0, JUMP_VELOCITY * 0.6, 0)
+	_last_safe = land_at
+	_squash(Vector3(0.8, 1.25, 0.8))
+	Game.sfx("jump", 1.0, -4.0)
+
+
+func _ride_step() -> void:
+	global_position = vehicle.seat()
+	velocity = vehicle.vel          # the camera uses this to swing round behind us
+	_pivot.rotation.y = vehicle.rotation.y + PI
 
 
 ## Teleports the player (e.g. back to the start of a challenge) with a little poof.
@@ -302,6 +332,12 @@ func _update_safe_point(delta: float) -> void:
 
 
 func _respawn() -> void:
+	# Fell in the sea near your rowing boat? Splash back into it instead (never get stranded).
+	var boat := get_tree().get_first_node_in_group("rowboat") as Node3D
+	if boat and boat.rider == null and Vector2(boat.global_position.x - global_position.x, boat.global_position.z - global_position.z).length() < 20.0:
+		boat.board(self)
+		Game.show_toast("¡Splash! Back into your boat.")
+		return
 	global_position = _last_safe + Vector3(0, 0.5, 0)
 	velocity = Vector3.ZERO
 	Game.sfx("wrong", 1.3, -6.0)

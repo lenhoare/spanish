@@ -55,6 +55,9 @@ func _run() -> void:
 	if Game.current_island == 2:
 		await _island3(p, cam)
 		return
+	if Game.current_island == 3:
+		await _island4(p, cam)
+		return
 
 	# Movement checks: run forward, jump, use the spring.
 	var start := p.global_position
@@ -413,6 +416,159 @@ func _island3(p: CharacterBody3D, cam) -> void:
 	var riding: bool = p.global_position.distance_to(board.global_position) < 1.2
 	print("SKATEBOARD: board moved %.1f m, player riding=%s, speed now %.1f" % [moved, riding, board.vel.length()])
 	await _shot("i3_05_skateboard")
+	get_tree().quit()
+
+
+## Island 4: row to Isla Secreta; the recycler's quest.
+func _island4(p: CharacterBody3D, cam) -> void:
+	var w = main.world
+	var boat: Node3D = w.rowboat
+	print("ISLAND4: sweets total=%d quest items=%d" % [Game.total_sweets, Game.ingredients_total])
+	var d: Vector3 = w.BOAT_DIR
+	# Stand on the jetty, look out to sea at the boat.
+	_teleport(p, cam, d * (w.MAIN_R + 3.0) + Vector3(0, 0.3, 0), atan2(-d.x, -d.z))
+	cam.pitch = deg_to_rad(-14)
+	await _wait(1.2)
+	await _shot("i4_01_jetty")
+	# Walk off the end of the jetty and hop into the boat.
+	Input.action_press("move_forward")
+	await _wait(0.9)
+	Input.action_press("jump")
+	await _wait(0.3)
+	Input.action_release("jump")
+	await _wait(0.6)
+	Input.action_release("move_forward")
+	await _wait(0.5)
+	print("BOARD: riding=%s" % (p.vehicle != null))
+	if p.vehicle == null:
+		_teleport(p, cam, boat.global_position + Vector3(0, 1.5, 0), cam.yaw)
+		await _wait(0.5)
+		print("BOARD (dropped in): riding=%s" % (p.vehicle != null))
+	# Row out a bit and try to get out at sea: should be refused.
+	var goal := Vector2(w.SECRET_ISLAND.x, w.SECRET_ISLAND.z)
+	var steps := 0
+	var reached := false
+	Input.action_press("move_forward")
+	while steps < 200:
+		steps += 1
+		var bp := Vector2(boat.global_position.x, boat.global_position.z)
+		var to := goal - bp
+		cam.yaw = atan2(-to.x, -to.y)
+		if steps == 25:
+			Input.action_release("move_forward")
+			await _wait(0.2)
+			Input.action_press("jump")
+			await get_tree().physics_frame
+			await get_tree().physics_frame
+			Input.action_release("jump")
+			print("EXIT AT SEA: still riding=%s (want true)" % (p.vehicle != null))
+			await _shot("i4_02_rowing")
+			Input.action_press("move_forward")
+		if to.length() - w.SECRET_R < 4.5:
+			reached = true
+			break
+		await _wait(0.15)
+	Input.action_release("move_forward")
+	print("ROW: reached Isla Secreta=%s after %.1f s, boat at %s" % [reached, steps * 0.15, boat.global_position])
+	await _wait(0.8)
+	await _shot("i4_03_arrived")
+	Input.action_press("jump")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("jump")
+	await _wait(1.2)
+	var on_isle: bool = Vector2(p.global_position.x - w.SECRET_ISLAND.x, p.global_position.z - w.SECRET_ISLAND.z).length() < w.SECRET_R
+	print("LAND: riding=%s on Isla Secreta=%s y=%.2f" % [p.vehicle != null, on_isle, p.global_position.y])
+	# Walk to the sweet.
+	var sweet_at: Vector3 = w.SECRET_ISLAND + Vector3(-0.5, 0.3, -0.5)
+	_teleport(p, cam, sweet_at, cam.yaw)
+	await _wait(0.6)
+	print("BOAT SWEET: question open=%s (want true)" % Game.ui_open)
+	await _shot("i4_04_secret_question")
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+
+	# Jump into the sea: should splash back into the boat.
+	_teleport(p, cam, boat.global_position + Vector3(3.0, -2.0, 0), cam.yaw)
+	p.velocity = Vector3(0, -10, 0)
+	await _wait(1.0)
+	print("SPLASH: back in boat=%s" % (p.vehicle == boat))
+	# Row to the secret white ship and hop onto its deck.
+	var row_to := func(target: Vector2, gap: float) -> bool:
+		Input.action_press("move_forward")
+		for i in 400:
+			var bp := Vector2(boat.global_position.x, boat.global_position.z)
+			var to := target - bp
+			cam.yaw = atan2(-to.x, -to.y)
+			if to.length() < gap:
+				Input.action_release("move_forward")
+				return true
+			await _wait(0.15)
+		Input.action_release("move_forward")
+		return false
+	var ws := Vector2(w.WHITE_SHIP.x, w.WHITE_SHIP.z)
+	# Row round the west and south coasts rather than through the island.
+	for wp in [Vector2(-72, 20), Vector2(-30, 62), Vector2(30, 70)]:
+		await row_to.call(wp, 6.0)
+	var ok: bool = await row_to.call(ws, 9.0)
+	print("ROW to white ship: reached=%s" % ok)
+	await _wait(0.8)
+	await _shot("i4_06_white_ship")
+	Input.action_press("jump")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("jump")
+	await _wait(1.5)
+	print("DECK: riding=%s player y=%.2f (deck ~1.2)" % [p.vehicle != null, p.global_position.y])
+	var sweet_node = w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == w.WHITE_SHIP)[0]
+	_teleport(p, cam, sweet_node.global_position + Vector3(0, 0.4, 0.3), cam.yaw)
+	await _wait(0.6)
+	print("SHIP SWEET: question open=%s (want true)" % Game.ui_open)
+	await _shot("i4_07_ship_question")
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+	# Back into the boat (jump in the sea), then sneak to Star Island before the bridge is built.
+	_teleport(p, cam, boat.global_position + Vector3(2.0, -2.5, 0), cam.yaw)
+	p.velocity = Vector3(0, -10, 0)
+	await _wait(1.0)
+	for wp in [Vector2(75, 5), Vector2(40, -55)]:
+		await row_to.call(wp, 6.0)
+	ok = await row_to.call(Vector2(w.PRIZE_CENTER.x, w.PRIZE_CENTER.z), 10.0)
+	Input.action_press("jump")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("jump")
+	await _wait(1.2)
+	var coins_before := Game.coins
+	_teleport(p, cam, w.PRIZE_CENTER + Vector3(0, 0.4, 0.5), cam.yaw)
+	await _wait(1.0)
+	print("SNEAKY: reached=%s coins %d -> %d, prize claimed=%s (want false)" % [ok, coins_before, Game.coins, Game.ui_open])
+	await _shot("i4_08_sneaky")
+
+	# Recycler quest.
+	var stall: Node3D = w.cafe
+	var front: Vector3 = stall.to_global(Vector3(0, 0.2, 2.3))
+	var back_off: Vector3 = front + (front - stall.global_position).normalized() * 4.0
+	var to_stall: Vector3 = stall.global_position - back_off
+	_teleport(p, cam, back_off, atan2(-to_stall.x, -to_stall.z))
+	cam.pitch = deg_to_rad(-12)
+	await _wait(1.0)
+	await _shot("i4_05_recycling_stall")
+	for item in w.QUESTS.recycler.items:
+		_teleport(p, cam, item[3] + Vector3(0, 0.3, 0), 0.0)
+		await _wait(0.5)
+	print("ITEMS: %s" % [Game.ingredients])
+	_teleport(p, cam, back_off, atan2(-to_stall.x, -to_stall.z))
+	await _wait(0.4)
+	_teleport(p, cam, front, cam.yaw)
+	await _wait(0.8)
+	print("RECYCLER with items: question open=%s (want true)" % Game.ui_open)
+	if Game.ui_open:
+		main.ui._question_done.emit("correct")
+		await _wait(1.2)
+	print("SWEETS: %d / %d" % [Game.sweets, Game.total_sweets])
 	get_tree().quit()
 
 

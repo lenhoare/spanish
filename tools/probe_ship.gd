@@ -18,7 +18,7 @@ func _init() -> void:
 	sun.rotation = Vector3(-0.8, 0.5, 0)
 	root3d.add_child(sun)
 
-	var ship: Node3D = load("res://assets/pirate/ship-pirate-large.glb").instantiate()
+	var ship: Node3D = load("res://assets/pirate/%s.glb" % (OS.get_cmdline_user_args()[0] if OS.get_cmdline_user_args().size() > 0 else "ship-pirate-large")).instantiate()
 	ship.scale = Vector3.ONE * SCALE
 	root3d.add_child(ship)
 	await process_frame
@@ -43,8 +43,8 @@ func _init() -> void:
 	for f in 3:
 		await physics_frame
 	var space := root3d.get_world_3d().direct_space_state
-	for z in [-10.0, -8.0, -6.0, -4.0, -2.0, -1.0, 0.0, 1.0, 2.0, 4.0, 6.0, 8.0, 10.0]:
-		for x in [0.0, 1.5, 3.0]:
+	for z in [-6.0, -4.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 6.0]:
+		for x in [0.0, 1.5]:
 			var q := PhysicsRayQueryParameters3D.create(Vector3(x, 30, z), Vector3(x, -5, z))
 			var hit := space.intersect_ray(q)
 			print("ray x=%.1f z=%.1f -> %s" % [x, z, ("%.2f" % hit.position.y) if hit else "none"])

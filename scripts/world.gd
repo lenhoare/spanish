@@ -26,6 +26,11 @@ const SHIP := Vector3(17, -2.2, 44)         # pirate ship moored off the south c
 const JETTY_X := 9.0
 const JETTY_Z := Vector2(26, 47)
 const HEALTHY_FIELD := Vector3(-18, 0, 16)  # "Comida sana" uses the ghost garden's spot
+const BOAT_DIR := Vector3(-0.707, 0, -0.707)  # the rowing jetty is on the far north-west shore
+const SECRET_ISLAND := Vector3(-66, 0, -50)
+const SECRET_R := 5.0
+const WHITE_SHIP := Vector3(70, -2.2, 56)      # far out to the south-east, opposite Isla Secreta
+const CIRCUIT_DIR := Vector3(-0.6, 0, -0.8)    # El circuito runs out to sea from the far north-west shore
 
 ## Characters with a 3-item fetch quest (lesson sweet "kind" -> set-up). Items are
 ## [spanish name, model, scale, where it's hidden]. All speech is Spanish only.
@@ -52,6 +57,30 @@ const QUESTS := {
 			["una botella de agua", "survival/bottle", 6.0, Vector3(24, 0.5, -4)],     # on the east mound
 			["un plátano", "food/banana", 2.6, Vector3(-42.5, 0, 15.5)],              # west island
 			["una pelota", "minigolf/ball-red", 10.0, Vector3(20.5, 3.8, 12.4)],      # top floating islet
+		],
+	},
+	"recycler": {
+		"sign": "Reciclaje", "character": "character-female-c", "hat": "",
+		"speaker": "La ecologista", "greeting": "¡Hola! ¡Reciclamos!\n¡Necesito tres cosas!",
+		"thanks": "¡Genial!\n¡Toma un dulce!", "awning": Color(0.3, 0.72, 0.35),
+		"reward": "food/popsicle", "reward_scale": 5.0, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"counter": [["bins", 1.0, -1.1]],
+		"items": [
+			["una botella de plástico", "survival/bottle", 6.0, Vector3(-42.5, 0, 15.5)],   # west island
+			["una lata", "food/soda-can", 3.0, Vector3(38.5, 0, 11.5)],                      # east island
+			["un vaso de vidrio", "food/glass", 4.5, SECRET_ISLAND + Vector3(2.5, 0, 1.5)],   # Isla Secreta!
+		],
+	},
+	"tourist": {
+		"sign": "Tienda de recuerdos", "character": "character-female-d", "hat": "",
+		"speaker": "La turista", "greeting": "¡Hola! Estoy de vacaciones.\n¡Necesito mis recuerdos!",
+		"thanks": "¡Gracias!\n¡Toma un dulce!", "awning": Color(1.0, 0.6, 0.2),
+		"reward": "food/cupcake", "reward_scale": 3.2, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"counter": [["food/cup-coffee", 2.8, -1.5], ["flag", 1.2, 1.5]],
+		"items": [
+			["una taza", "food/cup-tea", 3.5, Vector3(24, 0.5, -4)],                    # on the east mound
+			["un llavero", "key", 3.5, Vector3(-41, 0, 11)],                            # west island
+			["una figurita", "skate/character-skate-boy", 1.3, Vector3(17.2, 2.7, 16)],  # middle floating islet
 		],
 	},
 }
@@ -96,6 +125,8 @@ var ship: Node3D
 var cafe: Node3D
 var healthy_field: Node3D
 var skateboard: AnimatableBody3D
+var rowboat: Node3D
+var circuit: Node3D
 var cards: Array[Node3D] = []
 var chests: Array[Node3D] = []
 var sweets: Array[Node3D] = []
@@ -217,6 +248,7 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 	prize.position = PRIZE_CENTER + Vector3(0, 0, -1)
 	prize.setup(lesson.prize.name)
 	prize.claimed.connect(func(): prize_claimed.emit())
+	prize.can_claim = func() -> bool: return bridge.built >= bridge.sections
 	# Keep the walk from the bridge to the prize clear of trees.
 	for z in range(int(PRIZE_CENTER.z) + 6, int(PRIZE_CENTER.z) - 3, -1):
 		_keep(Vector3(0, 0, z), 2.2)
@@ -248,7 +280,9 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 
 	# Sweets: bonus challenges in special places. Each island's lesson picks which ones.
 	var ship_qs := {}
-	for q in lesson.get("sweets", []):
+	var sweet_list: Array = lesson.get("sweets", []).duplicate()
+	sweet_list.sort_custom(func(a, b): return str(a.get("kind", "")) == "boat" and str(b.get("kind", "")) != "boat")
+	for q in sweet_list:
 		match str(q.get("kind", "")):
 			"key":
 				if not _has_sweet_at(SWEET_SHOP):
@@ -258,7 +292,15 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 					_build_ghost_garden(q)
 			"ship_deck", "ship_crow":
 				ship_qs[str(q.kind)] = q
-			"chef", "trainer":
+			"boat":
+				if rowboat == null:
+					_build_boat_trip(q)
+			"white_ship":
+				_build_white_ship(q)
+			"circuit":
+				if circuit == null:
+					_build_circuit(q)
+			"chef", "trainer", "recycler", "tourist":
 				if not _has_sweet_at(CAFE):
 					_build_quest(q, QUESTS[str(q.kind)])
 			"healthy_field":
@@ -420,6 +462,157 @@ func _build_ship(qs: Dictionary) -> void:
 	var steps: Array[Vector3] = ship.climb_steps()
 	for k: int in [1, 3, 5, 7]:
 		_star(ship.to_global(steps[k] + Vector3(0, 0.7, 0)))
+
+
+## The rowing trip: a jetty on the far shore, a boat, buoys and rocks, and Isla Secreta.
+func _build_boat_trip(q: Dictionary) -> void:
+	var d := BOAT_DIR
+	var side := Vector3(-d.z, 0, d.x)
+	_jetty(d * (MAIN_R - 2.0), d * (MAIN_R + 7.0))
+	for k in range(int(MAIN_R) - 6, int(MAIN_R) + 1, 2):
+		_keep(d * k, 2.6)
+	var sign := Props.place(self, "sign", d * (MAIN_R - 3.5) + side * 2.4, atan2(d.x, d.z) + PI, 2.5, "box")
+	var sl := Label3D.new()
+	sl.text = "¡A remar!"
+	sl.font_size = 40
+	sl.pixel_size = 0.005
+	sl.modulate = Color(0.2, 0.3, 0.6)
+	sl.position = Vector3(0, 1.1, 0.22)
+	sign.add_child(sl)
+
+	# Isla Secreta: a tiny palm island far out to sea with the sweet on it.
+	_island(SECRET_ISLAND, SECRET_R)
+	_add_sweet(q, "food/ice-cream", SECRET_ISLAND + Vector3(-0.5, 0.1, -0.5), SECRET_ISLAND, 4.0)
+	for p in [Vector3(-2.8, 0, 1.8), Vector3(2.4, 0, -2.6), Vector3(-1.5, 0, -3.3)]:
+		Props.place(self, "pirate/palm-detailed-bend", SECRET_ISLAND + p, _rng.randf() * TAU, 1.3, "cyl")
+	var flag := Props.model("pirate/flag-pirate-high")
+	flag.scale = Vector3.ONE * 1.6
+	flag.position = SECRET_ISLAND + Vector3(3.2, 0, 2.6)
+	add_child(flag)
+	var isl := Label3D.new()
+	isl.text = "Isla Secreta"
+	isl.font = preload("res://scripts/ui.gd").ui_font(700)
+	isl.font_size = 96
+	isl.pixel_size = 0.01
+	isl.outline_size = 20
+	isl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	isl.outline_modulate = Color(0.3, 0.2, 0.5)
+	isl.position = SECRET_ISLAND + Vector3(0, 6.5, 0)
+	add_child(isl)
+
+	# The boat, moored at the end of the jetty.
+	rowboat = Node3D.new()
+	rowboat.set_script(preload("res://scripts/rowboat.gd"))
+	add_child(rowboat)
+	rowboat.global_position = d * (MAIN_R + 9.0) + side * 0.5
+	rowboat.rotation.y = atan2(-d.x, -d.z)
+	rowboat.setup()
+	rowboat.shores = [[Vector3.ZERO, MAIN_R], [SECRET_ISLAND, SECRET_R], [EAST_ISLAND, 5.0], [WEST_ISLAND, 5.0], [PRIZE_CENTER, 6.0]]
+	for s in rowboat.shores:
+		rowboat.blockers.append([Vector2(s[0].x, s[0].z), s[1] + 2.2])
+
+	# Slalom out to sea: rocks to dodge, buoys to row between, stars to grab on the way.
+	var start := Vector2(rowboat.global_position.x, rowboat.global_position.z)
+	var goal := Vector2(SECRET_ISLAND.x, SECRET_ISLAND.z)
+	var path := goal - start
+	var across := Vector2(-path.y, path.x).normalized()
+	for i in 5:
+		var t := (i + 1) / 6.0
+		var mid := start + path * t
+		var wiggle := across * (4.5 if i % 2 == 0 else -4.5)
+		# Rock on one side of the channel, a pair of buoys marking the gap on the other.
+		var rock_at := mid + wiggle
+		Props.place(self, "pirate/rocks-a" if i % 2 == 0 else "pirate/rocks-b", Vector3(rock_at.x, -1.6, rock_at.y), _rng.randf() * TAU, 1.3, "")
+		rowboat.blockers.append([rock_at, 3.0])
+		for side_off: float in [-3.0, 3.0]:
+			var b := mid - wiggle * 0.3 + across * side_off
+			var buoy := Props.model("water/buoy-flag" if side_off > 0 else "water/buoy")
+			buoy.scale = Vector3.ONE * 1.6
+			buoy.position = Vector3(b.x, -1.2, b.y)
+			add_child(buoy)
+			rowboat.blockers.append([b, 0.8])
+		var star_at := mid - wiggle * 0.3
+		_star(Vector3(star_at.x, -0.4, star_at.y))
+
+
+## A white ship anchored far out at sea - no buoys, no signs, properly secret.
+## Row alongside and hop onto its deck to find the sweet.
+func _build_white_ship(q: Dictionary) -> void:
+	var ship_root := Node3D.new()
+	add_child(ship_root)
+	ship_root.position = WHITE_SHIP
+	ship_root.rotation.y = 0.7
+	var model := Props.model("pirate/ship-small")
+	model.scale = Vector3.ONE * 1.6
+	ship_root.add_child(model)
+	var body := StaticBody3D.new()
+	body.add_to_group("solid_ground")
+	ship_root.add_child(body)
+	for mi in model.find_children("*", "MeshInstance3D", true, false):
+		if not mi.name.begins_with("ship"):
+			continue
+		var cs := CollisionShape3D.new()
+		cs.shape = (mi as MeshInstance3D).mesh.create_trimesh_shape()
+		cs.transform = ship_root.global_transform.affine_inverse() * (mi as MeshInstance3D).global_transform
+		body.add_child(cs)
+	_add_sweet(q, "food/chocolate-wrapper", ship_root.to_global(Vector3(0.9, 3.36, 2.4)), WHITE_SHIP, 5.0)
+	var deck: Vector3 = ship_root.to_global(Vector3(0, 3.7, 1.4))
+	if rowboat:
+		rowboat.shores.append([Vector3(WHITE_SHIP.x, deck.y, WHITE_SHIP.z), 4.0, deck])
+		rowboat.blockers.append([Vector2(WHITE_SHIP.x, WHITE_SHIP.z), 4.2])
+
+
+## El circuito: a timed obstacle course running out over the sea from the far shore.
+func _build_circuit(q: Dictionary) -> void:
+	circuit = Node3D.new()
+	circuit.set_script(preload("res://scripts/circuit.gd"))
+	add_child(circuit)
+	circuit.position = CIRCUIT_DIR * (MAIN_R - 4.0)
+	circuit.rotation.y = atan2(-CIRCUIT_DIR.z, CIRCUIT_DIR.x)    # local +X points along CIRCUIT_DIR
+	circuit.setup()
+	for k in range(0, 8):
+		_keep(CIRCUIT_DIR * (MAIN_R - 4.0 + k), 3.5)
+	var s := _add_sweet(q, "food/lollypop", circuit.sweet_spot(), circuit.position, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return circuit.done
+	circuit.sweet = s
+	# A few stars along the course for the brave.
+	for x in [9.0, 17.0, 26.0, 32.8]:
+		_star(circuit.to_global(Vector3(x, 1.4 if x < 30 else 3.2, 0)))
+
+
+func _jetty(from: Vector3, to: Vector3) -> void:
+	var body := StaticBody3D.new()
+	body.add_to_group("solid_ground")
+	add_child(body)
+	var length := from.distance_to(to)
+	body.position = (from + to) / 2.0
+	body.rotation.y = atan2(to.x - from.x, to.z - from.z)
+	var deck := BoxMesh.new()
+	deck.size = Vector3(3.0, 0.3, length)
+	deck.material = Props.mat(Color(0.7, 0.48, 0.32))
+	var dmi := MeshInstance3D.new()
+	dmi.mesh = deck
+	dmi.position.y = -0.15
+	body.add_child(dmi)
+	var dcs := CollisionShape3D.new()
+	var dsh := BoxShape3D.new()
+	dsh.size = deck.size
+	dcs.shape = dsh
+	dcs.position.y = -0.15
+	body.add_child(dcs)
+	var post_mat := Props.mat(Color(0.5, 0.33, 0.22))
+	for i in int(length / 3.0) + 1:
+		for sx in [-1.5, 1.5]:
+			var post := CylinderMesh.new()
+			post.top_radius = 0.16
+			post.bottom_radius = 0.16
+			post.height = 2.6
+			post.material = post_mat
+			var pm := MeshInstance3D.new()
+			pm.mesh = post
+			pm.position = Vector3(sx, -0.9, -length / 2.0 + i * 3.0)
+			body.add_child(pm)
 
 
 ## A character's market stall; their three lost things are hidden around the island.

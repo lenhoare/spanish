@@ -28,6 +28,7 @@ var _card_label: Label
 var _sweet_label: Label
 var _ingredient_label: Label
 var _key_pill: Control
+var _timer_label: Label
 var _toast_box: PanelContainer
 var _toast_label: Label
 var _toast_tween: Tween
@@ -67,6 +68,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	layer = 10
+	add_to_group("hud")
 	# DynaPuff: puffy, friendly and has every Spanish accent (Kenney's fonts don't).
 	_title_font = ui_font(700)
 	_bold_font = ui_font(600)
@@ -361,6 +363,21 @@ func show_hud() -> void:
 	menu.offset_bottom = 76
 	menu.pressed.connect(_confirm_leave)
 
+	# Big countdown clock for timed challenges (hidden until needed).
+	_timer_label = Label.new()
+	_timer_label.add_theme_font_override("font", _title_font)
+	_timer_label.add_theme_font_size_override("font_size", 64)
+	_timer_label.add_theme_color_override("font_color", Color.WHITE)
+	_timer_label.add_theme_color_override("font_outline_color", Color(0.45, 0.15, 0.35))
+	_timer_label.add_theme_constant_override("outline_size", 14)
+	_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_timer_label.visible = false
+	_hud.add_child(_timer_label)
+	_timer_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	_timer_label.offset_top = 160
+	_timer_label.offset_left = -150
+	_timer_label.offset_right = 150
+
 	_toast_box = _panel(Color(0.18, 0.12, 0.35, 0.85), Color(1, 1, 1, 0.0), 18)
 	_toast_box.position.y = 100
 	_toast_box.modulate.a = 0
@@ -407,6 +424,15 @@ func _confirm_leave() -> void:
 		Game.ui_open = false)
 	go.pressed.connect(func(): menu_pressed.emit())
 	_pop_in(p)
+
+
+## Shows the countdown for a timed challenge; a negative value hides it.
+func set_timer(seconds: float) -> void:
+	if not _timer_label:
+		return
+	_timer_label.visible = seconds >= 0
+	_timer_label.text = "%.1f" % maxf(seconds, 0.0)
+	_timer_label.add_theme_color_override("font_color", Color(1, 0.45, 0.45) if seconds < 5.0 else Color.WHITE)
 
 
 func _counter(parent: Control, icon: String, color: Color) -> Label:
