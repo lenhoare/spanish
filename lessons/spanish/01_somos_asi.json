@@ -1,0 +1,214 @@
+{
+  "format": "lesson-island/1",
+  "title": "Somos así",
+  "subject": "Español - Unit 1",
+  "theme": "meadow",
+  "intro": "Free time, films and plans! Learn the present tense and the near future.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "The present tense",
+        "markdown": "# The present tense\nThere are three groups of regular verbs: **-ar**, **-er** and **-ir**.\nTake off the ending and add the endings in bold:\n\n| Person | bailar (to dance) | comer (to eat) | escribir (to write) |\n|---|---|---|---|\n| yo | bail**o** | com**o** | escrib**o** |\n| tú | bail**as** | com**es** | escrib**es** |\n| él / ella / usted | bail**a** | com**e** | escrib**e** |\n| nosotros/as | bail**amos** | com**emos** | escrib**imos** |\n| vosotros/as | bail**áis** | com**éis** | escrib**ís** |\n| ellos / ellas / ustedes | bail**an** | com**en** | escrib**en** |\n\n> Me encanta el baile. **Bailo** dos veces a la semana."
+      },
+      {
+        "title": "Ser, ir, hacer",
+        "markdown": "# Irregular verbs\nThese don't follow the pattern - learn them by heart!\n\n| | ser (to be) | ir (to go) |\n|---|---|---|\n| yo | **soy** | **voy** |\n| tú | **eres** | **vas** |\n| él / ella | **es** | **va** |\n| nosotros | **somos** | **vamos** |\n| vosotros | **sois** | **vais** |\n| ellos / ellas | **son** | **van** |\n\n**hacer** (to do / make) is regular except for \"I\": **hago**\n\n- Mi actriz favorita **es** Zoe Saldana.\n- Mi hermano **va** al parque todos los días.\n- Los lunes voy a la piscina, donde **hago** natación."
+      },
+      {
+        "title": "The near future",
+        "markdown": "# The near future: \"going to...\"\nUse **ir** (present tense) + **a** + infinitive:\n\n- **Voy a ver** un partido de fútbol. - *I am going to see a football match.*\n- **Vamos a jugar** al tenis. - *We are going to play tennis.*\n- **¿Vas a venir?** - *Are you going to come?*\n- **Van a ir** a Italia. - *They are going to go to Italy.*\n- **Va a ser** genial. - *It's going to be great.*\n\n## Present or future?\n- **Present:** things you do regularly - *Bailo salsa una vez a la semana.*\n- **Near future:** things you are going to do - *Mañana voy a bailar flamenco.*"
+      },
+      {
+        "title": "Free time",
+        "markdown": "# En mi tiempo libre\n- Bailo Zumba - *I dance Zumba*\n- Cocino para mi familia - *I cook for my family*\n- Escribo canciones - *I write songs*\n- Leo cómics / libros - *I read comics / books*\n- Monto en bici - *I ride my bike*\n- Saco fotos - *I take photos*\n- Toco el teclado - *I play the keyboard*\n- Soy miembro de un club / equipo / grupo - *I am a member of a club / team / band*\n\n## How often?\n**a veces** (sometimes), **a menudo** (often), **siempre** (always),\n**una vez a la semana** (once a week), **dos veces a la semana** (twice a week),\n**(casi) todos los días** ((almost) every day), **los fines de semana** (at weekends)"
+      },
+      {
+        "title": "Opinions & cinema",
+        "markdown": "# Opinions\n- **Me gusta(n)** (mucho) - *I like (a lot)*\n- **Me encanta(n) / Me chifla(n)** - *I love*\n- **No me gusta(n) (nada)** - *I don't like (at all)*\n\nUse **gustan / encantan** with plural things: *Me encantan los videojuegos.*\n\n# ¿Qué tipo de película es?\nuna comedia, una película de **acción / animación / aventuras / ciencia ficción / fantasía / superhéroes / terror**\n\n*Mi actor favorito es... / Mi actriz favorita es...*"
+      },
+      {
+        "title": "Birthday plans",
+        "markdown": "# ¿Cómo vas a celebrar tu cumpleaños?\n- Voy a hacer karting / ir a la bolera\n- Voy a ir a un parque de atracciones\n- Voy a pasar la noche en casa con mis amigos\n- Vamos a montar en una montaña rusa\n- Vamos a ver películas de terror. **¡Va a ser genial!**\n\n## Useful words\n**primero** (first), **luego** (then), **después** (afterwards), **más tarde** (later),\n**casi** (almost), **pero** (but), **también** (also), **además** (furthermore),\n**por supuesto** (of course)"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "s1-bailo",
+      "question": "Me encanta el baile. ____ dos veces a la semana.\n(bailar - \"I dance\")",
+      "answers": [
+        "bailo"
+      ],
+      "hint": "Look at the -ar column for 'yo' on page 1.",
+      "explanation": "Bailo - the 'yo' ending for -ar verbs is -o."
+    },
+    {
+      "id": "s1-va",
+      "question": "Mi hermano ____ al parque todos los días.\n(ir - \"he goes\")",
+      "answers": [
+        "va"
+      ],
+      "hint": "ir is irregular - see page 2.",
+      "explanation": "Va - él/ella form of ir."
+    },
+    {
+      "id": "s1-escriben",
+      "question": "Mis padres ____ cartas para Amnistía Internacional.\n(escribir - \"they write\")",
+      "answers": [
+        "escriben"
+      ],
+      "hint": "It's an -ir verb, 'ellos' form - page 1.",
+      "explanation": "Escriben - ellos form of an -ir verb."
+    },
+    {
+      "id": "s1-hago",
+      "question": "How do you say \"I do / I make\" in Spanish?\n(hacer)",
+      "answers": [
+        "hago",
+        "yo hago"
+      ],
+      "hint": "hacer is only irregular in the 'I' form - page 2.",
+      "explanation": "Hago - hacer is irregular in the yo form."
+    },
+    {
+      "id": "s1-vamos",
+      "question": "Translate into Spanish:\n\"We are going to play tennis.\"",
+      "answers": [
+        "vamos a jugar al tenis",
+        "vamos a jugar tenis",
+        "nosotros vamos a jugar al tenis"
+      ],
+      "hint": "ir + a + infinitive. 'We go' = vamos. Page 3.",
+      "explanation": "Vamos a jugar al tenis."
+    },
+    {
+      "id": "s1-somos",
+      "question": "Mi familia y yo ____ fanáticos del baloncesto.",
+      "choices": [
+        "somos",
+        "son",
+        "es",
+        "sois"
+      ],
+      "correct": 0,
+      "hint": "'My family and I' = we. Check ser on page 2.",
+      "explanation": "Somos - 'my family and I' means 'we'."
+    }
+  ],
+  "chests": [
+    {
+      "id": "s1-amenudo",
+      "question": "What does \"a menudo\" mean?",
+      "choices": [
+        "often",
+        "never",
+        "always",
+        "at weekends"
+      ],
+      "correct": 0,
+      "hint": "Page 4 - how often?",
+      "explanation": "A menudo = often.",
+      "level": 1
+    },
+    {
+      "id": "s1-saco",
+      "question": "\"Saco fotos\" means...",
+      "choices": [
+        "I take photos",
+        "I draw pictures",
+        "I watch films",
+        "I read comics"
+      ],
+      "correct": 0,
+      "hint": "Page 4 - free time.",
+      "explanation": "Saco fotos = I take photos.",
+      "level": 1
+    },
+    {
+      "id": "s1-future",
+      "question": "Which sentence is in the NEAR FUTURE?",
+      "choices": [
+        "Voy a ver una película.",
+        "Veo una película.",
+        "Me gusta ver películas.",
+        "Veo películas a menudo."
+      ],
+      "correct": 0,
+      "hint": "Look for ir + a + infinitive - page 3.",
+      "explanation": "Voy a ver = I am going to watch.",
+      "level": 2
+    },
+    {
+      "id": "s1-van",
+      "question": "Julia y Felipe, ¿____ a menudo al cine?",
+      "choices": [
+        "van",
+        "va",
+        "vamos",
+        "voy"
+      ],
+      "correct": 0,
+      "hint": "Julia and Felipe = they. Check ir on page 2.",
+      "explanation": "¿Van a menudo al cine? - van is the 'they' form of ir.",
+      "level": 2
+    },
+    {
+      "id": "s1-encantan",
+      "question": "Which sentence is CORRECT?",
+      "choices": [
+        "Me encantan los videojuegos.",
+        "Me encanta los videojuegos.",
+        "Me encantan el fútbol.",
+        "Me gusta las películas."
+      ],
+      "correct": 0,
+      "hint": "Plural things need encantan / gustan - page 5.",
+      "explanation": "Me encantan los videojuegos - 'videojuegos' is plural, so encantan.",
+      "level": 3
+    },
+    {
+      "id": "s1-tenses",
+      "question": "Normalmente ____ salsa, pero mañana ____ flamenco.",
+      "choices": [
+        "bailo / voy a bailar",
+        "voy a bailar / bailo",
+        "bailo / bailo",
+        "voy a bailar / voy a bailar"
+      ],
+      "correct": 0,
+      "hint": "Present for what you usually do, near future for tomorrow - page 3.",
+      "explanation": "Normalmente bailo salsa, pero mañana voy a bailar flamenco.",
+      "level": 3
+    }
+  ],
+  "sweets": [
+    {
+      "id": "s1-sweet-bolera",
+      "question": "Extension! Translate into Spanish:\n\"Next weekend I am going to go to the bowling alley.\"",
+      "answers": [
+        "el fin de semana que viene voy a ir a la bolera",
+        "voy a ir a la bolera el fin de semana que viene",
+        "el próximo fin de semana voy a ir a la bolera",
+        "voy a ir a la bolera el próximo fin de semana"
+      ],
+      "hint": "Near future (page 3) + 'el fin de semana que viene' and 'la bolera' (page 6).",
+      "explanation": "El fin de semana que viene voy a ir a la bolera. ¡Va a ser genial!",
+      "kind": "key"
+    },
+    {
+      "id": "s1-sweet-club",
+      "question": "Extension! Translate into Spanish:\n\"My brother and I are members of a club.\"",
+      "answers": [
+        "mi hermano y yo somos miembros de un club",
+        "mi hermano y yo somos miembros de un club de judo"
+      ],
+      "hint": "'My brother and I' = we, so use ser in the 'nosotros' form (page 2). 'Soy miembro de un club' is on page 4.",
+      "explanation": "Mi hermano y yo somos miembros de un club.",
+      "kind": "guarded"
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "You can talk about free time and plans!"
+  }
+}

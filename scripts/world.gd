@@ -1,0 +1,741 @@
+extends Node3D
+## "Meadow Island" world template.
+##
+## The layout is hand-designed; the lesson file fills the slots:
+##   - question cards go into CARD_SLOTS (in order, easiest first)
+##   - multiple-choice chests go into CHEST_SLOTS
+##   - the bridge to Star Island has one section per card
+##   - sweets (bonus challenges) go to the sweet shop ("key") or the ghost garden ("guarded")
+
+signal card_touched(card: Node3D)
+signal chest_touched(chest: Node3D)
+signal sweet_touched(sweet: Node3D)
+signal whiteboard_touched
+signal prize_claimed
+
+const MAIN_R := 30.0
+const SPAWN := Vector3(0, 0.2, 14)
+const PRIZE_CENTER := Vector3(0, 0, -(MAIN_R + 21))
+const EAST_ISLAND := Vector3(40, 0, 8)
+const WEST_ISLAND := Vector3(-40, 0, 14)
+const SWEET_SHOP := Vector3(16, 0, -20)
+const GHOST_GARDEN := Vector3(-18, 0, 16)
+const KEY_SPOT := Vector3(-42, 0, 11.5)
+const CAFE := Vector3(16, 0, -20)           # the chef's café uses the sweet shop's spot
+const SHIP := Vector3(17, -2.2, 44)         # pirate ship moored off the south coast (keel below the sea)
+const JETTY_X := 9.0
+const JETTY_Z := Vector2(26, 47)
+const HEALTHY_FIELD := Vector3(-18, 0, 16)  # "Comida sana" uses the ghost garden's spot
+
+## Characters with a 3-item fetch quest (lesson sweet "kind" -> set-up). Items are
+## [spanish name, model, scale, where it's hidden]. All speech is Spanish only.
+const QUESTS := {
+	"chef": {
+		"sign": "Café del Cocinero", "character": "character-male-e", "hat": "chef",
+		"speaker": "El cocinero", "greeting": "¡Hola! Soy cocinero.\n¡Necesito ingredientes!",
+		"thanks": "¡Gracias!\n¡Toma un dulce!", "awning": Color(0.93, 0.3, 0.35),
+		"reward": "food/cupcake", "counter": [["food/burger", 2.5, -1.4]],
+		"items": [
+			["una pizza", "food/pizza", 2.6, Vector3(-17.5, 1.8, -6)],                   # west plateau
+			["un limón", "food/lemon", 4.0, Vector3(38.5, 0, 11.5)],                     # east island
+			["una botella de limonada", "food/soda-bottle", 3.0, Vector3(17.2, 2.7, 16)],  # floating islet
+		],
+	},
+	"trainer": {
+		"sign": "El Gimnasio", "character": "skate/character-skate-girl", "hat": "headband", "npc_scale": 2.9,
+		"speaker": "La entrenadora", "greeting": "¡Hola! Soy entrenadora.\n¡Necesito mis cosas!",
+		"thanks": "¡Genial!\n¡Toma un dulce!", "awning": Color(0.25, 0.6, 0.95),
+		"reward": "food/donut-chocolate", "reward_scale": 4.0, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"floor_props": [["skate/skateboard", 2.6, Vector3(4.0, 0.0, 3.0), 0.4]],
+		"counter": [["dumbbell", 0.8, -1.45, -0.25], ["dumbbell", 0.8, -0.7, 0.25], ["arena/trophy", 1.6, 1.5]],
+		"items": [
+			["una botella de agua", "survival/bottle", 6.0, Vector3(24, 0.5, -4)],     # on the east mound
+			["un plátano", "food/banana", 2.6, Vector3(-42.5, 0, 15.5)],              # west island
+			["una pelota", "minigolf/ball-red", 10.0, Vector3(20.5, 3.8, 12.4)],      # top floating islet
+		],
+	},
+}
+
+## Where cards go, easiest first.
+const CARD_SLOTS := [
+	Vector3(-10, 1.0, -18),     # little hill, north-west
+	Vector3(-16, 1.8, -4),      # west plateau (up the stepping stones)
+	Vector3(16, 5.0, -8),       # top of the tower (use the spring!)
+	Vector3(20, 4.5, 8),        # end of the floating islet path
+	Vector3(41, 0, 10.5),       # east island (stepping stones)
+	Vector3(-24, 0.8, -7),      # far west hill
+	Vector3(8, 0, 24),
+	Vector3(-26, 0, 2),
+]
+## Chests in pairs: level 1 near the start, level 2 further out, level 3 hardest to reach.
+const CHEST_SLOTS := [
+	Vector3(-8, 0, 11),         # L1 near the start
+	Vector3(6, 0.6, -12),       # L1 on the mound behind the whiteboard
+	Vector3(40, 0, 4.5),        # L2 east island (stepping stones)
+	Vector3(-4, 0, 25),         # L2 south meadow
+	Vector3(-38.5, 0, 17),      # L3 west island (moving platform)
+	Vector3(23, 0, -14),        # L3 past the tower, near the sweet shop
+]
+
+## Colour themes: each island (chapter) can pick one with "theme" in the course/lesson.
+const THEMES := {
+	"meadow":   {"grass": Color(0.4, 0.72, 0.27),  "dirt": Color(0.78, 0.48, 0.3),  "sand": Color(1.0, 0.84, 0.52),  "sky": Color(0.2, 0.48, 0.95),  "horizon": Color(0.78, 0.9, 1.0),  "deep": Color(0.07, 0.36, 0.8),  "shallow": Color(0.18, 0.6, 0.93),  "trees": ["tree", "tree", "tree-pine", "tree-pine-small"]},
+	"sunset":   {"grass": Color(0.9, 0.58, 0.2),   "dirt": Color(0.82, 0.38, 0.32), "sand": Color(1.0, 0.82, 0.66),  "sky": Color(0.93, 0.45, 0.5),  "horizon": Color(1.0, 0.82, 0.6),  "deep": Color(0.35, 0.3, 0.7),   "shallow": Color(0.95, 0.55, 0.55), "trees": ["tree", "tree", "tree-pine"]},
+	"mint":     {"grass": Color(0.16, 0.55, 0.42), "dirt": Color(0.3, 0.5, 0.68),   "sand": Color(0.9, 0.93, 0.78), "sky": Color(0.25, 0.68, 0.9),  "horizon": Color(0.82, 1.0, 0.95), "deep": Color(0.05, 0.45, 0.65), "shallow": Color(0.2, 0.78, 0.82),  "trees": ["tree", "tree-pine", "tree-pine-small"]},
+	"lavender": {"grass": Color(0.56, 0.42, 0.86), "dirt": Color(0.5, 0.38, 0.75),  "sand": Color(0.96, 0.87, 1.0),  "sky": Color(0.45, 0.4, 0.92),  "horizon": Color(0.92, 0.84, 1.0), "deep": Color(0.25, 0.25, 0.75), "shallow": Color(0.45, 0.55, 0.95), "trees": ["tree", "tree", "tree-pine-small"]},
+	"candy":    {"grass": Color(0.93, 0.42, 0.64), "dirt": Color(0.96, 0.8, 0.5),   "sand": Color(1.0, 0.94, 0.82),  "sky": Color(0.5, 0.62, 1.0),   "horizon": Color(1.0, 0.86, 0.93), "deep": Color(0.3, 0.45, 0.9),  "shallow": Color(0.55, 0.78, 1.0),  "trees": ["tree", "tree", "tree-pine"]},
+	"snow":     {"grass": Color(0.84, 0.89, 0.97), "dirt": Color(0.58, 0.68, 0.85), "sand": Color(0.85, 0.9, 0.98),  "sky": Color(0.42, 0.58, 0.85), "horizon": Color(0.9, 0.95, 1.0),  "deep": Color(0.1, 0.3, 0.55),   "shallow": Color(0.4, 0.65, 0.85),  "trees": ["tree-snow", "tree-pine-snow", "tree-pine-snow-small"]},
+}
+
+var player: CharacterBody3D
+var theme: Dictionary = THEMES.meadow
+var bridge: Node3D
+var whiteboard: Node3D
+var ghost: Node3D
+var ship: Node3D
+var cafe: Node3D
+var healthy_field: Node3D
+var skateboard: AnimatableBody3D
+var cards: Array[Node3D] = []
+var chests: Array[Node3D] = []
+var sweets: Array[Node3D] = []
+
+var _grass: StandardMaterial3D
+var _dirt: StandardMaterial3D
+var _sand: StandardMaterial3D
+var _foam: StandardMaterial3D
+var _rng := RandomNumberGenerator.new()
+var _keepout: Array = []   # [Vector2 center, radius]
+var _mover: AnimatableBody3D
+var _mover_t := 0.0
+var _clouds: Array[Node3D] = []
+
+
+func build(lesson: Dictionary, theme_name := "meadow") -> void:
+	_rng.seed = 12345
+	var t = lesson.get("theme", "")
+	if t is String and THEMES.has(t):
+		theme_name = t
+	theme = THEMES.get(theme_name, THEMES.meadow)
+	_grass = Props.mat(theme.grass)
+	_dirt = Props.mat(theme.dirt)
+	_sand = Props.mat(theme.sand)
+	_foam = Props.unshaded(Color(1, 1, 1, 0.55))
+
+	_environment()
+	_sea()
+
+	# Islands
+	_island(Vector3.ZERO, MAIN_R, 96)
+	_island(PRIZE_CENTER, 6.0)
+	_island(EAST_ISLAND, 5.0)
+	_island(WEST_ISLAND, 5.0)
+
+	# West plateau with stepping-stone steps up to it
+	_pillar(Vector3(-16, 0, -4), 3.5, 1.8)
+	_pillar(Vector3(-17.5, 0, 1.6), 1.1, 0.6)
+	_pillar(Vector3(-16.2, 0, 0.3), 1.0, 1.2)
+	_keep(Vector3(-16, 0, -4), 4.2)
+	_keep(Vector3(-17, 0, 1), 2.4)
+	# Tower (reach the top with the spring)
+	_pillar(Vector3(16, 0, -8), 2.2, 5.0)
+	_keep(Vector3(16, 0, -8), 3.2)
+	var spring := Node3D.new()
+	spring.set_script(preload("res://scripts/spring_pad.gd"))
+	add_child(spring)
+	spring.position = Vector3(12.8, 0, -5.2)
+	_keep(spring.position, 1.8)
+	# Floating islets leading up to a tall pillar
+	for p in [Vector3(14, 1.6, 15), Vector3(17.2, 2.7, 16), Vector3(20.5, 3.8, 12.4)]:
+		_floating_islet(p, 1.35)
+	_pillar(Vector3(20, 0, 8), 1.8, 4.5)
+	_keep(Vector3(20, 0, 8), 2.8)
+	# Little hill and some gentle mounds for variety
+	_pillar(Vector3(-10, 0, -18), 2.5, 1.0)
+	_keep(Vector3(-10, 0, -18), 3.2)
+	for m in [[Vector3(6, 0, -12), 3.5, 0.6], [Vector3(-24, 0, -7), 3.2, 0.8], [Vector3(24, 0, -4), 3.0, 0.5], [Vector3(-8, 0, 22), 2.6, 0.5]]:
+		_pillar(m[0], m[1], m[2])
+		_keep(m[0], m[1] + 0.6)
+
+	# Stepping stones to the east island
+	for x in [30.8, 32.9]:
+		_pillar(Vector3(x, 0, EAST_ISLAND.z), 0.8, 0.2, 5.0)
+	# Moving platform to the west island
+	_mover = AnimatableBody3D.new()
+	_mover.add_to_group("moving")
+	var mm := Props.model("platform-fortified")
+	mm.scale = Vector3(2.6, 2.0, 2.6)
+	_mover.add_child(mm)
+	var mcs := CollisionShape3D.new()
+	var mshape := BoxShape3D.new()
+	mshape.size = Vector3(2.6, 0.42, 2.6)
+	mcs.shape = mshape
+	mcs.position.y = 0.21
+	_mover.add_child(mcs)
+	add_child(_mover)
+	_mover.position = Vector3(-28.2, -0.4, WEST_ISLAND.z)
+
+	# Whiteboard
+	whiteboard = Node3D.new()
+	whiteboard.set_script(preload("res://scripts/whiteboard.gd"))
+	add_child(whiteboard)
+	whiteboard.position = Vector3(0, 0, -2)
+	whiteboard.setup(lesson)
+	whiteboard.touched.connect(func(): whiteboard_touched.emit())
+	_keep(Vector3(0, 0, -2), 5.5)
+	_keep(Vector3(0, 0, 1.5), 3.0)
+	_keep(SPAWN, 3.0)
+
+	# Bridge to Star Island: one section per question card.
+	var n_cards := mini(lesson.cards.size(), CARD_SLOTS.size())
+	bridge = Node3D.new()
+	bridge.set_script(preload("res://scripts/bridge.gd"))
+	add_child(bridge)
+	bridge.position = Vector3(0, 0, -MAIN_R + 0.6)
+	# From just inside the main island's edge to just inside Star Island's edge.
+	var blen := (-PRIZE_CENTER.z - 6.0 + 0.4) - (MAIN_R - 0.6)
+	bridge.setup(maxi(n_cards, 1), blen)
+	for x in [-2.4, 2.4]:
+		Props.place(self, "flag", Vector3(x, 0, -MAIN_R + 1.4), 0.0, 2.2, "cyl")
+	var sign := Props.place(self, "sign", Vector3(3.6, 0, -MAIN_R + 2.0), -0.3, 2.5, "box")
+	var sl := Label3D.new()
+	sl.text = "Star\nIsland"
+	sl.font_size = 40
+	sl.pixel_size = 0.005
+	sl.modulate = Color(0.4, 0.22, 0.1)
+	sl.position = Vector3(0, 1.1, 0.22)
+	sign.add_child(sl)
+	for x in range(-3, 4):
+		_keep(Vector3(x, 0, -MAIN_R + 2), 2.0)
+	if n_cards == 0:
+		bridge.build_next()
+
+	# Prize
+	var prize := Node3D.new()
+	prize.set_script(preload("res://scripts/prize.gd"))
+	add_child(prize)
+	prize.position = PRIZE_CENTER + Vector3(0, 0, -1)
+	prize.setup(lesson.prize.name)
+	prize.claimed.connect(func(): prize_claimed.emit())
+	# Keep the walk from the bridge to the prize clear of trees.
+	for z in range(int(PRIZE_CENTER.z) + 6, int(PRIZE_CENTER.z) - 3, -1):
+		_keep(Vector3(0, 0, z), 2.2)
+
+	# Question cards
+	var tex: Texture2D = preload("res://scripts/question_card.gd").card_texture()
+	for i in n_cards:
+		var c := Node3D.new()
+		c.set_script(preload("res://scripts/question_card.gd"))
+		add_child(c)
+		c.position = CARD_SLOTS[i]
+		c.setup(lesson.cards[i], i, tex)
+		c.touched.connect(func(card): card_touched.emit(card))
+		cards.append(c)
+		_keep(CARD_SLOTS[i], 2.0)
+
+	# Quiz chests
+	for i in mini(lesson.chests.size(), CHEST_SLOTS.size()):
+		var ch := Node3D.new()
+		ch.set_script(preload("res://scripts/quiz_chest.gd"))
+		add_child(ch)
+		ch.position = CHEST_SLOTS[i]
+		ch.rotation.y = atan2(-CHEST_SLOTS[i].x, -CHEST_SLOTS[i].z)
+		ch.setup(lesson.chests[i], int(lesson.chests[i].get("level", i / 2 + 1)))
+		ch.set_level_locked(ch.level > 1)
+		ch.touched.connect(func(chest): chest_touched.emit(chest))
+		chests.append(ch)
+		_keep(CHEST_SLOTS[i], 2.5)
+
+	# Sweets: bonus challenges in special places. Each island's lesson picks which ones.
+	var ship_qs := {}
+	for q in lesson.get("sweets", []):
+		match str(q.get("kind", "")):
+			"key":
+				if not _has_sweet_at(SWEET_SHOP):
+					_build_sweet_shop(q)
+			"guarded":
+				if not _has_sweet_at(GHOST_GARDEN):
+					_build_ghost_garden(q)
+			"ship_deck", "ship_crow":
+				ship_qs[str(q.kind)] = q
+			"chef", "trainer":
+				if not _has_sweet_at(CAFE):
+					_build_quest(q, QUESTS[str(q.kind)])
+			"healthy_field":
+				if not _has_sweet_at(HEALTHY_FIELD):
+					_build_healthy_field(q)
+	if not ship_qs.is_empty():
+		_build_ship(ship_qs)
+
+	_stars()
+	_decorate()
+	_make_clouds()
+
+	Game.total_cards = n_cards
+	Game.total_chests = chests.size()
+	Game.total_sweets = sweets.size()
+
+
+func spawn_player(character_name: String) -> CharacterBody3D:
+	player = CharacterBody3D.new()
+	player.set_script(preload("res://scripts/player.gd"))
+	player.add_to_group("player")
+	# Position before entering the tree, otherwise physics briefly sees it at the origin
+	# (inside the whiteboard's trigger zone).
+	player.position = SPAWN
+	add_child(player)
+	player.setup(character_name, SPAWN)
+	return player
+
+
+func _physics_process(delta: float) -> void:
+	if _mover:
+		_mover_t += delta
+		_mover.position.x = -28.2 - (sin(_mover_t * 0.9) * 0.5 + 0.5) * 5.2
+
+
+func _process(delta: float) -> void:
+	for c in _clouds:
+		c.position.x += delta * 0.6
+		if c.position.x > 110:
+			c.position.x = -110
+
+
+# ---------------------------------------------------------------- sweets
+
+func _has_sweet_at(p: Vector3) -> bool:
+	for s in sweets:
+		if s.get_meta("area") == p:
+			return true
+	return false
+
+
+func _add_sweet(q: Dictionary, model: String, pos: Vector3, area: Vector3, scale := 5.0) -> Node3D:
+	var s := Node3D.new()
+	s.set_script(preload("res://scripts/sweet.gd"))
+	add_child(s)
+	s.global_position = pos
+	s.setup(q, model, scale)
+	s.set_meta("area", area)
+	s.touched.connect(func(sweet): sweet_touched.emit(sweet))
+	sweets.append(s)
+	return s
+
+
+## The sweet shop: locked hut; the key is hidden on the west island.
+func _build_sweet_shop(q: Dictionary) -> void:
+	var shop := Node3D.new()
+	shop.set_script(preload("res://scripts/sweet_shop.gd"))
+	add_child(shop)
+	shop.position = SWEET_SHOP
+	var to_centre := -SWEET_SHOP.normalized()
+	shop.rotation.y = atan2(to_centre.x, to_centre.z)   # door faces the middle of the island
+	shop.setup()
+	_keep(SWEET_SHOP, 6.5)
+	_keep(SWEET_SHOP + to_centre * 6.0, 2.0)
+	_add_sweet(q, "food/cupcake", SWEET_SHOP + Vector3(0, 0.1, 0), SWEET_SHOP)
+
+	var key := Area3D.new()
+	key.set_script(preload("res://scripts/key_pickup.gd"))
+	key.position = KEY_SPOT
+	add_child(key)
+	_keep(KEY_SPOT, 1.5)
+
+
+## The ghost garden: a lollipop on a pedestal, guarded by a patrolling ghost.
+func _build_ghost_garden(q: Dictionary) -> void:
+	_pillar(GHOST_GARDEN, 1.2, 1.2)
+	_keep(GHOST_GARDEN, 6.5)
+	var lolly := _add_sweet(q, "food/lollypop", GHOST_GARDEN + Vector3(0, 1.2, 0), GHOST_GARDEN)
+	ghost = Node3D.new()
+	ghost.set_script(preload("res://scripts/ghost.gd"))
+	add_child(ghost)
+	ghost.setup(GHOST_GARDEN, 3.2)
+	ghost.guarded_sweet = lolly
+	# Spooky-cute decorations in a ring: pumpkins, lanterns and gravestones.
+	var deco := ["graveyard/pumpkin-carved", "graveyard/lantern-candle", "graveyard/gravestone-round", "graveyard/pumpkin"]
+	for i in 12:
+		var a := TAU * i / 12.0 + 0.2
+		var p := GHOST_GARDEN + Vector3(cos(a), 0, sin(a)) * 6.0
+		Props.place(self, deco[i % deco.size()], p, -a + PI / 2, 2.6, "")
+	var warn := Props.place(self, "sign", GHOST_GARDEN + Vector3(5.5, 0, -4.5), -0.8, 2.5, "box")
+	var wl := Label3D.new()
+	wl.text = "¡Cuidado!\nFantasma"
+	wl.font_size = 34
+	wl.pixel_size = 0.005
+	wl.modulate = Color(0.45, 0.15, 0.35)
+	wl.position = Vector3(0, 1.1, 0.22)
+	warn.add_child(wl)
+
+
+## The pirate ship beside a jetty: one sweet on deck (past the cannons), one in the crow's nest.
+func _build_ship(qs: Dictionary) -> void:
+	# Jetty from the beach out along the ship's side.
+	var jetty := StaticBody3D.new()
+	jetty.add_to_group("solid_ground")
+	add_child(jetty)
+	var length := JETTY_Z.y - JETTY_Z.x
+	jetty.position = Vector3(JETTY_X, 0, (JETTY_Z.x + JETTY_Z.y) / 2.0)
+	var deck := BoxMesh.new()
+	deck.size = Vector3(3.0, 0.3, length)
+	deck.material = Props.mat(Color(0.7, 0.48, 0.32))
+	var dmi := MeshInstance3D.new()
+	dmi.mesh = deck
+	dmi.position.y = -0.15
+	jetty.add_child(dmi)
+	var dcs := CollisionShape3D.new()
+	var dsh := BoxShape3D.new()
+	dsh.size = deck.size
+	dcs.shape = dsh
+	dcs.position.y = -0.15
+	jetty.add_child(dcs)
+	var post_mat := Props.mat(Color(0.5, 0.33, 0.22))
+	for i in int(length / 3.0) + 1:
+		for side in [-1.5, 1.5]:
+			var post := CylinderMesh.new()
+			post.top_radius = 0.16
+			post.bottom_radius = 0.16
+			post.height = 2.6
+			post.material = post_mat
+			var pm := MeshInstance3D.new()
+			pm.mesh = post
+			pm.position = Vector3(side, -0.9, -length / 2.0 + i * 3.0)
+			jetty.add_child(pm)
+	for z in range(int(JETTY_Z.x) - 2, int(JETTY_Z.y) + 1, 2):
+		_keep(Vector3(JETTY_X, 0, z), 2.2)
+	# Clutter on the jetty - kept well clear of the gangplank (which starts at ship z-1).
+	Props.place(self, "pirate/barrel", Vector3(JETTY_X - 0.9, 0, JETTY_Z.y - 0.8), 0.3, 1.0, "cyl")
+	Props.place(self, "pirate/crate-bottles", Vector3(JETTY_X + 0.7, 0, JETTY_Z.x + 5.0), 0.2, 1.3, "box")
+
+	ship = Node3D.new()
+	ship.set_script(preload("res://scripts/pirate_ship.gd"))
+	add_child(ship)
+	ship.position = SHIP
+	ship.setup()
+	if qs.has("ship_deck"):
+		_add_sweet(qs.ship_deck, "food/donut-sprinkles", ship.to_global(ship.deck_sweet_spot()), SHIP)
+	if qs.has("ship_crow"):
+		_add_sweet(qs.ship_crow, "food/candy-bar-wrapper", ship.to_global(ship.nest_sweet_spot()), SHIP + Vector3.UP)
+	# Stars up the rigging, to lure climbers.
+	var steps: Array[Vector3] = ship.climb_steps()
+	for k: int in [1, 3, 5, 7]:
+		_star(ship.to_global(steps[k] + Vector3(0, 0.7, 0)))
+
+
+## A character's market stall; their three lost things are hidden around the island.
+func _build_quest(q: Dictionary, quest: Dictionary) -> void:
+	cafe = Node3D.new()
+	cafe.set_script(preload("res://scripts/quest_stall.gd"))
+	add_child(cafe)
+	cafe.position = CAFE
+	var to_centre := -CAFE.normalized()
+	cafe.rotation.y = atan2(to_centre.x, to_centre.z)
+	cafe.setup(quest)
+	_keep(CAFE, 5.0)
+	_keep(CAFE + to_centre * 4.0, 2.5)
+	# The reward sits at the front corner of the counter (so it doesn't hide the character).
+	var s := _add_sweet(q, quest.reward, cafe.to_global(quest.get("reward_pos", Vector3(1.3, 0.75, 1.55))), CAFE, float(quest.get("reward_scale", 3.2)))
+	if quest.get("reward_hidden", false):
+		s.visible = false     # appears on the counter once everything has been brought back
+	if quest.has("floor_props"):
+		for fp in quest.floor_props:     # [model, scale, local position, y rotation]
+			if fp[0] == "skate/skateboard":
+				skateboard = AnimatableBody3D.new()
+				skateboard.set_script(preload("res://scripts/skateboard.gd"))
+				add_child(skateboard)
+				skateboard.global_position = cafe.to_global(fp[2])
+				skateboard.rotation.y = cafe.rotation.y + fp[3]
+				skateboard.setup(fp[1])
+				continue
+			var d := Props.model(fp[0])
+			d.scale = Vector3.ONE * fp[1]
+			cafe.add_child(d)
+			d.position = fp[2]
+			d.rotation.y = fp[3]
+	s.gate = cafe.has_everything
+	cafe.sweet = s
+	for item in quest.items:
+		var ing := Area3D.new()
+		ing.set_script(preload("res://scripts/ingredient.gd"))
+		add_child(ing)
+		ing.position = item[3]
+		ing.setup(item[0], item[1], item[2])
+		_keep(item[3], 1.2)
+	Game.ingredients_total = quest.items.size()
+
+
+## "Comida sana": collect healthy food in a fenced field while dodging bouncing junk food.
+func _build_healthy_field(q: Dictionary) -> void:
+	var field := Node3D.new()
+	healthy_field = field
+	field.set_script(preload("res://scripts/healthy_field.gd"))
+	add_child(field)
+	field.position = HEALTHY_FIELD
+	var s := _add_sweet(q, "food/watermelon", HEALTHY_FIELD + Vector3(0, 1.2, 0), HEALTHY_FIELD, 2.2)
+	field.setup(s)
+	_pillar(HEALTHY_FIELD, 1.0, 1.2)
+	_keep(HEALTHY_FIELD, field.RADIUS + 1.5)
+
+
+# ---------------------------------------------------------------- building blocks
+
+func _environment() -> void:
+	var env := Environment.new()
+	env.background_mode = Environment.BG_SKY
+	var sky := Sky.new()
+	var sm := ProceduralSkyMaterial.new()
+	sm.sky_top_color = theme.sky
+	sm.sky_horizon_color = theme.horizon
+	sm.ground_horizon_color = theme.horizon
+	sm.ground_bottom_color = Color(0.4, 0.7, 0.95)
+	sm.sun_angle_max = 20
+	sky.sky_material = sm
+	env.sky = sky
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+	env.ambient_light_energy = 0.45
+	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+	env.adjustment_enabled = true
+	env.adjustment_saturation = 1.1
+	env.fog_enabled = true
+	env.fog_light_color = theme.horizon
+	env.fog_density = 0.002
+	env.fog_sky_affect = 0.0
+	var we := WorldEnvironment.new()
+	we.environment = env
+	add_child(we)
+
+	var sun := DirectionalLight3D.new()
+	sun.rotation = Vector3(deg_to_rad(-52), deg_to_rad(35), 0)
+	sun.light_color = Color(1.0, 0.96, 0.88)
+	sun.light_energy = 1.0
+	sun.shadow_enabled = true
+	sun.shadow_opacity = 0.55
+	sun.directional_shadow_max_distance = 45.0
+	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
+	add_child(sun)
+
+
+func _sea() -> void:
+	var plane := PlaneMesh.new()
+	plane.size = Vector2(600, 600)
+	plane.subdivide_width = 96
+	plane.subdivide_depth = 96
+	var m := ShaderMaterial.new()
+	m.shader = preload("res://scripts/sea.gdshader")
+	m.set_shader_parameter("deep", theme.deep)
+	m.set_shader_parameter("shallow", theme.shallow)
+	plane.material = m
+	var mi := MeshInstance3D.new()
+	mi.mesh = plane
+	mi.position.y = -1.3
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(mi)
+
+
+## Round grassy island with cliffs, a sandy beach and a foam ring.
+func _island(center: Vector3, r: float, seg := 48) -> void:
+	var body := StaticBody3D.new()
+	body.add_to_group("solid_ground")
+	add_child(body)
+	body.position = center
+	_cyl(body, r + 0.25, r + 0.25, 0.6, -0.3, _grass, seg)
+	_cyl(body, r, r * 0.85, 6.0, -3.4, _dirt, seg)
+	_cyl(body, r + 1.6, r + 2.2, 0.8, -1.55, _sand, seg, false)
+	var cs := CollisionShape3D.new()
+	var shape := CylinderShape3D.new()
+	shape.radius = r + 0.25
+	shape.height = 8.0
+	cs.shape = shape
+	cs.position.y = -4.0
+	body.add_child(cs)
+	# Beach is walkable too (in case you fall off the edge you can jump back up).
+	var bcs := CollisionShape3D.new()
+	var bshape := CylinderShape3D.new()
+	bshape.radius = r + 2.0
+	bshape.height = 1.0
+	bcs.shape = bshape
+	bcs.position.y = -1.65
+	body.add_child(bcs)
+	_foam_ring(center, r + 2.3, seg)
+
+
+## A round grassy pillar/hill rising from the ground (or the sea).
+func _pillar(pos: Vector3, r: float, top: float, depth := 1.0) -> void:
+	var body := StaticBody3D.new()
+	body.add_to_group("solid_ground")
+	add_child(body)
+	body.position = Vector3(pos.x, 0, pos.z)
+	var h := top + depth
+	_cyl(body, r + 0.15, r + 0.15, 0.4, top - 0.2, _grass, 32)
+	_cyl(body, r, r * 0.95, h - 0.3, top - 0.3 - (h - 0.3) / 2.0, _dirt, 32)
+	var cs := CollisionShape3D.new()
+	var shape := CylinderShape3D.new()
+	shape.radius = r + 0.15
+	shape.height = h
+	cs.shape = shape
+	cs.position.y = top - h / 2.0
+	body.add_child(cs)
+	if depth > 2.0:
+		_foam_ring(Vector3(pos.x, 0, pos.z), r + 0.4)
+
+
+## A little floating island (grass top, rounded dirt underside). `top` is the walkable height.
+func _floating_islet(top: Vector3, r: float) -> void:
+	var body := StaticBody3D.new()
+	body.add_to_group("solid_ground")
+	add_child(body)
+	body.position = top
+	_cyl(body, r + 0.15, r + 0.15, 0.35, -0.175, _grass, 24)
+	_cyl(body, r, 0.25, 1.2, -0.95, _dirt, 24)
+	var cs := CollisionShape3D.new()
+	var shape := CylinderShape3D.new()
+	shape.radius = r + 0.15
+	shape.height = 0.6
+	cs.shape = shape
+	cs.position.y = -0.3
+	body.add_child(cs)
+
+
+func _cyl(parent: Node3D, top_r: float, bottom_r: float, h: float, y: float, m: Material, seg := 32, shadow := true) -> void:
+	var c := CylinderMesh.new()
+	c.top_radius = top_r
+	c.bottom_radius = bottom_r
+	c.height = h
+	c.radial_segments = seg
+	c.rings = 1
+	c.material = m
+	var mi := MeshInstance3D.new()
+	mi.mesh = c
+	mi.position.y = y
+	if not shadow:
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	parent.add_child(mi)
+
+
+func _foam_ring(center: Vector3, r: float, seg := 48) -> void:
+	var t := TorusMesh.new()
+	t.inner_radius = r
+	t.outer_radius = r + 0.5
+	t.rings = seg
+	t.ring_segments = 6
+	t.material = _foam
+	var mi := MeshInstance3D.new()
+	mi.mesh = t
+	mi.position = center + Vector3(0, -1.28, 0)
+	mi.scale.y = 0.1
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(mi)
+
+
+func _keep(p: Vector3, r: float) -> void:
+	_keepout.append([Vector2(p.x, p.z), r])
+
+
+func _is_free(p: Vector2, r: float) -> bool:
+	for k in _keepout:
+		if p.distance_to(k[0]) < k[1] + r:
+			return false
+	return true
+
+
+func _star(p: Vector3) -> void:
+	var s := Area3D.new()
+	s.set_script(preload("res://scripts/star_pickup.gd"))
+	s.position = p
+	add_child(s)
+	Game.total_stars += 1
+
+
+func _stars() -> void:
+	var pts := [
+		# Trail from the start
+		Vector3(-2, 0.5, 9), Vector3(-4.5, 0.5, 7), Vector3(-7.5, 0.5, 5), Vector3(-10.5, 0.5, 3.5),
+		# Up the plateau steps
+		Vector3(-17.5, 1.1, 1.6), Vector3(-16.2, 1.7, 0.3), Vector3(-17.5, 2.3, -5.5), Vector3(-14.5, 2.3, -5),
+		# Above the spring - grab them on the way up!
+		Vector3(12.8, 2.6, -5.2), Vector3(12.8, 4.4, -5.2), Vector3(16, 5.6, -6.4),
+		# Floating islet path
+		Vector3(14, 2.1, 15), Vector3(17.2, 3.2, 16), Vector3(20.5, 4.3, 12.4), Vector3(20, 5.0, 8),
+		# Stepping stones and east island
+		Vector3(30.8, 0.8, 8), Vector3(32.9, 0.8, 8), Vector3(42.5, 0.5, 6), Vector3(38.5, 0.5, 11),
+		# Moving platform and west island
+		Vector3(-30, 1.4, 14), Vector3(-33, 1.4, 14), Vector3(-41, 0.5, 16.5),
+		# Behind the whiteboard and the mounds
+		Vector3(0, 0.5, -6.5), Vector3(-2, 0.5, -7.5), Vector3(2, 0.5, -7.5), Vector3(6, 1.2, -12),
+		Vector3(24, 1.1, -4), Vector3(-24, 1.4, -9), Vector3(-8, 1.1, 22),
+		# Little hill
+		Vector3(-10, 1.6, -19.8), Vector3(-12, 0.5, -15),
+		# Near the sweet shop and the ghost garden (brave players only!)
+		Vector3(10, 0.5, -17), Vector3(12, 0.5, -24), Vector3(-12, 0.5, 18), Vector3(-15, 0.5, 11),
+		# Around the island
+		Vector3(0, 0.5, 26), Vector3(14, 0.5, 22), Vector3(26, 0.5, 12), Vector3(27, 0.5, -10),
+		Vector3(-27, 0.5, 8), Vector3(-26, 0.5, -14), Vector3(-4, 0.5, -26), Vector3(4, 0.5, -26),
+		# Star Island bonus
+		Vector3(-3.2, 0.5, PRIZE_CENTER.z + 2), Vector3(3.2, 0.5, PRIZE_CENTER.z + 2),
+	]
+	for p in pts:
+		_star(p)
+
+
+func _decorate() -> void:
+	# Trees, thickest towards the edge of the island
+	for i in 120:
+		var a := _rng.randf() * TAU
+		var d := _rng.randf_range(8.0, MAIN_R - 1.2) if i % 3 == 0 else _rng.randf_range(20.0, MAIN_R - 1.2)
+		var p := Vector2(cos(a), sin(a)) * d
+		if not _is_free(p, 1.3):
+			continue
+		_keep(Vector3(p.x, 0, p.y), 1.3)
+		var kind: String = theme.trees[_rng.randi() % theme.trees.size()]
+		Props.place(self, kind, Vector3(p.x, 0, p.y), _rng.randf() * TAU, _rng.randf_range(1.8, 2.6), "cyl")
+	# Small islands get a few trees each
+	for c in [EAST_ISLAND, WEST_ISLAND, PRIZE_CENTER]:
+		for j in 4:
+			var a := _rng.randf() * TAU
+			var p := Vector3(c.x + cos(a) * 3.8, 0, c.z + sin(a) * 3.8)
+			if _is_free(Vector2(p.x, p.z), 1.2):
+				_keep(p, 1.2)
+				Props.place(self, theme.trees[0], p, _rng.randf() * TAU, 1.8, "cyl")
+	# Flowers, mushrooms, rocks, grass tufts everywhere
+	var smalls := ["flowers", "flowers-tall", "flowers", "mushrooms", "grass", "grass", "plant", "rocks", "stones"]
+	for i in 320:
+		var a := _rng.randf() * TAU
+		var d := sqrt(_rng.randf()) * (MAIN_R - 0.8)
+		var p := Vector2(cos(a), sin(a)) * d
+		if not _is_free(p, 0.4):
+			continue
+		var kind: String = smalls[_rng.randi() % smalls.size()]
+		var col := "cyl" if kind == "rocks" else ""
+		Props.place(self, kind, Vector3(p.x, 0, p.y), _rng.randf() * TAU, _rng.randf_range(1.6, 2.2), col)
+	# A few props near the start to bump into
+	Props.place(self, "barrel", Vector3(3.5, 0, 13), 0.3, 2.0, "cyl")
+	Props.place(self, "crate", Vector3(4.6, 0, 12.2), 0.2, 2.0, "box")
+	Props.place(self, "crate", Vector3(4.2, 1.0, 12.6), 0.9, 2.0, "box")
+
+
+func _make_clouds() -> void:
+	var m := Props.mat(Color(1, 1, 1))
+	m.emission_enabled = true
+	m.emission = Color(0.9, 0.93, 1.0)
+	m.emission_energy_multiplier = 0.35
+	for i in 20:
+		var cloud := Node3D.new()
+		var n := _rng.randi_range(3, 5)
+		for j in n:
+			var s := SphereMesh.new()
+			var r := _rng.randf_range(1.6, 3.0)
+			s.radius = r
+			s.height = r * 1.6
+			s.radial_segments = 16
+			s.rings = 8
+			s.material = m
+			var mi := MeshInstance3D.new()
+			mi.mesh = s
+			mi.position = Vector3(j * 2.2 - n, _rng.randf_range(-0.4, 0.6), _rng.randf_range(-1, 1))
+			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			cloud.add_child(mi)
+		var a := _rng.randf() * TAU
+		var d := _rng.randf_range(40, 100)
+		cloud.position = Vector3(cos(a) * d, _rng.randf_range(16, 30), sin(a) * d)
+		add_child(cloud)
+		_clouds.append(cloud)

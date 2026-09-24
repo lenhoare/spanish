@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(foreach \\($p in \"Mini Characters 1\",\"Platformer Kit\",\"Nature Kit\",\"Animated Characters Bundle\",\"Blocky Characters\"\\) { \"=== $p\"; Get-ChildItem \"C:\\\\Kenney\\\\3D assets\\\\$p\" -Recurse -Directory | Select-Object -ExpandProperty FullName | ForEach-Object { $_.Replace\\(\"C:\\\\Kenney\\\\3D assets\\\\$p\",\"\"\\) } | Select-Object -First 30 })",
+      "PowerShell(\"=== MINI\"; Get-ChildItem \"C:\\\\Kenney\\\\3D assets\\\\Mini Characters 1\\\\Models\\\\GLB format\" -Recurse | Select-Object -ExpandProperty Name; \"=== PLATFORMER\"; \\(Get-ChildItem \"C:\\\\Kenney\\\\3D assets\\\\Platformer Kit\\\\Models\\\\GLB format\" -Recurse | Select-Object -ExpandProperty Name\\) -join \", \")",
+      "PowerShell(python --version; where.exe python)"
+    ]
+  }
+}

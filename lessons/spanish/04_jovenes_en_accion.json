@@ -1,0 +1,162 @@
+{
+  "format": "lesson-island/1",
+  "title": "Jóvenes en acción",
+  "subject": "Español - Unit 4",
+  "theme": "lavender",
+  "intro": "Young people changing the world! He/she and we forms, poder and comparatives.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "He / she forms",
+        "markdown": "# Third person singular (he / she / it)\n| | ending | example |\n|---|---|---|\n| -ar | **-a** | trabaj**a** |\n| -er | **-e** | com**e** |\n| -ir | **-e** | viv**e** |\n\nIrregular: hacer -> **hace**, ir -> **va**, ser -> **es**, tener -> **tiene**\n\n- **Es** boliviana y **tiene** doce años.\n- **Vive** en Londres, pero **habla** español en casa.\n- **Va** a la piscina, donde **hace** natación."
+      },
+      {
+        "title": "Poder (can)",
+        "markdown": "# Poder - can / to be able to\nA boot verb (o -> ue), followed by an infinitive:\n\n| | poder |\n|---|---|\n| yo | **puedo** |\n| tú | **puedes** |\n| él / ella | **puede** |\n| nosotros | podemos |\n| vosotros | podéis |\n| ellos / ellas | **pueden** |\n\n- No **puede** salir sola. - *She can't go out alone.*\n- **Podemos** ir al insti. - *We can go to school.*\n- No **puedo** dar mi opinión. - *I can't give my opinion.*"
+      },
+      {
+        "title": "Comparatives",
+        "markdown": "# más + adjective + que\n**más** ... **que** = more ... than.\nThe adjective agrees with the FIRST noun.\n\n- Un elefante es más **lento** que un leopardo.\n- Los coches son más **rápidos** que los caballos.\n- Los estudios son más **importantes** que el trabajo.\n- La vida es más **dura** en India que en Inglaterra.\n\n# \"We\" forms\n-ar: recicl**amos** / -er: vend**emos** / -ir: reduc**imos**\nhacer -> **hacemos**, ir -> **vamos**, ser -> **somos**, tener -> **tenemos**"
+      },
+      {
+        "title": "Rights & transport",
+        "markdown": "# Nationalities\nargentino/a, boliviano/a, colombiano/a, mexicano/a, peruano/a,\ninglés / inglesa, español / española, pakistaní\n\n# Rights\n**Tengo derecho a** la educación / al juego / a la protección\n- *I have the right to education / play / protection*\nNo puedo ir al insti porque tengo que trabajar. **¡No es justo!** (It's not fair!)\n\n# Transport\nVoy **a pie** (on foot), voy **a caballo** (on horseback),\nvoy **en** autobús / barco / bici / coche / metro / tren"
+      },
+      {
+        "title": "A better world",
+        "markdown": "# Nuestro insti verde (our green school)\n- apagamos la luz - *we switch off the light*\n- no malgastamos agua - *we don't waste water*\n- plantamos árboles y flores - *we plant trees and flowers*\n- reciclamos botellas de plástico - *we recycle plastic bottles*\n- vamos en bici - *we go by bike*\n\n# Vamos a...\nescribir cartas para Amnistía Internacional, organizar un evento,\nrecaudar fondos (raise money), vender pasteles"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "s4-vive",
+      "question": "____ en Londres, pero habla español en casa.\n(vivir - \"she lives\")",
+      "answers": [
+        "vive"
+      ],
+      "hint": "-ir verbs end in -e for he/she - page 1.",
+      "explanation": "Vive."
+    },
+    {
+      "id": "s4-puede",
+      "question": "No ____ salir sola.\n(poder - \"she can't\")",
+      "answers": [
+        "puede"
+      ],
+      "hint": "poder is a boot verb - page 2.",
+      "explanation": "No puede salir sola."
+    },
+    {
+      "id": "s4-podemos",
+      "question": "____ ir al insti.\n(poder - \"we can\")",
+      "answers": [
+        "podemos"
+      ],
+      "hint": "No boot change for 'we' - page 2.",
+      "explanation": "Podemos."
+    },
+    {
+      "id": "s4-rapidos",
+      "question": "Los trenes son más ____ que los autobuses.\n(rápido - make it agree!)",
+      "answers": [
+        "rápidos"
+      ],
+      "hint": "Los trenes = masculine plural - page 3.",
+      "explanation": "Rápidos."
+    },
+    {
+      "id": "s4-reciclamos",
+      "question": "En nuestro insti ____ botellas de plástico.\n(reciclar - \"we recycle\")",
+      "answers": [
+        "reciclamos"
+      ],
+      "hint": "-ar 'we' ending - page 3 or 5.",
+      "explanation": "Reciclamos."
+    },
+    {
+      "id": "s4-en",
+      "question": "Voy ____ bici.",
+      "choices": [
+        "en",
+        "a",
+        "de",
+        "por"
+      ],
+      "correct": 0,
+      "hint": "Transport - page 4.",
+      "explanation": "Voy en bici (but a pie, a caballo)."
+    }
+  ],
+  "chests": [
+    {
+      "id": "s4-pie",
+      "question": "\"Voy a pie\" means...",
+      "choices": [
+        "I go on foot",
+        "I go by car",
+        "I go on horseback",
+        "I go by bus"
+      ],
+      "correct": 0,
+      "hint": "Page 4 - transport.",
+      "explanation": "A pie = on foot."
+    },
+    {
+      "id": "s4-derecho",
+      "question": "\"Tengo derecho a la educación\" means...",
+      "choices": [
+        "I have the right to education",
+        "I have to go to school",
+        "I like education",
+        "I am right about school"
+      ],
+      "correct": 0,
+      "hint": "Page 4 - rights.",
+      "explanation": "Tener derecho a = to have the right to."
+    },
+    {
+      "id": "s4-verde",
+      "question": "Una bici es más ____ que un coche.",
+      "choices": [
+        "verde",
+        "verdes",
+        "verda",
+        "verdo"
+      ],
+      "correct": 0,
+      "hint": "Una bici = feminine singular, but -e adjectives don't change.",
+      "explanation": "Verde."
+    },
+    {
+      "id": "s4-boliviana",
+      "question": "Which nationality is FEMININE?",
+      "choices": [
+        "boliviana",
+        "boliviano",
+        "pakistaní",
+        "inglés"
+      ],
+      "correct": 0,
+      "hint": "Page 4 - nationalities.",
+      "explanation": "Boliviana."
+    },
+    {
+      "id": "s4-justo",
+      "question": "\"¡No es justo!\" means...",
+      "choices": [
+        "It's not fair!",
+        "It's not just me!",
+        "It's no joke!",
+        "It's not fun!"
+      ],
+      "correct": 0,
+      "hint": "Page 4.",
+      "explanation": "¡No es justo! = It's not fair!"
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Jóvenes en acción! You can talk about rights and a better world!"
+  }
+}

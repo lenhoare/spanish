@@ -1,0 +1,210 @@
+{
+  "format": "lesson-island/1",
+  "title": "En forma",
+  "subject": "Español - Unit 3",
+  "theme": "mint",
+  "intro": "Get fit! Negatives, boot verbs, reflexive verbs, ser vs. estar and staying healthy.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Negatives",
+        "markdown": "# Negatives\nPut **no** or **nunca** before the verb.\nWith **nada**, make a sandwich: **no** + verb + **nada**.\n\n- **No** como carne. - *I don't eat meat.*\n- **Nunca** bebo café. - *I never drink coffee.*\n- **No** bebo **nada**. - *I don't drink anything.*\n- **Nunca** juego al tenis. - *I never play tennis.*\n- **No** desayuno **nada**. - *I don't eat anything for breakfast.*"
+      },
+      {
+        "title": "Boot verbs",
+        "markdown": "# Stem-changing verbs (\"boot verbs\")\nThe vowel changes in the yo, tú, él/ella and ellos forms\n(the \"boot\" shape) - but NOT in nosotros / vosotros.\n\n| | jugar (u -> ue) | preferir (e -> ie) |\n|---|---|---|\n| yo | **jue**go | pref**ie**ro |\n| tú | **jue**gas | pref**ie**res |\n| él / ella | **jue**ga | pref**ie**re |\n| nosotros | jugamos | preferimos |\n| vosotros | jugáis | preferís |\n| ellos / ellas | **jue**gan | pref**ie**ren |\n\n- **Juega** al baloncesto una vez al mes.\n- ¿**Prefieres** jugar con tus amigos?"
+      },
+      {
+        "title": "Reflexive verbs",
+        "markdown": "# Reflexive verbs\nThe pronoun (**me, te, se, nos, os, se**) goes before the verb.\n\n**lavarse** (to wash): **me** lavo, **te** lavas, **se** lava,\n**nos** lavamos, **os** laváis, **se** lavan\n\n- **Me levanto** a las seis. - *I get up at six.*\n- **Se lava** los dientes. - *He brushes his teeth.*\n- **Nos acostamos** a las diez. - *We go to bed at ten.*\n\nSome are also boot verbs: acostarse -> **me acuesto**,\ndespertarse -> **me despierto**, vestirse -> **me visto**"
+      },
+      {
+        "title": "Ser vs. estar",
+        "markdown": "# Two verbs for \"to be\"\n**estar** - temporary things, feelings, location:\nestoy, estás, **está**, estamos, estáis, están\n- *Estoy enfermo.* (I am ill.) - *Mis abuelos están cansados.*\n\n**ser** - permanent things, personality, time:\nsoy, eres, **es**, somos, sois, son\n- *Soy alto.* - *¿Qué hora **es**? **Son** las seis.*\n\n> Matías no va al insti. **Está** enfermo."
+      },
+      {
+        "title": "Healthy living",
+        "markdown": "# Food & routine\n**Food:** caramelos, fruta, galletas, pan, pescado, pasta, pasteles, verduras\n**Drinks:** agua, café, leche\nEs **sano** (healthy), es **rico** (tasty), es **asqueroso** (disgusting)\n\n**Routine:** me despierto, me levanto, me ducho, me visto, desayuno,\nme lavo los dientes, ceno, me acuesto\n\n# Aches & advice\n**Me duele** la cabeza / el brazo / la pierna - *My head / arm / leg hurts*\n**Me duelen** los ojos - *My eyes hurt*\nTengo **catarro** (a cold), tengo **tos** (a cough), estoy cansado/a\n\n**Se debe** beber agua, comer fruta. **No se debe** comer comida basura, fumar."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "s3-nunca",
+      "question": "Translate: \"I never drink coffee.\"",
+      "answers": [
+        "nunca bebo café",
+        "yo nunca bebo café",
+        "no bebo café nunca"
+      ],
+      "hint": "nunca goes before the verb - page 1.",
+      "explanation": "Nunca bebo café."
+    },
+    {
+      "id": "s3-juega",
+      "question": "____ al baloncesto una vez al mes.\n(jugar - \"he plays\")",
+      "answers": [
+        "juega"
+      ],
+      "hint": "jugar is a boot verb: u -> ue. Page 2.",
+      "explanation": "Juega."
+    },
+    {
+      "id": "s3-prefieres",
+      "question": "¿____ jugar con tus amigos?\n(preferir - \"do you prefer\", tú)",
+      "answers": [
+        "prefieres"
+      ],
+      "hint": "e -> ie in the tú form - page 2.",
+      "explanation": "Prefieres."
+    },
+    {
+      "id": "s3-levanto",
+      "question": "Me ____ a las seis.\n(levantarse - \"I get up\")",
+      "answers": [
+        "levanto"
+      ],
+      "hint": "Reflexive: me + yo form - page 3.",
+      "explanation": "Me levanto a las seis."
+    },
+    {
+      "id": "s3-esta",
+      "question": "Matías no va al insti. ____ enfermo.\n(ser or estar?)",
+      "answers": [
+        "está"
+      ],
+      "hint": "Being ill is temporary - page 4.",
+      "explanation": "Está - estar for temporary states like being ill."
+    },
+    {
+      "id": "s3-cabeza",
+      "question": "\"My head hurts\" is...",
+      "choices": [
+        "Me duele la cabeza",
+        "Me duelen la cabeza",
+        "Tengo la cabeza",
+        "Estoy la cabeza"
+      ],
+      "correct": 0,
+      "hint": "One thing hurting = duele - page 5.",
+      "explanation": "Me duele la cabeza."
+    }
+  ],
+  "chests": [
+    {
+      "id": "s3-catarro",
+      "question": "\"Tengo catarro\" means...",
+      "choices": [
+        "I have a cold",
+        "I have a cough",
+        "I am tired",
+        "I am hungry"
+      ],
+      "correct": 0,
+      "hint": "Page 5 - aches.",
+      "explanation": "Catarro = a cold.",
+      "level": 1
+    },
+    {
+      "id": "s3-asqueroso",
+      "question": "\"Es asqueroso\" means...",
+      "choices": [
+        "It's disgusting",
+        "It's healthy",
+        "It's delicious",
+        "It's expensive"
+      ],
+      "correct": 0,
+      "hint": "Page 5 - food.",
+      "explanation": "Asqueroso = disgusting.",
+      "level": 1
+    },
+    {
+      "id": "s3-reflexive",
+      "question": "Which one is a REFLEXIVE verb?",
+      "choices": [
+        "me ducho",
+        "ceno",
+        "entreno",
+        "desayuno"
+      ],
+      "correct": 0,
+      "hint": "Look for the pronoun me/te/se - page 3.",
+      "explanation": "Me ducho = I have a shower.",
+      "level": 2
+    },
+    {
+      "id": "s3-hora",
+      "question": "¿Qué hora ____? Son las seis.",
+      "choices": [
+        "es",
+        "está",
+        "estás",
+        "eres"
+      ],
+      "correct": 0,
+      "hint": "Time uses ser - page 4.",
+      "explanation": "¿Qué hora es?",
+      "level": 2
+    },
+    {
+      "id": "s3-cansados",
+      "question": "Mis abuelos siempre ____ cansados.",
+      "choices": [
+        "están",
+        "son",
+        "estamos",
+        "está"
+      ],
+      "correct": 0,
+      "hint": "Tired is a temporary state (estar), and 'mis abuelos' = they - page 4.",
+      "explanation": "Mis abuelos siempre están cansados.",
+      "level": 3
+    },
+    {
+      "id": "s3-duelen",
+      "question": "Me ____ los ojos. (My eyes hurt.)",
+      "choices": [
+        "duelen",
+        "duele",
+        "dolen",
+        "duelo"
+      ],
+      "correct": 0,
+      "hint": "Los ojos is plural - page 5.",
+      "explanation": "Me duelen los ojos - plural things take duelen.",
+      "level": 3
+    }
+  ],
+  "sweets": [
+    {
+      "id": "s3-sweet-basura",
+      "question": "Extension! Translate into Spanish:\n\"I never eat junk food.\"",
+      "answers": [
+        "nunca como comida basura",
+        "yo nunca como comida basura",
+        "no como nunca comida basura",
+        "no como comida basura nunca"
+      ],
+      "hint": "Nunca goes before the verb (page 1). 'Comida basura' is on page 5.",
+      "explanation": "Nunca como comida basura. ¡Muy sano!",
+      "kind": "healthy_field"
+    },
+    {
+      "id": "s3-sweet-gimnasio",
+      "question": "La entrenadora asks: \"¿Qué haces para estar en forma?\"\nAnswer in Spanish: \"I go to the gym and I drink water.\"",
+      "answers": [
+        "voy al gimnasio y bebo agua",
+        "yo voy al gimnasio y bebo agua",
+        "voy al gimnasio y bebo mucha agua"
+      ],
+      "hint": "ir -> voy, beber -> bebo. 'Voy al gimnasio' is on page 5.",
+      "explanation": "¡Genial! Voy al gimnasio y bebo agua.",
+      "kind": "trainer"
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Estás en forma! You can talk about health and routine!"
+  }
+}

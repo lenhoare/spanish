@@ -1,0 +1,123 @@
+# Lesson file format (`lesson-island/1`)
+
+## config.json - the game itself
+
+`config.json` (next to `index.html` on the web) sets the game's name, the heroes and the
+list of islands. Edit it and re-upload - no rebuild needed.
+
+```jsonc
+{
+  "game_title": "La Isla del Saber",
+  "tagline": "Español - Year 9",
+  "intro": "Optional title-screen text",
+  "heroes": [                       // one button per hero; < > cycle the outfits (models)
+    { "name": "Ester", "color": "#f0508c", "models": ["character-female-f", "character-female-b"] },
+    { "name": "Raúl",  "color": "#4fa3ff", "models": ["character-male-f", "character-male-a"] }
+  ],
+  "accents": "lenient",             // "lenient": jugue counts for jugué (with a gentle note); "strict": it doesn't
+  "text_scale": 0.7,                // whiteboard text size on computers
+  "text_scale_touch": 0.9,          // ...and on phones
+  "course": [                       // the islands, in order
+    { "file": "lessons/spanish/01_somos_asi.json", "title": "Somos así", "theme": "meadow" }
+  ]
+}
+```
+
+**Themes** (island colours): `meadow`, `sunset`, `mint`, `lavender`, `candy`, `snow`.
+
+To play just one lesson file without the island map: `https://your-site/game/?lesson=week12.json`
+
+## Lesson files - one island each
+
+## Shape
+
+```jsonc
+{
+  "format": "lesson-island/1",
+  "title": "Photosynthesis",            // shown on the title screen and whiteboard
+  "subject": "Biology",                 // optional
+  "intro": "The bridge is broken! ...", // short description of the island
+  "theme": "mint",                      // optional: overrides the theme set in config.json
+
+  "whiteboard": {
+    "pages": [                          // 1+ pages, read in the whiteboard viewer
+      { "title": "What is it?", "markdown": "# Heading\n\nSome **bold** text..." }
+    ]
+  },
+
+  "cards": [                            // question cards: each correct answer builds one bridge section
+    {
+      "id": "card-co2",                 // any unique id
+      "question": "Which gas do plants take in?",
+      "answers": ["carbon dioxide", "co2"],   // typed answer; any of these is accepted
+      "hint": "Check page 1.",           // shown after a wrong answer
+      "explanation": "Plants take in CO2 through stomata."  // shown when correct
+    },
+    {
+      "id": "card-mc",
+      "question": "Where does photosynthesis happen?",
+      "choices": ["Nucleus", "Chloroplast", "Cell wall", "Vacuole"],  // use choices instead of answers
+      "correct": 1,                      // index into choices (0 = first)
+      "hint": "...", "explanation": "..."
+    }
+  ],
+
+  "chests": [                           // multiple-choice treasure chests (bonus coins)
+    {
+      "id": "chest-1",
+      "question": "Which is a product?",
+      "choices": ["Carbon dioxide", "Oxygen", "Nitrogen", "Water"],
+      "correct": 1,
+      "hint": "...", "explanation": "...",
+      "coins": 10
+    }
+  ],
+
+  "sweets": [                           // optional bonus "extension" challenges (don't open the bridge)
+    {
+      "id": "sweet-1",
+      "kind": "key",                    // "key": inside the locked sweet shop - find the key first
+      "question": "Extension! Translate...",
+      "answers": ["..."], "hint": "...", "explanation": "..."
+    },
+    {
+      "id": "sweet-2",
+      "kind": "guarded",                // "guarded": on a pedestal guarded by the ghost
+      "question": "...", "choices": ["..."], "correct": 0, "hint": "...", "explanation": "..."
+    }
+  ],
+
+  "prize": { "name": "Golden Star", "message": "You mastered photosynthesis!" }
+}
+```
+
+**Sweets** are the place for harder "extension" questions. They aren't needed to finish
+the island and don't affect the star rating; finding them all earns a special mention on
+the results screen and a sweet icon on the island map.
+
+## Rules the game applies
+
+- **Cards** can be typed (`answers`) or multiple choice (`choices` + `correct`).
+  Typed answers ignore case, punctuation (including ¿ ¡) and extra spaces; numbers compare
+  numerically (`"0.5"` matches `".5"`). List common alternatives in `answers`, and put the
+  correctly-accented spelling FIRST (it's shown when a student misses an accent).
+- Use `\n` in a question to start a new line (e.g. for the "(bailar - I dance)" clue).
+- **Up to 8 cards** and **up to 6 chests** fit the current island (extras are ignored).
+  Cards fill the slots easiest-first, so put the easiest question first.
+  4 cards + 3 chests is the sweet spot.
+- **Wrong answers**: a typed card allows 3 tries. A multiple-choice card or sweet locks after
+  one wrong pick and reopens only after the student jumps at the whiteboard and reads it.
+  A wrong **chest** answer never locks - it just sends the student back to the whiteboard.
+- **Chest levels**: chests unlock in levels - both level 1 chests must be opened before the
+  level 2 chests unlock, and so on. Put the easiest questions first; by default chests are
+  paired in file order (1-2 = level 1, 3-4 = level 2, 5-6 = level 3), or set `"level": 1..3`
+  on each chest. Up to 6 chests fit the island.
+- **Whiteboard pages** never scroll: long pages are split across screens automatically,
+  keeping tables and lists whole. Shorter pages with a heading each read best.
+- Stars (30 of them) are placed by the island itself - pure fun, no questions.
+
+## Markdown supported on the whiteboard
+
+`#`/`##`/`###` headings, `**bold**`, `*italic*`, `~~strike~~`, `` `code` ``,
+fenced code blocks, `-` bullet lists, `1.` numbered lists, `> quotes`, `---` rules,
+and `| tables |`. Write `->` for an arrow. Emoji and images aren't supported yet.

@@ -1,0 +1,154 @@
+{
+  "format": "lesson-island/1",
+  "title": "Repaso: los verbos",
+  "subject": "Español - Review",
+  "theme": "snow",
+  "intro": "The big verb review! Present, preterite, reflexive and near future - plus key words.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Present tense",
+        "markdown": "# Present tense\n| | bailar | comer | escribir | ir | ser | tener | ver |\n|---|---|---|---|---|---|---|---|\n| yo | bailo | como | escribo | voy | soy | tengo | veo |\n| tú | bailas | comes | escribes | vas | eres | tienes | ves |\n| él/ella | baila | come | escribe | va | es | tiene | ve |\n| nosotros | bailamos | comemos | escribimos | vamos | somos | tenemos | vemos |\n| vosotros | bailáis | coméis | escribís | vais | sois | tenéis | veis |\n| ellos/ellas | bailan | comen | escriben | van | son | tienen | ven |"
+      },
+      {
+        "title": "Boot verbs",
+        "markdown": "# Stem-changing verbs (present)\n- **e -> ie:** preferir (prefiero), empezar (empiezo), entender (entiendo), querer (**quiero**)\n- **o -> ue:** poder (puedo), dormir (**duermo**), doler (duele)\n- **u -> ue:** jugar (juego)\n\n# Reflexive (ducharse)\nme ducho, te duchas, se ducha, nos duchamos, os ducháis, se duchan\n\n# Near future (ir + a + infinitive)\nvoy a bailar, vas a bailar, va a bailar, vamos a bailar, vais a bailar, van a bailar"
+      },
+      {
+        "title": "Preterite tense",
+        "markdown": "# Preterite (past)\n| | bailar | comer | escribir | ir / ser | hacer | tener | ver |\n|---|---|---|---|---|---|---|---|\n| yo | bailé | comí | escribí | fui | hice | tuve | vi |\n| tú | bailaste | comiste | escribiste | fuiste | hiciste | tuviste | viste |\n| él/ella | bailó | comió | escribió | fue | hizo | tuvo | vio |\n| nosotros | bailamos | comimos | escribimos | fuimos | hicimos | tuvimos | vimos |\n| vosotros | bailasteis | comisteis | escribisteis | fuisteis | hicisteis | tuvisteis | visteis |\n| ellos/ellas | bailaron | comieron | escribieron | fueron | hicieron | tuvieron | vieron |"
+      },
+      {
+        "title": "Minidiccionario",
+        "markdown": "# Key words\n| Spanish | English | Spanish | English |\n|---|---|---|---|\n| ahorrar | to save money | mientras | while |\n| anoche | last night | nunca | never |\n| ayer | yesterday | el país | country |\n| bastante | quite, enough | según | according to |\n| cada | each, every | el siglo | century |\n| demasiado | too much | sin embargo | however |\n| el edificio | building | ya | already |\n| hasta | until | el vecino | neighbour |"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "s6-tienen",
+      "question": "tener - present - ellos:\n\"they have\" = ?",
+      "answers": [
+        "tienen"
+      ],
+      "hint": "Present table, tener column - page 1.",
+      "explanation": "Tienen."
+    },
+    {
+      "id": "s6-vi",
+      "question": "ver - preterite - yo:\n\"I saw\" = ?",
+      "answers": [
+        "vi"
+      ],
+      "hint": "Preterite table, ver column - page 3.",
+      "explanation": "Vi."
+    },
+    {
+      "id": "s6-tuve",
+      "question": "tener - preterite - yo:\n\"I had\" = ?",
+      "answers": [
+        "tuve"
+      ],
+      "hint": "Preterite table, tener column - page 3.",
+      "explanation": "Tuve."
+    },
+    {
+      "id": "s6-fuimos",
+      "question": "ir - preterite - nosotros:\n\"we went\" = ?",
+      "answers": [
+        "fuimos"
+      ],
+      "hint": "ir and ser share the same preterite - page 3.",
+      "explanation": "Fuimos."
+    },
+    {
+      "id": "s6-quiero",
+      "question": "querer - present - yo:\n\"I want\" = ?",
+      "answers": [
+        "quiero"
+      ],
+      "hint": "It's a boot verb (e -> ie) - page 2.",
+      "explanation": "Quiero."
+    },
+    {
+      "id": "s6-duermo",
+      "question": "dormir - present - yo:\n\"I sleep\" = ?",
+      "answers": [
+        "duermo"
+      ],
+      "hint": "It's a boot verb (o -> ue) - page 2.",
+      "explanation": "Duermo."
+    }
+  ],
+  "chests": [
+    {
+      "id": "s6-siglo",
+      "question": "\"el siglo\" means...",
+      "choices": [
+        "century",
+        "sky",
+        "sign",
+        "silence"
+      ],
+      "correct": 0,
+      "hint": "Minidiccionario - page 4.",
+      "explanation": "El siglo = century."
+    },
+    {
+      "id": "s6-ahorrar",
+      "question": "\"ahorrar\" means...",
+      "choices": [
+        "to save money",
+        "to hurry",
+        "to hate",
+        "to hang up"
+      ],
+      "correct": 0,
+      "hint": "Minidiccionario - page 4.",
+      "explanation": "Ahorrar = to save money."
+    },
+    {
+      "id": "s6-vecino",
+      "question": "\"el vecino\" means...",
+      "choices": [
+        "neighbour",
+        "wine seller",
+        "cousin",
+        "vet"
+      ],
+      "correct": 0,
+      "hint": "Minidiccionario - page 4.",
+      "explanation": "El vecino = neighbour."
+    },
+    {
+      "id": "s6-sinembargo",
+      "question": "\"sin embargo\" means...",
+      "choices": [
+        "however",
+        "without a boat",
+        "therefore",
+        "also"
+      ],
+      "correct": 0,
+      "hint": "Minidiccionario - page 4.",
+      "explanation": "Sin embargo = however."
+    },
+    {
+      "id": "s6-hizo",
+      "question": "hacer - preterite - él / ella:",
+      "choices": [
+        "hizo",
+        "hació",
+        "hice",
+        "hacía"
+      ],
+      "correct": 0,
+      "hint": "Preterite table - page 3.",
+      "explanation": "Hizo."
+    }
+  ],
+  "prize": {
+    "name": "Corona de Verbos",
+    "message": "You are a verb champion!"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "game_title": "La Isla del Saber",
+  "tagline": "Español",
+
+  "heroes": [
+    { "name": "Ester", "color": "#f0508c", "models": ["character-female-f", "character-female-b", "character-female-c", "character-female-a", "character-female-e", "character-female-d"] },
+    { "name": "Raúl",  "color": "#4fa3ff", "models": ["character-male-f", "character-male-a", "character-male-d", "character-male-e", "character-male-c", "character-male-b"] },
+    { "name": "Coco",  "color": "#ff9a3c", "models": ["character-oobi", "character-oodi", "character-ooli", "character-oopi", "character-oozi"] }
+  ],
+
+  "accents": "lenient",
+  "beacons": false,
+  "text_scale": 0.7,
+  "text_scale_touch": 0.9,
+
+  "course": [
+    { "file": "lessons/spanish/01_somos_asi.json",          "title": "Somos así",              "theme": "meadow" },
+    { "file": "lessons/spanish/02_orientate.json",          "title": "¡Oriéntate!",            "theme": "sunset" },
+    { "file": "lessons/spanish/03_en_forma.json",           "title": "En forma",               "theme": "mint" },
+    { "file": "lessons/spanish/04_jovenes_en_accion.json",  "title": "Jóvenes en acción",      "theme": "lavender" },
+    { "file": "lessons/spanish/05_aventura_en_madrid.json", "title": "Una aventura en Madrid", "theme": "candy" },
+    { "file": "lessons/spanish/06_tabla_de_verbos.json",    "title": "Repaso: los verbos",     "theme": "snow" }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "format": "lesson-island/1",
+  "title": "¡Oriéntate!",
+  "subject": "Español - Unit 2",
+  "theme": "sunset",
+  "intro": "Jobs and work! Learn tener que, adjective agreement and the preterite (past) tense.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Tener que + infinitive",
+        "markdown": "# Tener que + infinitive\nTo say what you **have to** do: **tener** (present) + **que** + infinitive\n\n- **Tengo que** limpiar habitaciones. - *I have to clean rooms.*\n- **Tenemos que** preparar comida. - *We have to prepare food.*\n\n| tener | |\n|---|---|\n| yo | tengo |\n| tú | tienes |\n| él / ella | tiene |\n| nosotros | tenemos |\n| vosotros | tenéis |\n| ellos / ellas | tienen |"
+      },
+      {
+        "title": "Adjective agreement",
+        "markdown": "# Adjectives agree!\nAdjectives match the noun: masculine / feminine, singular / plural.\n\n| Ending | masc. sing. | fem. sing. | masc. pl. | fem. pl. |\n|---|---|---|---|---|\n| -o | creativ**o** | creativ**a** | creativ**os** | creativ**as** |\n| -e | sociabl**e** | sociabl**e** | sociabl**es** | sociabl**es** |\n| consonant | fácil | fácil | fácil**es** | fácil**es** |\n| -dor | habla**dor** | habla**dora** | habla**dores** | habla**doras** |\n\n- En mi opinión, Teresa es **habladora**.\n- Los niños de los clientes son **horrorosos**."
+      },
+      {
+        "title": "The preterite",
+        "markdown": "# The preterite (simple past)\nFor completed actions in the past - *ayer* (yesterday)...\n\n| Person | hablar | comer | escribir |\n|---|---|---|---|\n| yo | habl**é** | com**í** | escrib**í** |\n| tú | habl**aste** | com**iste** | escrib**iste** |\n| él / ella | habl**ó** | com**ió** | escrib**ió** |\n| nosotros | habl**amos** | com**imos** | escrib**imos** |\n| vosotros | habl**asteis** | com**isteis** | escrib**isteis** |\n| ellos / ellas | habl**aron** | com**ieron** | escrib**ieron** |\n\n## Watch out in the \"I\" form!\njugar -> **jugué**, llegar -> **llegué**, sacar -> **saqué**\nir -> **fui**, hacer -> **hice**"
+      },
+      {
+        "title": "Jobs",
+        "markdown": "# Trabajos\ncamarero/a (waiter), cocinero/a (cook), dependiente/a (shop assistant),\njardinero/a (gardener), limpiador/a (cleaner), peluquero/a (hairdresser),\nrecepcionista (receptionist)\n\n## What do they do?\nayudar a los clientes, cortar el pelo, hablar por teléfono, limpiar habitaciones,\npreparar comida, servir en el restaurante, vender productos en la tienda\n\n## Opinions\nEs **creativo / estresante / fácil / interesante / monótono / repetitivo**.\nMi jefe es **severo** (strict). Los clientes son **simpáticos / horrorosos**."
+      },
+      {
+        "title": "In the future...",
+        "markdown": "# Me gustaría ser... (I would like to be...)\ncantante (singer), diseñador/a (designer), enfermero/a (nurse),\nmecánico/a (mechanic), periodista (journalist), policía (police officer),\nprofesor/a (teacher), veterinario/a (vet)\n\n## Me gustaría...\ntrabajar **al aire libre** (outdoors), trabajar con animales / niños,\ntrabajar en equipo, trabajar solo/a, hacer un trabajo creativo\n\n## Strategy: context clues\n- *restaurante, clientes, servir comida* -> **camarero/a**\n- *clínica, animales, operar* -> **veterinario/a**\n- *instituto, niños, dar clases* -> **profesor/a**"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "s2-limpiar",
+      "question": "Tengo que ____ habitaciones.\n(to clean)",
+      "answers": [
+        "limpiar"
+      ],
+      "hint": "tener que + INFINITIVE - page 1.",
+      "explanation": "Limpiar - after 'tener que' you use the infinitive."
+    },
+    {
+      "id": "s2-habladora",
+      "question": "En mi opinión, Teresa es ____.\n(hablador - make it agree!)",
+      "answers": [
+        "habladora"
+      ],
+      "hint": "Teresa is feminine. -dor adjectives - page 2.",
+      "explanation": "Habladora - -dor adjectives add -a for feminine."
+    },
+    {
+      "id": "s2-jugue",
+      "question": "Preterite \"I\" form of jugar:\n\"I played\" = ?",
+      "answers": [
+        "jugué"
+      ],
+      "hint": "It has a spelling change - page 3.",
+      "explanation": "Jugué - the u keeps the g sound hard."
+    },
+    {
+      "id": "s2-llegue",
+      "question": "Ayer ____ al garaje a las diez.\n(llegar - \"I arrived\")",
+      "answers": [
+        "llegué"
+      ],
+      "hint": "Same spelling change as jugar - page 3.",
+      "explanation": "Llegué."
+    },
+    {
+      "id": "s2-hice",
+      "question": "\"I did / I made\" in the preterite?\n(hacer)",
+      "answers": [
+        "hice"
+      ],
+      "hint": "Irregular - bottom of page 3.",
+      "explanation": "Hice - hacer is irregular in the preterite."
+    },
+    {
+      "id": "s2-camarero",
+      "question": "restaurante, clientes, servir comida... Which job?",
+      "choices": [
+        "camarero",
+        "veterinario",
+        "profesor",
+        "peluquero"
+      ],
+      "correct": 0,
+      "hint": "Context clues - page 5.",
+      "explanation": "Camarero - a waiter serves food in a restaurant."
+    }
+  ],
+  "chests": [
+    {
+      "id": "s2-enfermera",
+      "question": "\"Me gustaría ser enfermera\" means...",
+      "choices": [
+        "I'd like to be a nurse",
+        "I am a nurse",
+        "I was a nurse",
+        "I have to be a nurse"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "Me gustaría ser = I would like to be.",
+      "level": 1
+    },
+    {
+      "id": "s2-airelibre",
+      "question": "\"Trabajar al aire libre\" means...",
+      "choices": [
+        "to work outdoors",
+        "to work for free",
+        "to work alone",
+        "to work in an office"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "Al aire libre = in the open air / outdoors.",
+      "level": 1
+    },
+    {
+      "id": "s2-comi",
+      "question": "Which verb is in the PRETERITE (past)?",
+      "choices": [
+        "comí",
+        "como",
+        "voy a comer",
+        "comer"
+      ],
+      "correct": 0,
+      "hint": "Look for the accent on the ending - page 3.",
+      "explanation": "Comí = I ate.",
+      "level": 2
+    },
+    {
+      "id": "s2-horrorosos",
+      "question": "Los niños de los clientes son ____.",
+      "choices": [
+        "horrorosos",
+        "horrorosa",
+        "horroroso",
+        "horrorosas"
+      ],
+      "correct": 0,
+      "hint": "Los niños = masculine plural - page 2.",
+      "explanation": "Horrorosos - masculine plural.",
+      "level": 2
+    },
+    {
+      "id": "s2-hablamos",
+      "question": "Ayer nosotros ____ con el jefe. (hablar, preterite)",
+      "choices": [
+        "hablamos",
+        "hablé",
+        "hablaron",
+        "hablasteis"
+      ],
+      "correct": 0,
+      "hint": "nosotros row - page 3.",
+      "explanation": "Hablamos (same in present and preterite for -ar!).",
+      "level": 3
+    },
+    {
+      "id": "s2-jugue",
+      "question": "Ayer ____ a un videojuego. (jugar - \"I played\")",
+      "choices": [
+        "jugué",
+        "jugé",
+        "juego",
+        "jugó"
+      ],
+      "correct": 0,
+      "hint": "Watch the spelling change in the 'I' form - page 3.",
+      "explanation": "Jugué - the u keeps the g hard.",
+      "level": 3
+    }
+  ],
+  "sweets": [
+    {
+      "id": "s2-sweet-vet",
+      "question": "Extension! Translate into Spanish:\n\"I would like to be a vet.\"",
+      "answers": [
+        "me gustaría ser veterinario",
+        "me gustaría ser veterinaria",
+        "yo me gustaría ser veterinario",
+        "yo me gustaría ser veterinaria"
+      ],
+      "hint": "Me gustaría ser... and the job list on page 5.",
+      "explanation": "Me gustaría ser veterinario / veterinaria.",
+      "kind": "ship_deck"
+    },
+    {
+      "id": "s2-sweet-tarde",
+      "question": "Top of the mast challenge! Translate into Spanish:\n\"Yesterday I arrived late to work.\"",
+      "answers": [
+        "ayer llegué tarde al trabajo",
+        "llegué tarde al trabajo ayer",
+        "ayer yo llegué tarde al trabajo"
+      ],
+      "hint": "Ayer + preterite. llegar -> llegué (page 3). 'to work' = al trabajo.",
+      "explanation": "Ayer llegué tarde al trabajo. ¡Qué horror!",
+      "kind": "ship_crow"
+    },
+    {
+      "id": "s2-sweet-chef",
+      "question": "The chef asks: \"¿Qué comiste ayer?\"\nAnswer in Spanish: \"Yesterday I ate a pizza.\"",
+      "answers": [
+        "ayer comí una pizza",
+        "comí una pizza ayer",
+        "ayer comí pizza",
+        "ayer yo comí una pizza"
+      ],
+      "hint": "Ayer + preterite: comer -> comí (page 3).",
+      "explanation": "¡Muy bien! Ayer comí una pizza. ¡Qué rica!",
+      "kind": "chef"
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "You can talk about jobs and the past!"
+  }
+}

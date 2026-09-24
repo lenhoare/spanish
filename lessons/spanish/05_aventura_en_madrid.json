@@ -1,0 +1,159 @@
+{
+  "format": "lesson-island/1",
+  "title": "Una aventura en Madrid",
+  "subject": "Español - Unit 5",
+  "theme": "candy",
+  "intro": "A trip to Madrid! Superlatives, tú vs. usted, and the irregular preterite.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Superlatives",
+        "markdown": "# The most...\n**el / la / los / las** + noun + **más** + adjective\n\n- el estadio **más famoso** - *the most famous stadium*\n- la película **más antigua** - *the oldest film*\n- los monumentos **más famosos**\n- las tiendas **más grandes** - *the biggest shops*\n\nThe adjective agrees: la playa más **bonita**, las patatas más **ricas**"
+      },
+      {
+        "title": "Tú or usted?",
+        "markdown": "# Four ways to say \"you\"\n| | informal | formal |\n|---|---|---|\n| one person | **tú** (vives) | **usted** (vive) |\n| more than one | **vosotros/as** (vivís) | **ustedes** (viven) |\n\n- ¿Y **tú**, Miguel? ¿Tienes hambre?\n- Señor García, ¿dónde vive **usted**?\n- Ana y Ramón, ¿**vosotros** coméis carne?\n- Buenas tardes, señores. ¿Qué quieren **ustedes**?"
+      },
+      {
+        "title": "Irregular preterite",
+        "markdown": "# ir, hacer, ver in the past\n| | ir (went) | hacer (did) | ver (saw) |\n|---|---|---|---|\n| yo | **fui** | **hice** | **vi** |\n| tú | fuiste | hiciste | viste |\n| él / ella | **fue** | **hizo** | vio |\n| nosotros | **fuimos** | hicimos | **vimos** |\n| vosotros | fuisteis | hicisteis | visteis |\n| ellos / ellas | fueron | hicieron | vieron |\n\n> Ayer **hice** muchas cosas. Por la mañana **fui** a la Plaza Mayor.\n> Luego **fuimos** al cine, donde **vimos** una película de acción. ¡Qué guay!"
+      },
+      {
+        "title": "Three tenses",
+        "markdown": "# Present, past and future\n| Verb | present | preterite | near future |\n|---|---|---|---|\n| visitar | visito | visité | voy a visitar |\n| beber | bebo | bebí | voy a beber |\n| jugar | juego | jugué | voy a jugar |\n| ir | voy | fui | voy a ir |\n| hacer | hago | hice | voy a hacer |"
+      },
+      {
+        "title": "In Madrid",
+        "markdown": "# Greetings\nEste es mi padre / Esta es mi madre.\n¿Tienes **hambre** / **sed** / **sueño**? - *Are you hungry / thirsty / sleepy?*\n\n# Souvenirs\nun **abanico** (fan), un **collar** (necklace), un **imán** (magnet),\nun **llavero** (key ring), una camiseta, una figurita, una **taza** (cup), turrón\n\nbarato (cheap), caro (expensive), bonito, feo, precioso, típico, útil\n\n# Exclamations\n¡Qué aburrido! ¡Qué bien! ¡Qué bonito! ¡Qué horror! **¡Qué sorpresa!**"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "s5-bonita",
+      "question": "la playa más ____\n(bonito - \"the prettiest beach\")",
+      "answers": [
+        "bonita"
+      ],
+      "hint": "la playa is feminine - page 1.",
+      "explanation": "La playa más bonita."
+    },
+    {
+      "id": "s5-hice",
+      "question": "Ayer ____ muchas cosas.\n(hacer - \"I did\")",
+      "answers": [
+        "hice"
+      ],
+      "hint": "Irregular preterite - page 3.",
+      "explanation": "Hice."
+    },
+    {
+      "id": "s5-fui",
+      "question": "Por la mañana ____ a la Plaza Mayor.\n(ir - \"I went\")",
+      "answers": [
+        "fui"
+      ],
+      "hint": "Irregular preterite - page 3.",
+      "explanation": "Fui."
+    },
+    {
+      "id": "s5-vimos",
+      "question": "Fuimos al cine, donde ____ una película de acción.\n(ver - \"we saw\")",
+      "answers": [
+        "vimos"
+      ],
+      "hint": "ver, nosotros, preterite - page 3.",
+      "explanation": "Vimos."
+    },
+    {
+      "id": "s5-usted",
+      "question": "Señor García, ¿dónde vive ____?\n(\"you\" - formal)",
+      "answers": [
+        "usted"
+      ],
+      "hint": "Formal, one person - page 2.",
+      "explanation": "Usted."
+    },
+    {
+      "id": "s5-visitar",
+      "question": "Translate: \"I am going to visit Madrid.\"",
+      "answers": [
+        "voy a visitar madrid",
+        "yo voy a visitar madrid"
+      ],
+      "hint": "Near future: ir + a + infinitive - page 4.",
+      "explanation": "Voy a visitar Madrid."
+    }
+  ],
+  "chests": [
+    {
+      "id": "s5-llavero",
+      "question": "\"un llavero\" is a...",
+      "choices": [
+        "key ring",
+        "necklace",
+        "fan",
+        "magnet"
+      ],
+      "correct": 0,
+      "hint": "Page 5 - souvenirs.",
+      "explanation": "Un llavero = a key ring."
+    },
+    {
+      "id": "s5-hambre",
+      "question": "\"¿Tienes hambre?\" means...",
+      "choices": [
+        "Are you hungry?",
+        "Are you thirsty?",
+        "Are you sleepy?",
+        "Are you cold?"
+      ],
+      "correct": 0,
+      "hint": "Page 5 - greetings.",
+      "explanation": "Tener hambre = to be hungry."
+    },
+    {
+      "id": "s5-vosotros",
+      "question": "Talking to TWO friends informally, you use...",
+      "choices": [
+        "vosotros",
+        "ustedes",
+        "usted",
+        "tú"
+      ],
+      "correct": 0,
+      "hint": "Page 2 - the table.",
+      "explanation": "Vosotros/as = you (plural, informal)."
+    },
+    {
+      "id": "s5-hizo",
+      "question": "Preterite of hacer for él / ella:",
+      "choices": [
+        "hizo",
+        "hice",
+        "hació",
+        "hacía"
+      ],
+      "correct": 0,
+      "hint": "Page 3.",
+      "explanation": "Hizo."
+    },
+    {
+      "id": "s5-sorpresa",
+      "question": "\"¡Qué sorpresa!\" means...",
+      "choices": [
+        "What a surprise!",
+        "How boring!",
+        "How horrible!",
+        "How lovely!"
+      ],
+      "correct": 0,
+      "hint": "Page 5 - exclamations.",
+      "explanation": "¡Qué sorpresa! = What a surprise!"
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Qué aventura! You survived Madrid!"
+  }
+}

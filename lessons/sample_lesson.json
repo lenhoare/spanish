@@ -1,0 +1,86 @@
+{
+  "format": "lesson-island/1",
+  "title": "Photosynthesis",
+  "subject": "Biology",
+  "intro": "The bridge to Star Island is broken! Find the question cards, answer them to rebuild it, and claim the Golden Star. Stuck? The whiteboard in the middle of the island has everything you need.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "What is it?",
+        "markdown": "# Photosynthesis\n\nPlants make their **own food** using light energy from the Sun.\n\nThis happens in the **chloroplasts** - tiny green structures inside plant cells, mostly in the *leaves*.\n\n## The word equation\n\n> carbon dioxide + water  ->  glucose + oxygen\n\nThe energy to drive this reaction comes from **light**, which is absorbed by a green pigment called **chlorophyll**.\n\n---\n\n**Remember:** plants *take in* carbon dioxide and *give out* oxygen."
+      },
+      {
+        "title": "Ingredients",
+        "markdown": "# What goes in, what comes out\n\n| Substance | In or out? | Where from / to |\n|---|---|---|\n| Carbon dioxide | In | Air, through tiny holes in leaves (stomata) |\n| Water | In | Soil, absorbed by the **roots** |\n| Glucose | Out | Used for energy, or stored as starch |\n| Oxygen | Out | Released into the air |\n\n## What is the glucose used for?\n\n- Respiration (releasing energy)\n- Making **cellulose** for cell walls\n- Stored as **starch** for later\n- Making proteins and fats"
+      },
+      {
+        "title": "Limiting factors",
+        "markdown": "# What controls the speed?\n\nThe *rate* of photosynthesis depends on three main **limiting factors**:\n\n1. **Light intensity** - more light, faster photosynthesis (up to a point)\n2. **Carbon dioxide concentration** - more CO2, faster rate (up to a point)\n3. **Temperature** - enzymes work faster when warmer, but too hot and they get damaged\n\n> Whichever factor is in *shortest supply* is the one limiting the rate.\n\n## Top tip\n\nIf a question says \"light increases and nothing else changes\", the rate **increases** - until something else becomes the limiting factor."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "card-co2",
+      "question": "Which gas do plants take IN from the air for photosynthesis?",
+      "answers": ["carbon dioxide", "co2", "carbon-dioxide"],
+      "hint": "Check the word equation on whiteboard page 1.",
+      "explanation": "Plants take in carbon dioxide through their stomata."
+    },
+    {
+      "id": "card-chlorophyll",
+      "question": "What is the name of the green pigment that absorbs light?",
+      "answers": ["chlorophyll", "chlorophyl"],
+      "hint": "Page 1 mentions it right after the word equation.",
+      "explanation": "Chlorophyll absorbs light energy and makes leaves green."
+    },
+    {
+      "id": "card-glucose",
+      "question": "Name the sugar that photosynthesis produces.",
+      "answers": ["glucose"],
+      "hint": "Look at the products in the word equation.",
+      "explanation": "Glucose is the sugar made in photosynthesis."
+    },
+    {
+      "id": "card-chloroplast",
+      "question": "In which part of a plant cell does photosynthesis happen?",
+      "choices": ["Nucleus", "Chloroplast", "Cell wall", "Vacuole"],
+      "correct": 1,
+      "hint": "It's the tiny green structure - see page 1.",
+      "explanation": "Photosynthesis happens in the chloroplasts."
+    }
+  ],
+  "chests": [
+    {
+      "id": "chest-product",
+      "question": "Which of these is a PRODUCT of photosynthesis?",
+      "choices": ["Carbon dioxide", "Oxygen", "Nitrogen", "Water"],
+      "correct": 1,
+      "hint": "Products are on the right-hand side of the equation.",
+      "explanation": "Oxygen is released as a product.",
+      "coins": 10
+    },
+    {
+      "id": "chest-light",
+      "question": "Light intensity increases and nothing else changes. What happens to the rate of photosynthesis?",
+      "choices": ["It decreases", "It stays the same", "It increases", "It stops"],
+      "correct": 2,
+      "hint": "Whiteboard page 3 has a top tip about this.",
+      "explanation": "More light means a faster rate - until another factor limits it.",
+      "coins": 10
+    },
+    {
+      "id": "chest-water",
+      "question": "How does the plant get the water it needs for photosynthesis?",
+      "choices": ["Leaves soak up rain", "Roots absorb it from the soil", "It is made in the chloroplast", "From the air through stomata"],
+      "correct": 1,
+      "hint": "Check the table on whiteboard page 2.",
+      "explanation": "Water is absorbed from the soil by the roots.",
+      "coins": 10
+    }
+  ],
+  "prize": {
+    "name": "Golden Star",
+    "message": "You rebuilt the bridge and mastered photosynthesis!"
+  }
+}
