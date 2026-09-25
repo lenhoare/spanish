@@ -14,6 +14,10 @@ const CURRENT := Vector3(1.3, 0, 0.9)     # drifts you back towards the main isl
 const WORLD_LIMIT := 110.0
 
 var vel := Vector3.ZERO
+## Solid rectangles (jetties, ships): [centre Vector2, half size Vector2 (local x, z), y rotation].
+var rects: Array = []
+## Optional: () -> Array of rectangles that move (e.g. a ship on a tow rope).
+var dynamic_rects := Callable()
 var rider: CharacterBody3D
 ## Circles the boat can't enter: [Vector2 centre, radius]. Filled in by the world.
 var blockers: Array = []
@@ -89,7 +93,9 @@ func board(body: CharacterBody3D) -> void:
 	Game.sfx("thud", 1.4, -6.0)
 	if not _told:
 		_told = true
-		if boat_name == "speedboat":
+		if boat_name == "tug":
+			Game.show_toast("¡A remolcar! Steer out to the big yellow ship - get close to its front to hook it.")
+		elif boat_name == "speedboat":
 			Game.show_toast("¡Vamos! Steer with the joystick. Jump near land to get out.")
 		else:
 			Game.show_toast("¡A remar! Steer with the joystick. Jump near land to get out.")
@@ -143,11 +149,47 @@ func _collide() -> void:
 				vel = Vector3(v2.x, 0, v2.y)
 				if rider:
 					Game.sfx("thud", 1.2, -8.0)
+	var all_rects := rects.duplicate()
+	if dynamic_rects.is_valid():
+		all_rects.append_array(dynamic_rects.call())
+	for rc in all_rects:
+		var push := push_out_rect(p, 1.6, rc)
+		if push != Vector2.ZERO:
+			p += push
+			var n := push.normalized()
+			var v2 := Vector2(vel.x, vel.z)
+			if v2.dot(n) < 0:
+				v2 = v2.bounce(n) * 0.4
+				vel = Vector3(v2.x, 0, v2.y)
+				if rider:
+					Game.sfx("thud", 1.2, -8.0)
 	if p.length() > WORLD_LIMIT:
 		p = p.normalized() * WORLD_LIMIT
 		vel = Vector3.ZERO
 	global_position.x = p.x
 	global_position.z = p.y
+
+
+## How far a circle (centre p, radius r) must move to get out of an oriented rectangle
+## [centre, half size (local x, z), y rotation]. Zero when it isn't inside.
+static func push_out_rect(p: Vector2, r: float, rc: Array) -> Vector2:
+	var c: Vector2 = rc[0]
+	var half: Vector2 = rc[1]
+	var ang: float = rc[2]
+	var xa := Vector2(cos(ang), -sin(ang))      # the rectangle's local x axis, in world (x, z)
+	var za := Vector2(sin(ang), cos(ang))       # its local z axis
+	var off := p - c
+	var lx := off.dot(xa)
+	var lz := off.dot(za)
+	var hx := half.x + r
+	var hz := half.y + r
+	if absf(lx) >= hx or absf(lz) >= hz:
+		return Vector2.ZERO
+	var px := hx - absf(lx)
+	var pz := hz - absf(lz)
+	if px < pz:
+		return xa * (px * (1.0 if lx >= 0 else -1.0))
+	return za * (pz * (1.0 if lz >= 0 else -1.0))
 
 
 func _nearest_shore_gap() -> float:

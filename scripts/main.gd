@@ -277,7 +277,12 @@ func _on_sweet(sweet: Node3D) -> void:
 				await get_tree().create_timer(0.8).timeout
 		if result == "correct":
 			Game.show_toast("\"¡Enhorabuena! ¡Estás contratado/a!\" You got the job!")
-			await get_tree().create_timer(1.0).timeout
+			# The reward appears on the desk (hidden until now), then flies to you.
+			if not sweet.visible:
+				sweet.visible = true
+				sweet.scale = Vector3.ONE * 0.01
+				create_tween().tween_property(sweet, "scale", Vector3.ONE, 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+			await get_tree().create_timer(1.2).timeout
 	elif sweet.question.has("sentence"):
 		# Sentence-builder sweet: earn enough stars to take it.
 		var ch: Dictionary = sweet.question.sentence

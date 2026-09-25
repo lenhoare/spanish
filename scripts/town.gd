@@ -149,7 +149,7 @@ func _say_round() -> void:
 	_guide_label.text = "Regalo %d / %d" % [round_i + 1, rounds.size()]
 	Game.sfx("click")
 	if read.is_valid():
-		read.call("La guía (%d / %d)" % [round_i + 1, rounds.size()], "## %s\n\n*Start here, facing down the main street.*" % rd.say)
+		read.call("La guía (%d / %d)" % [round_i + 1, rounds.size()], "# La guía (%d / %d)\n\n## %s\n\n*Start here, facing down the main street.*" % [round_i + 1, rounds.size(), rd.say])
 	else:
 		Game.show_toast("La guía: \"%s\"" % rd.say)
 

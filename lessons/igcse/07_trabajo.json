@@ -929,6 +929,25 @@
       ]
     },
     {
+      "id": "r7-sweet-remolcador",
+      "kind": "tug",
+      "at": [
+        232.0
+      ],
+      "berth_at": [
+        212.0
+      ],
+      "ship_at": [
+        246.0
+      ],
+      "question": "Translate into Spanish:\n\"My uncle works in the port.\"",
+      "answers": [
+        "mi tío trabaja en el puerto"
+      ],
+      "hint": "trabajar en - el puerto = the port.",
+      "explanation": "Mi tío trabaja en el puerto."
+    },
+    {
       "id": "r7-sweet-grua",
       "kind": "crane",
       "at": [

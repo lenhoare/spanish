@@ -1222,11 +1222,183 @@ trabajo = {
              {"job": "profesor", "items": [["unos libros", "furniture/books", 8.0], ["una pizarra", "proc/chalkboard", 3.0]]},
              {"job": "mecánico", "items": [["una llave inglesa", "proc/wrench", 3.0], ["una rueda", "proc/tyre", 3.0]]},
          ]},
+        {"id": "r7-sweet-remolcador", "kind": "tug", "at": [232.0], "berth_at": [212.0], "ship_at": [246.0],
+         "question": "Translate into Spanish:\n\"My uncle works in the port.\"",
+         "answers": ["mi tío trabaja en el puerto"],
+         "hint": "trabajar en - el puerto = the port.", "explanation": "Mi tío trabaja en el puerto."},
         {"id": "r7-sweet-grua", "kind": "crane", "at": [215.0, 0.78], "question": "Translate into Spanish:\n\"I am going to take a gap year.\"",
          "answers": ["voy a hacer un año sabático", "haré un año sabático", "voy a tomar un año sabático"],
          "hint": "Page 5 - ir a + hacer; a gap year = un año sabático.", "explanation": "Voy a hacer un año sabático."},
     ],
     "prize": {"name": "Estrella de Oro", "message": "¡Estás contratado! You conquered Isla 7."},
+}
+
+PLANET_WORDS = ["medio ambiente", "planeta", "tierra", "reciclo", "reciclar", "recicl", "contamina", "basura", "plástico",
+                "plastico", "energía", "energia", "agua", "ahorr", "transporte", "bici", "autobús", "autobus", "coche",
+                "árbol", "arbol", "bosque", "deforestación", "deforestacion", "cambio climático", "cambio climatico",
+                "calentamiento", "clima", "mar", "océano", "oceano", "animales", "especies", "proteger", "salvar",
+                "apagar", "luz", "ducha", "ecológic", "ecologic", "verde", "sostenible", "residuos", "petróleo", "petroleo"]
+
+planeta = {
+    "format": "lesson-island/1",
+    "title": "El planeta",
+    "subject": "IGCSE - Módulo 8",
+    "intro": "The environment, global problems and what we can all do. The grand finale - ¡salva la isla!",
+    "whiteboard": {"pages": [
+        {"title": "Los problemas", "markdown": md("""
+          # Los problemas del planeta
+          el cambio climático - el calentamiento global - la contaminación del aire / del mar
+          la deforestación - la basura - los plásticos en el mar - la sequía - las inundaciones
+          las especies en peligro de extinción - la marea negra (oil spill)
+
+          **El problema más grave es** el cambio climático **porque**...
+          **Me preocupa** la contaminación. **Me preocupan** los océanos.
+        """)},
+        {"title": "¿Qué haces?", "markdown": md("""
+          # ¿Qué haces para proteger el medio ambiente?
+          **Reciclo** el papel, el vidrio y el plástico.
+          **Ahorro** energía: **apago** la luz y **me ducho** en vez de bañarme.
+          **Voy** al instituto a pie / en bici / en autobús.
+          **Uso** una bolsa reutilizable. **No compro** botellas de plástico.
+
+          # Hay que... / Se debe... / Se debería...
+          **Hay que** usar el transporte público. **Se debería** plantar más árboles.
+        """)},
+        {"title": "Ayer y mañana", "markdown": md("""
+          # ¿Qué hiciste recientemente?
+          **La semana pasada participé** en una limpieza de la playa.
+          **Ayer fui** al instituto en bici. **Planté** un árbol.
+
+          # ¿Qué harás en el futuro?
+          **Voy a** reciclar más. **Usaré** menos plástico. **Compraré** un coche eléctrico.
+          **Si todos reciclamos, salvaremos el planeta.** (si + present → future)
+        """)},
+        {"title": "Podríamos...", "markdown": md("""
+          # ¿Qué podrías hacer?
+          The **conditional**: what you *could / would / should* do.
+          **Podría** ir en bici. **Debería** ahorrar agua. **Sería** mejor usar energía solar.
+          **Me gustaría** trabajar para una organización benéfica.
+          **Si fuera** presidente, **prohibiría** los plásticos. (*If I were...*)
+        """)},
+        {"title": "Vida sana", "markdown": md("""
+          # Vivir de forma sana
+          **Fumar es** peligroso y **un malgasto de dinero**.
+          **Causa** muchos problemas de salud.
+          **Dejó de** fumar. (*She gave up smoking.*)
+          **Participa en** una carrera de 10 km.
+
+          # Los eventos internacionales
+          **Los Juegos Olímpicos / el Mundial sirven para unir a la gente.**
+          **Fomentan** el espíritu de solidaridad.
+        """)},
+        {"title": "5 estrellas", "markdown": md("""
+          # How to write a 5-star answer
+          1. A **verb in the right tense** - *reciclo, ahorro, voy en bici*
+          2. A **time phrase** - *todos los días, la semana pasada, en el futuro*
+          3. A **connective** - *porque, sin embargo, además*
+          4. An **opinion** - *me preocupa, creo que, es fundamental*
+          5. A **second tense** - *la semana pasada planté..., en el futuro usaré...*
+
+          > **Todos los días reciclo** el plástico **porque me preocupan** los océanos.
+          > **Además, la semana pasada participé** en una limpieza de la playa.
+        """)},
+    ]},
+    "cards": [
+        card("r8-reciclo", "Translate into Spanish:\n\"I recycle paper and glass.\"", ["reciclo el papel y el vidrio", "reciclo papel y vidrio", "yo reciclo el papel y el vidrio"], "Page 2.", "Reciclo el papel y el vidrio."),
+        card("r8-hayque", "Translate into Spanish:\n\"We must use public transport.\"", ["hay que usar el transporte público", "tenemos que usar el transporte público", "se debe usar el transporte público", "debemos usar el transporte público"], "Page 2 - hay que + infinitive.", "Hay que usar el transporte público."),
+        mc("r8-participe", "La semana pasada ____ en una limpieza de la playa.", ["participé", "participo", "participaba", "participaré"], 0, "La semana pasada = preterite - page 3.", "Participé en una limpieza de la playa."),
+        card("r8-salvaremos", "Si todos reciclamos, ____ el planeta.\n(salvar - \"we will save\")", ["salvaremos"], "si + present → future - page 3.", "Salvaremos el planeta."),
+        mc("r8-podria", "Para ayudar, ____ ir al instituto en bici.", ["podría", "pude", "puedo haber", "podía"], 0, "'I could' = the conditional - page 4.", "Podría ir en bici."),
+        card("r8-preocupa", "Translate into Spanish:\n\"Pollution worries me.\"", ["me preocupa la contaminación"], "Page 1 - like gustar.", "Me preocupa la contaminación."),
+    ],
+    "chests": [
+        mc("r8-medio", "\"el medio ambiente\" is...", ["the environment", "the middle of the environment", "half the world", "the atmosphere"], 0, "The topic!", "El medio ambiente = the environment.", level=1),
+        mc("r8-sequia", "\"la sequía\" is...", ["drought", "flooding", "a storm", "pollution"], 0, "Page 1.", "La sequía = drought.", level=1),
+        mc("r8-marea", "\"la marea negra\" is...", ["an oil spill", "a black tide at night", "a storm at sea", "a coral reef"], 0, "Page 1 - the Galápagos text!", "La marea negra = an oil spill.", level=2),
+        mc("r8-malgasto", "\"un malgasto de dinero\" means...", ["a waste of money", "a bad investment", "too much money", "a money problem"], 0, "Page 5.", "Un malgasto de dinero = a waste of money.", level=2),
+        mc("r8-fuera", "Si ____ presidente, prohibiría los plásticos.", ["fuera", "soy", "seré", "sería"], 0, "Si fuera... = If I were... - page 4.", "Si fuera presidente...", level=3),
+        mc("r8-dejo", "La semana pasada mi hermana ____ de fumar.", ["dejó", "deja", "dejaba", "dejará"], 0, "La semana pasada = preterite.", "Dejó de fumar - she gave up smoking.", level=3),
+    ],
+    "retos": [
+        {"kind": "postcard", "at": [20.0, 0.84], "question": "¿Qué haces para proteger el medio ambiente?", "tense": "present",
+         "topic_words": PLANET_WORDS, "stars_needed": 3,
+         "chips": ["reciclo", "ahorro energía", "voy en bici", "porque", "me preocupa", "sin embargo", "la semana pasada"]},
+        {"kind": "postcard", "at": [200.0, 0.84], "question": "¿Qué hiciste recientemente para ayudar al medio ambiente?", "tense": "preterite",
+         "topic_words": PLANET_WORDS + ["participé", "participe", "planté", "plante", "fui", "limpieza"], "stars_needed": 4},
+        {"kind": "postcard", "at": [345.0, 0.84], "question": "En tu opinión, ¿cuál será el problema más grave para el planeta en el futuro?", "tense": "future",
+         "topic_words": PLANET_WORDS + ["será", "sera", "habrá", "habra", "futuro", "grave"], "stars_needed": 5},
+        {"kind": "notice", "at": [235.0, 0.85], "intro": "The health poster has blown down! Write each word in the right form to fix it.",
+         "text": "En mi opinión, {1} es peligroso y también {2} un malgasto de dinero. En mi instituto, algunos jóvenes {3} "
+                 "que es divertido, pero desde mi punto de vista, {4} muchos problemas de salud y también es una actividad {5}. "
+                 "La semana pasada mi hermana mayor {6} de fumar y ahora {7} en una carrera de 10 km. Creo que será una carrera muy {8}.",
+         "hint": "An infinitive can be a subject. Plural subjects, adjective agreement, and 'la semana pasada' = preterite.",
+         "gaps": [
+             {"verb": "fumar", "answers": ["fumar"]},
+             {"verb": "ser", "answers": ["es"]},
+             {"verb": "pensar", "answers": ["piensan"]},
+             {"verb": "causar", "answers": ["causa"]},
+             {"verb": "estúpido", "answers": ["estúpida"]},
+             {"verb": "dejar", "answers": ["dejó"]},
+             {"verb": "participar", "answers": ["participa"]},
+             {"verb": "duro", "answers": ["dura"]},
+         ]},
+        {"kind": "detective", "at": [100.0, 0.82], "sign": "Las Galápagos", "greeting": "¿Quién lo dice?",
+         "speakers": [
+             {"name": "Valeria", "bubble": "Soy guía en las Galápagos.", "character": "character-female-e",
+              "review": "# Valeria (guía, Ecuador)\n\nTrabajo como guía turística en las Islas Galápagos, a mil kilómetros de la costa de Ecuador. Los turistas vienen a ver las tortugas gigantes, las iguanas y los arrecifes de coral. Sin embargo, hay demasiados turistas y mucha basura. En 2001 un barco petrolero causó una marea negra terrible. Ahora hay una ley nueva que prohíbe el plástico, ¡y estoy muy contenta!"},
+             {"name": "Mateo", "bubble": "¡Limpiamos la playa!", "character": "character-male-a",
+              "review": "# Mateo (voluntario, 16 años)\n\nEl sábado pasado participé en una limpieza costera con mi clase. Recogimos más de cien botellas de plástico en dos horas. ¡Qué asco! Creo que el problema más grave es el plástico en el mar, porque mata a las tortugas y a los peces. En el futuro voy a organizar una campaña de concienciación en mi instituto. Todos podemos ayudar."},
+         ],
+         "questions": [
+             mc("d1", "¿Quién menciona los animales?", ["Valeria", "Mateo", "Los dos"], 2, "Tortoises... turtles and fish...", "Los dos - tortugas gigantes (Valeria), tortugas y peces (Mateo)."),
+             mc("d2", "¿Quién habla de una ley?", ["Valeria", "Mateo", "Los dos"], 0, "Una ley nueva...", "Valeria - una ley que prohíbe el plástico."),
+             mc("d3", "¿Quién limpió una playa?", ["Valeria", "Mateo", "Los dos"], 1, "Una limpieza costera...", "Mateo - participó en una limpieza costera."),
+             mc("d4", "¿Quién menciona el turismo?", ["Valeria", "Mateo", "Los dos"], 0, "Demasiados turistas...", "Valeria - hay demasiados turistas."),
+             mc("d5", "¿Quién habla del petróleo?", ["Valeria", "Mateo", "Los dos"], 0, "Un barco petrolero...", "Valeria - una marea negra en 2001."),
+             mc("d6", "¿Quién tiene planes para el futuro?", ["Valeria", "Mateo", "Los dos"], 1, "Voy a organizar...", "Mateo - va a organizar una campaña."),
+             mc("d7", "¿Quién menciona el plástico?", ["Valeria", "Mateo", "Los dos"], 2, "Both!", "Los dos - la ley (Valeria) y las botellas (Mateo)."),
+         ]},
+        {"kind": "chat", "at": [255.0, 0.72], "name": "Greta", "character": "character-female-a", "color": "#3cb371",
+         "turns": [
+             {"them": ["¡Hola! Estoy organizando una limpieza de la playa.", "¿Tú reciclas en casa?"],
+              "task": "Say what you do for the environment at home - use the present.",
+              "hint": "Use the present: reciclo el plástico, ahorro agua, apago la luz, no reciclo mucho pero...",
+              "need": [{"all": [r"\b(reciclo|reciclamos|ahorro|apago|separo|uso|voy|no reciclo|compro|reutilizo)\b"], "reply": ["¡Qué bien!"]}]},
+             {"them": ["¿Y cómo vas al instituto?"],
+              "task": "Say how you get to school: voy a pie / en bici / en autobús / en coche...",
+              "hint": "Use 'voy' + 'a pie' or 'en' + transport (en bici, en autobús, en coche, en tren).",
+              "need": [{"all": [r"\b(voy|vamos|llego|camino|me llevan|me lleva|cojo|tomo)\b", r"\b(a pie|andando|caminando|bici|bicicleta|autobus|coche|tren|metro|moto|patinete)\b"],
+                        "reply": ["Yo voy en bici. ¡Es más ecológico!"]}]},
+             {"them": ["En tu opinión, ¿cuál es el problema más grave del planeta?"],
+              "task": "Give your opinion: creo que el problema más grave es...",
+              "hint": "Start 'Creo que...' or 'En mi opinión...' and name a problem (el cambio climático, la contaminación...).",
+              "need": [{"all": [r"\b(creo que|pienso que|en mi opinion|para mi|me preocupa|me preocupan|el problema mas grave)\b"],
+                        "reply": ["Estoy de acuerdo. ¡Hay que actuar!"]}]},
+             {"them": ["¿Vienes a la limpieza el sábado?"],
+              "task": "Say yes - or say you can't and give a reason.",
+              "hint": "Say 'sí, vale' / '¡claro!' - or 'no puedo porque tengo que...'.",
+              "need": [{"all": [r"\bno puedo\b", r"\b(porque|ya que|tengo que)\b"], "reply": ["¡Qué pena! La próxima vez."]},
+                       {"all": [r"\b(si|vale|claro|genial|de acuerdo|por supuesto|me encantaria|me gustaria|guay|venga|perfecto)\b"], "none": [r"\bno\b"],
+                        "reply": ["¡Genial! ¡Juntos salvaremos el planeta!"]}]},
+             {"them": ["¡Hasta el sábado!"]},
+         ]},
+    ],
+    "sweets": [
+        {"id": "r8-sweet-volcan", "kind": "volcano", "at": [150.0, 0.72], "need": 3,
+         "question": "El volcán asks: Si fueras presidente, ¿qué harías para salvar el planeta?",
+         "sentence": {"question": "El volcán asks: Si fueras presidente, ¿qué harías para salvar el planeta?", "tense": "conditional",
+                      "topic_words": PLANET_WORDS + ["prohibiría", "prohibiria", "haría", "haria", "presidente", "ley"], "stars_needed": 3}},
+        {"id": "r8-sweet-bosque", "kind": "trees", "at": [300.0, 0.7],
+         "question": "Translate into Spanish:\n\"We should plant more trees.\"",
+         "answers": ["deberíamos plantar más árboles", "se debería plantar más árboles", "hay que plantar más árboles", "debemos plantar más árboles"],
+         "hint": "Page 4 - deberíamos + infinitive.", "explanation": "Deberíamos plantar más árboles."},
+        {"id": "r8-sweet-crucero", "kind": "liner", "at": [60.0],
+         "question": "El capitán asks: ¿Cómo prefieres viajar? ¿Por qué?",
+         "sentence": {"question": "El capitán asks: ¿Cómo prefieres viajar? ¿Por qué?", "tense": "present",
+                      "topic_words": PLANET_WORDS + ["viajar", "prefiero", "avión", "avion", "barco", "tren", "crucero", "rápido", "rapido", "cómodo", "comodo"],
+                      "stars_needed": 3}},
+    ],
+    "prize": {"name": "Estrella de Oro", "message": "¡Has salvado el planeta! You conquered every island of La Isla de los Retos - ¡enhorabuena!"},
 }
 
 os.makedirs(OUT, exist_ok=True)
@@ -1258,3 +1430,7 @@ with open(os.path.join(OUT, "07_trabajo.json"), "w", encoding="utf-8") as f:
     json.dump(trabajo, f, ensure_ascii=False, indent=2)
 print("07_trabajo.json:", len(trabajo["whiteboard"]["pages"]), "pages,", len(trabajo["cards"]), "cards,",
       len(trabajo["chests"]), "chests,", len(trabajo["retos"]), "retos,", len(trabajo["sweets"]), "sweets")
+with open(os.path.join(OUT, "08_planeta.json"), "w", encoding="utf-8") as f:
+    json.dump(planeta, f, ensure_ascii=False, indent=2)
+print("08_planeta.json:", len(planeta["whiteboard"]["pages"]), "pages,", len(planeta["cards"]), "cards,",
+      len(planeta["chests"]), "chests,", len(planeta["retos"]), "retos,", len(planeta["sweets"]), "sweets")

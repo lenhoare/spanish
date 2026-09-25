@@ -1521,6 +1521,8 @@ func show_reading(title: String, markdown: String) -> void:
 	head.add_theme_font_size_override("font_size", 26)
 	head.add_theme_color_override("font_color", Color("#2e86de"))
 	v.add_child(head)
+	# Texts that start with their own big heading don't need the small title as well.
+	head.visible = not markdown.strip_edges().begins_with("#")
 	var text := _lesson_label(Game.text_scale())
 	text.fit_content = true
 	text.text = Markdown.to_bbcode(markdown, Game.text_scale())

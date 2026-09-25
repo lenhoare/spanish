@@ -1,0 +1,813 @@
+{
+  "format": "lesson-island/1",
+  "title": "El planeta",
+  "subject": "IGCSE - Módulo 8",
+  "intro": "The environment, global problems and what we can all do. The grand finale - ¡salva la isla!",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Los problemas",
+        "markdown": "# Los problemas del planeta\nel cambio climático - el calentamiento global - la contaminación del aire / del mar\nla deforestación - la basura - los plásticos en el mar - la sequía - las inundaciones\nlas especies en peligro de extinción - la marea negra (oil spill)\n\n**El problema más grave es** el cambio climático **porque**...\n**Me preocupa** la contaminación. **Me preocupan** los océanos."
+      },
+      {
+        "title": "¿Qué haces?",
+        "markdown": "# ¿Qué haces para proteger el medio ambiente?\n**Reciclo** el papel, el vidrio y el plástico.\n**Ahorro** energía: **apago** la luz y **me ducho** en vez de bañarme.\n**Voy** al instituto a pie / en bici / en autobús.\n**Uso** una bolsa reutilizable. **No compro** botellas de plástico.\n\n# Hay que... / Se debe... / Se debería...\n**Hay que** usar el transporte público. **Se debería** plantar más árboles."
+      },
+      {
+        "title": "Ayer y mañana",
+        "markdown": "# ¿Qué hiciste recientemente?\n**La semana pasada participé** en una limpieza de la playa.\n**Ayer fui** al instituto en bici. **Planté** un árbol.\n\n# ¿Qué harás en el futuro?\n**Voy a** reciclar más. **Usaré** menos plástico. **Compraré** un coche eléctrico.\n**Si todos reciclamos, salvaremos el planeta.** (si + present → future)"
+      },
+      {
+        "title": "Podríamos...",
+        "markdown": "# ¿Qué podrías hacer?\nThe **conditional**: what you *could / would / should* do.\n**Podría** ir en bici. **Debería** ahorrar agua. **Sería** mejor usar energía solar.\n**Me gustaría** trabajar para una organización benéfica.\n**Si fuera** presidente, **prohibiría** los plásticos. (*If I were...*)"
+      },
+      {
+        "title": "Vida sana",
+        "markdown": "# Vivir de forma sana\n**Fumar es** peligroso y **un malgasto de dinero**.\n**Causa** muchos problemas de salud.\n**Dejó de** fumar. (*She gave up smoking.*)\n**Participa en** una carrera de 10 km.\n\n# Los eventos internacionales\n**Los Juegos Olímpicos / el Mundial sirven para unir a la gente.**\n**Fomentan** el espíritu de solidaridad."
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\n1. A **verb in the right tense** - *reciclo, ahorro, voy en bici*\n2. A **time phrase** - *todos los días, la semana pasada, en el futuro*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *me preocupa, creo que, es fundamental*\n5. A **second tense** - *la semana pasada planté..., en el futuro usaré...*\n\n> **Todos los días reciclo** el plástico **porque me preocupan** los océanos.\n> **Además, la semana pasada participé** en una limpieza de la playa."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r8-reciclo",
+      "question": "Translate into Spanish:\n\"I recycle paper and glass.\"",
+      "answers": [
+        "reciclo el papel y el vidrio",
+        "reciclo papel y vidrio",
+        "yo reciclo el papel y el vidrio"
+      ],
+      "hint": "Page 2.",
+      "explanation": "Reciclo el papel y el vidrio."
+    },
+    {
+      "id": "r8-hayque",
+      "question": "Translate into Spanish:\n\"We must use public transport.\"",
+      "answers": [
+        "hay que usar el transporte público",
+        "tenemos que usar el transporte público",
+        "se debe usar el transporte público",
+        "debemos usar el transporte público"
+      ],
+      "hint": "Page 2 - hay que + infinitive.",
+      "explanation": "Hay que usar el transporte público."
+    },
+    {
+      "id": "r8-participe",
+      "question": "La semana pasada ____ en una limpieza de la playa.",
+      "choices": [
+        "participé",
+        "participo",
+        "participaba",
+        "participaré"
+      ],
+      "correct": 0,
+      "hint": "La semana pasada = preterite - page 3.",
+      "explanation": "Participé en una limpieza de la playa."
+    },
+    {
+      "id": "r8-salvaremos",
+      "question": "Si todos reciclamos, ____ el planeta.\n(salvar - \"we will save\")",
+      "answers": [
+        "salvaremos"
+      ],
+      "hint": "si + present → future - page 3.",
+      "explanation": "Salvaremos el planeta."
+    },
+    {
+      "id": "r8-podria",
+      "question": "Para ayudar, ____ ir al instituto en bici.",
+      "choices": [
+        "podría",
+        "pude",
+        "puedo haber",
+        "podía"
+      ],
+      "correct": 0,
+      "hint": "'I could' = the conditional - page 4.",
+      "explanation": "Podría ir en bici."
+    },
+    {
+      "id": "r8-preocupa",
+      "question": "Translate into Spanish:\n\"Pollution worries me.\"",
+      "answers": [
+        "me preocupa la contaminación"
+      ],
+      "hint": "Page 1 - like gustar.",
+      "explanation": "Me preocupa la contaminación."
+    }
+  ],
+  "chests": [
+    {
+      "id": "r8-medio",
+      "question": "\"el medio ambiente\" is...",
+      "choices": [
+        "the environment",
+        "the middle of the environment",
+        "half the world",
+        "the atmosphere"
+      ],
+      "correct": 0,
+      "hint": "The topic!",
+      "explanation": "El medio ambiente = the environment.",
+      "level": 1
+    },
+    {
+      "id": "r8-sequia",
+      "question": "\"la sequía\" is...",
+      "choices": [
+        "drought",
+        "flooding",
+        "a storm",
+        "pollution"
+      ],
+      "correct": 0,
+      "hint": "Page 1.",
+      "explanation": "La sequía = drought.",
+      "level": 1
+    },
+    {
+      "id": "r8-marea",
+      "question": "\"la marea negra\" is...",
+      "choices": [
+        "an oil spill",
+        "a black tide at night",
+        "a storm at sea",
+        "a coral reef"
+      ],
+      "correct": 0,
+      "hint": "Page 1 - the Galápagos text!",
+      "explanation": "La marea negra = an oil spill.",
+      "level": 2
+    },
+    {
+      "id": "r8-malgasto",
+      "question": "\"un malgasto de dinero\" means...",
+      "choices": [
+        "a waste of money",
+        "a bad investment",
+        "too much money",
+        "a money problem"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "Un malgasto de dinero = a waste of money.",
+      "level": 2
+    },
+    {
+      "id": "r8-fuera",
+      "question": "Si ____ presidente, prohibiría los plásticos.",
+      "choices": [
+        "fuera",
+        "soy",
+        "seré",
+        "sería"
+      ],
+      "correct": 0,
+      "hint": "Si fuera... = If I were... - page 4.",
+      "explanation": "Si fuera presidente...",
+      "level": 3
+    },
+    {
+      "id": "r8-dejo",
+      "question": "La semana pasada mi hermana ____ de fumar.",
+      "choices": [
+        "dejó",
+        "deja",
+        "dejaba",
+        "dejará"
+      ],
+      "correct": 0,
+      "hint": "La semana pasada = preterite.",
+      "explanation": "Dejó de fumar - she gave up smoking.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "at": [
+        20.0,
+        0.84
+      ],
+      "question": "¿Qué haces para proteger el medio ambiente?",
+      "tense": "present",
+      "topic_words": [
+        "medio ambiente",
+        "planeta",
+        "tierra",
+        "reciclo",
+        "reciclar",
+        "recicl",
+        "contamina",
+        "basura",
+        "plástico",
+        "plastico",
+        "energía",
+        "energia",
+        "agua",
+        "ahorr",
+        "transporte",
+        "bici",
+        "autobús",
+        "autobus",
+        "coche",
+        "árbol",
+        "arbol",
+        "bosque",
+        "deforestación",
+        "deforestacion",
+        "cambio climático",
+        "cambio climatico",
+        "calentamiento",
+        "clima",
+        "mar",
+        "océano",
+        "oceano",
+        "animales",
+        "especies",
+        "proteger",
+        "salvar",
+        "apagar",
+        "luz",
+        "ducha",
+        "ecológic",
+        "ecologic",
+        "verde",
+        "sostenible",
+        "residuos",
+        "petróleo",
+        "petroleo"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "reciclo",
+        "ahorro energía",
+        "voy en bici",
+        "porque",
+        "me preocupa",
+        "sin embargo",
+        "la semana pasada"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        200.0,
+        0.84
+      ],
+      "question": "¿Qué hiciste recientemente para ayudar al medio ambiente?",
+      "tense": "preterite",
+      "topic_words": [
+        "medio ambiente",
+        "planeta",
+        "tierra",
+        "reciclo",
+        "reciclar",
+        "recicl",
+        "contamina",
+        "basura",
+        "plástico",
+        "plastico",
+        "energía",
+        "energia",
+        "agua",
+        "ahorr",
+        "transporte",
+        "bici",
+        "autobús",
+        "autobus",
+        "coche",
+        "árbol",
+        "arbol",
+        "bosque",
+        "deforestación",
+        "deforestacion",
+        "cambio climático",
+        "cambio climatico",
+        "calentamiento",
+        "clima",
+        "mar",
+        "océano",
+        "oceano",
+        "animales",
+        "especies",
+        "proteger",
+        "salvar",
+        "apagar",
+        "luz",
+        "ducha",
+        "ecológic",
+        "ecologic",
+        "verde",
+        "sostenible",
+        "residuos",
+        "petróleo",
+        "petroleo",
+        "participé",
+        "participe",
+        "planté",
+        "plante",
+        "fui",
+        "limpieza"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        345.0,
+        0.84
+      ],
+      "question": "En tu opinión, ¿cuál será el problema más grave para el planeta en el futuro?",
+      "tense": "future",
+      "topic_words": [
+        "medio ambiente",
+        "planeta",
+        "tierra",
+        "reciclo",
+        "reciclar",
+        "recicl",
+        "contamina",
+        "basura",
+        "plástico",
+        "plastico",
+        "energía",
+        "energia",
+        "agua",
+        "ahorr",
+        "transporte",
+        "bici",
+        "autobús",
+        "autobus",
+        "coche",
+        "árbol",
+        "arbol",
+        "bosque",
+        "deforestación",
+        "deforestacion",
+        "cambio climático",
+        "cambio climatico",
+        "calentamiento",
+        "clima",
+        "mar",
+        "océano",
+        "oceano",
+        "animales",
+        "especies",
+        "proteger",
+        "salvar",
+        "apagar",
+        "luz",
+        "ducha",
+        "ecológic",
+        "ecologic",
+        "verde",
+        "sostenible",
+        "residuos",
+        "petróleo",
+        "petroleo",
+        "será",
+        "sera",
+        "habrá",
+        "habra",
+        "futuro",
+        "grave"
+      ],
+      "stars_needed": 5
+    },
+    {
+      "kind": "notice",
+      "at": [
+        235.0,
+        0.85
+      ],
+      "intro": "The health poster has blown down! Write each word in the right form to fix it.",
+      "text": "En mi opinión, {1} es peligroso y también {2} un malgasto de dinero. En mi instituto, algunos jóvenes {3} que es divertido, pero desde mi punto de vista, {4} muchos problemas de salud y también es una actividad {5}. La semana pasada mi hermana mayor {6} de fumar y ahora {7} en una carrera de 10 km. Creo que será una carrera muy {8}.",
+      "hint": "An infinitive can be a subject. Plural subjects, adjective agreement, and 'la semana pasada' = preterite.",
+      "gaps": [
+        {
+          "verb": "fumar",
+          "answers": [
+            "fumar"
+          ]
+        },
+        {
+          "verb": "ser",
+          "answers": [
+            "es"
+          ]
+        },
+        {
+          "verb": "pensar",
+          "answers": [
+            "piensan"
+          ]
+        },
+        {
+          "verb": "causar",
+          "answers": [
+            "causa"
+          ]
+        },
+        {
+          "verb": "estúpido",
+          "answers": [
+            "estúpida"
+          ]
+        },
+        {
+          "verb": "dejar",
+          "answers": [
+            "dejó"
+          ]
+        },
+        {
+          "verb": "participar",
+          "answers": [
+            "participa"
+          ]
+        },
+        {
+          "verb": "duro",
+          "answers": [
+            "dura"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "at": [
+        100.0,
+        0.82
+      ],
+      "sign": "Las Galápagos",
+      "greeting": "¿Quién lo dice?",
+      "speakers": [
+        {
+          "name": "Valeria",
+          "bubble": "Soy guía en las Galápagos.",
+          "character": "character-female-e",
+          "review": "# Valeria (guía, Ecuador)\n\nTrabajo como guía turística en las Islas Galápagos, a mil kilómetros de la costa de Ecuador. Los turistas vienen a ver las tortugas gigantes, las iguanas y los arrecifes de coral. Sin embargo, hay demasiados turistas y mucha basura. En 2001 un barco petrolero causó una marea negra terrible. Ahora hay una ley nueva que prohíbe el plástico, ¡y estoy muy contenta!"
+        },
+        {
+          "name": "Mateo",
+          "bubble": "¡Limpiamos la playa!",
+          "character": "character-male-a",
+          "review": "# Mateo (voluntario, 16 años)\n\nEl sábado pasado participé en una limpieza costera con mi clase. Recogimos más de cien botellas de plástico en dos horas. ¡Qué asco! Creo que el problema más grave es el plástico en el mar, porque mata a las tortugas y a los peces. En el futuro voy a organizar una campaña de concienciación en mi instituto. Todos podemos ayudar."
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién menciona los animales?",
+          "choices": [
+            "Valeria",
+            "Mateo",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Tortoises... turtles and fish...",
+          "explanation": "Los dos - tortugas gigantes (Valeria), tortugas y peces (Mateo)."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién habla de una ley?",
+          "choices": [
+            "Valeria",
+            "Mateo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Una ley nueva...",
+          "explanation": "Valeria - una ley que prohíbe el plástico."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién limpió una playa?",
+          "choices": [
+            "Valeria",
+            "Mateo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Una limpieza costera...",
+          "explanation": "Mateo - participó en una limpieza costera."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién menciona el turismo?",
+          "choices": [
+            "Valeria",
+            "Mateo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Demasiados turistas...",
+          "explanation": "Valeria - hay demasiados turistas."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién habla del petróleo?",
+          "choices": [
+            "Valeria",
+            "Mateo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Un barco petrolero...",
+          "explanation": "Valeria - una marea negra en 2001."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién tiene planes para el futuro?",
+          "choices": [
+            "Valeria",
+            "Mateo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Voy a organizar...",
+          "explanation": "Mateo - va a organizar una campaña."
+        },
+        {
+          "id": "d7",
+          "question": "¿Quién menciona el plástico?",
+          "choices": [
+            "Valeria",
+            "Mateo",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Both!",
+          "explanation": "Los dos - la ley (Valeria) y las botellas (Mateo)."
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "at": [
+        255.0,
+        0.72
+      ],
+      "name": "Greta",
+      "character": "character-female-a",
+      "color": "#3cb371",
+      "turns": [
+        {
+          "them": [
+            "¡Hola! Estoy organizando una limpieza de la playa.",
+            "¿Tú reciclas en casa?"
+          ],
+          "task": "Say what you do for the environment at home - use the present.",
+          "hint": "Use the present: reciclo el plástico, ahorro agua, apago la luz, no reciclo mucho pero...",
+          "need": [
+            {
+              "all": [
+                "\\b(reciclo|reciclamos|ahorro|apago|separo|uso|voy|no reciclo|compro|reutilizo)\\b"
+              ],
+              "reply": [
+                "¡Qué bien!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Y cómo vas al instituto?"
+          ],
+          "task": "Say how you get to school: voy a pie / en bici / en autobús / en coche...",
+          "hint": "Use 'voy' + 'a pie' or 'en' + transport (en bici, en autobús, en coche, en tren).",
+          "need": [
+            {
+              "all": [
+                "\\b(voy|vamos|llego|camino|me llevan|me lleva|cojo|tomo)\\b",
+                "\\b(a pie|andando|caminando|bici|bicicleta|autobus|coche|tren|metro|moto|patinete)\\b"
+              ],
+              "reply": [
+                "Yo voy en bici. ¡Es más ecológico!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "En tu opinión, ¿cuál es el problema más grave del planeta?"
+          ],
+          "task": "Give your opinion: creo que el problema más grave es...",
+          "hint": "Start 'Creo que...' or 'En mi opinión...' and name a problem (el cambio climático, la contaminación...).",
+          "need": [
+            {
+              "all": [
+                "\\b(creo que|pienso que|en mi opinion|para mi|me preocupa|me preocupan|el problema mas grave)\\b"
+              ],
+              "reply": [
+                "Estoy de acuerdo. ¡Hay que actuar!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Vienes a la limpieza el sábado?"
+          ],
+          "task": "Say yes - or say you can't and give a reason.",
+          "hint": "Say 'sí, vale' / '¡claro!' - or 'no puedo porque tengo que...'.",
+          "need": [
+            {
+              "all": [
+                "\\bno puedo\\b",
+                "\\b(porque|ya que|tengo que)\\b"
+              ],
+              "reply": [
+                "¡Qué pena! La próxima vez."
+              ]
+            },
+            {
+              "all": [
+                "\\b(si|vale|claro|genial|de acuerdo|por supuesto|me encantaria|me gustaria|guay|venga|perfecto)\\b"
+              ],
+              "none": [
+                "\\bno\\b"
+              ],
+              "reply": [
+                "¡Genial! ¡Juntos salvaremos el planeta!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¡Hasta el sábado!"
+          ]
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r8-sweet-volcan",
+      "kind": "volcano",
+      "at": [
+        150.0,
+        0.72
+      ],
+      "need": 3,
+      "question": "El volcán asks: Si fueras presidente, ¿qué harías para salvar el planeta?",
+      "sentence": {
+        "question": "El volcán asks: Si fueras presidente, ¿qué harías para salvar el planeta?",
+        "tense": "conditional",
+        "topic_words": [
+          "medio ambiente",
+          "planeta",
+          "tierra",
+          "reciclo",
+          "reciclar",
+          "recicl",
+          "contamina",
+          "basura",
+          "plástico",
+          "plastico",
+          "energía",
+          "energia",
+          "agua",
+          "ahorr",
+          "transporte",
+          "bici",
+          "autobús",
+          "autobus",
+          "coche",
+          "árbol",
+          "arbol",
+          "bosque",
+          "deforestación",
+          "deforestacion",
+          "cambio climático",
+          "cambio climatico",
+          "calentamiento",
+          "clima",
+          "mar",
+          "océano",
+          "oceano",
+          "animales",
+          "especies",
+          "proteger",
+          "salvar",
+          "apagar",
+          "luz",
+          "ducha",
+          "ecológic",
+          "ecologic",
+          "verde",
+          "sostenible",
+          "residuos",
+          "petróleo",
+          "petroleo",
+          "prohibiría",
+          "prohibiria",
+          "haría",
+          "haria",
+          "presidente",
+          "ley"
+        ],
+        "stars_needed": 3
+      }
+    },
+    {
+      "id": "r8-sweet-bosque",
+      "kind": "trees",
+      "at": [
+        300.0,
+        0.7
+      ],
+      "question": "Translate into Spanish:\n\"We should plant more trees.\"",
+      "answers": [
+        "deberíamos plantar más árboles",
+        "se debería plantar más árboles",
+        "hay que plantar más árboles",
+        "debemos plantar más árboles"
+      ],
+      "hint": "Page 4 - deberíamos + infinitive.",
+      "explanation": "Deberíamos plantar más árboles."
+    },
+    {
+      "id": "r8-sweet-crucero",
+      "kind": "liner",
+      "at": [
+        60.0
+      ],
+      "question": "El capitán asks: ¿Cómo prefieres viajar? ¿Por qué?",
+      "sentence": {
+        "question": "El capitán asks: ¿Cómo prefieres viajar? ¿Por qué?",
+        "tense": "present",
+        "topic_words": [
+          "medio ambiente",
+          "planeta",
+          "tierra",
+          "reciclo",
+          "reciclar",
+          "recicl",
+          "contamina",
+          "basura",
+          "plástico",
+          "plastico",
+          "energía",
+          "energia",
+          "agua",
+          "ahorr",
+          "transporte",
+          "bici",
+          "autobús",
+          "autobus",
+          "coche",
+          "árbol",
+          "arbol",
+          "bosque",
+          "deforestación",
+          "deforestacion",
+          "cambio climático",
+          "cambio climatico",
+          "calentamiento",
+          "clima",
+          "mar",
+          "océano",
+          "oceano",
+          "animales",
+          "especies",
+          "proteger",
+          "salvar",
+          "apagar",
+          "luz",
+          "ducha",
+          "ecológic",
+          "ecologic",
+          "verde",
+          "sostenible",
+          "residuos",
+          "petróleo",
+          "petroleo",
+          "viajar",
+          "prefiero",
+          "avión",
+          "avion",
+          "barco",
+          "tren",
+          "crucero",
+          "rápido",
+          "rapido",
+          "cómodo",
+          "comodo"
+        ],
+        "stars_needed": 3
+      }
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Has salvado el planeta! You conquered every island of La Isla de los Retos - ¡enhorabuena!"
+  }
+}

@@ -190,6 +190,7 @@ const THEMES := {
 	"digital":  {"grass": Color(0.42, 0.42, 0.68), "dirt": Color(0.45, 0.33, 0.6),  "sand": Color(0.82, 0.78, 0.96), "sky": Color(0.16, 0.12, 0.42), "horizon": Color(0.98, 0.55, 0.78), "deep": Color(0.06, 0.18, 0.5), "shallow": Color(0.25, 0.55, 0.95), "sun": Color(1.0, 0.8, 0.9), "sun_energy": 0.9, "trees": ["tree-pine", "tree-pine-small", "tree"], "props": [["proc/lamp", 2.0, 16], ["proc/screen", 1.6, 8]]},
 	"festival": {"grass": Color(0.93, 0.56, 0.74), "dirt": Color(0.75, 0.42, 0.7), "sand": Color(1.0, 0.9, 0.82), "sky": Color(0.42, 0.55, 1.0), "horizon": Color(1.0, 0.85, 0.93), "deep": Color(0.25, 0.35, 0.85), "shallow": Color(0.45, 0.7, 1.0), "trees": ["fair/tree", "fair/tree-large"], "tree_scale": 2.2, "props": [["fair/stall-food", 2.6, 5], ["fair/stall-drinks", 2.6, 5], ["proc/speaker", 2.0, 8], ["arcade/claw-machine", 2.6, 4]]},
 	"industria": {"grass": Color(0.46, 0.49, 0.56), "dirt": Color(0.88, 0.55, 0.2), "sand": Color(0.85, 0.82, 0.74), "sky": Color(0.4, 0.6, 0.85), "horizon": Color(0.9, 0.9, 0.95), "deep": Color(0.08, 0.3, 0.55), "shallow": Color(0.2, 0.5, 0.75), "trees": ["tree-pine", "tree-pine-small"], "tree_scale": 0.9, "props": [["water/cargo-container-a", 1.4, 8, "box"], ["water/cargo-container-c", 1.4, 8, "box"], ["conveyor/box-large", 1.4, 10, "box"], ["barrel", 2.0, 10]]},
+	"volcan":   {"grass": Color(0.36, 0.3, 0.33), "dirt": Color(0.9, 0.42, 0.15), "sand": Color(0.25, 0.22, 0.25), "sky": Color(0.5, 0.35, 0.45), "horizon": Color(1.0, 0.62, 0.42), "deep": Color(0.08, 0.2, 0.45), "shallow": Color(0.2, 0.42, 0.6), "sun": Color(1.0, 0.75, 0.6), "trees": ["graveyard/pine-crooked", "tree-pine", "tree-pine-small"], "props": [["pirate/rocks-a", 0.9, 10], ["pirate/rocks-b", 0.9, 10]]},
 	"fiesta":   {"grass": Color(0.5, 0.74, 0.32), "dirt": Color(0.86, 0.52, 0.32), "sand": Color(1.0, 0.86, 0.6), "sky": Color(0.32, 0.58, 1.0), "horizon": Color(1.0, 0.86, 0.66), "deep": Color(0.06, 0.36, 0.78), "shallow": Color(0.2, 0.64, 0.95), "trees": ["tree", "fair/tree-large", "tree"], "props": [["proc/bunting", 1.0, 12, ""], ["graveyard/lantern-candle", 2.6, 10], ["fair/stall-drinks", 2.6, 4]]},
 	"ciudad":   {"grass": Color(0.42, 0.74, 0.74), "dirt": Color(0.4, 0.5, 0.62), "sand": Color(1.0, 0.93, 0.78), "sky": Color(0.22, 0.52, 0.98), "horizon": Color(0.85, 0.94, 1.0), "deep": Color(0.03, 0.16, 0.5), "shallow": Color(0.12, 0.34, 0.78), "trees": ["tree", "tree", "fair/tree-large"], "tree_scale": 1.0, "props": [["holiday/bench", 2.4, 10], ["fair/trash", 2.6, 8], ["flag", 2.0, 6]]},
 	"campus":   {"grass": Color(0.86, 0.66, 0.28), "dirt": Color(0.72, 0.42, 0.26), "sand": Color(0.98, 0.88, 0.62), "sky": Color(0.35, 0.55, 0.92), "horizon": Color(1.0, 0.9, 0.75), "deep": Color(0.08, 0.35, 0.72), "shallow": Color(0.25, 0.6, 0.9), "trees": ["tree", "tree", "tree-pine", "tree-pine-small"], "props": [["holiday/bench", 2.4, 14], ["flag", 2.0, 6]]},
@@ -222,6 +223,13 @@ var pinata: Node3D
 var sorter: Node3D
 var crane: Node3D
 var office: Node3D
+var towing: Node3D
+var volcano: Node3D
+var reforest: Node3D
+var liner: Node3D
+var liner_boat: Node3D
+var _nostar: Array = []    # [Vector2 centre, radius]: big set-pieces the fixed star trail must avoid
+var tug: Node3D
 var market: Node3D
 var noria: Node3D
 var cards: Array[Node3D] = []
@@ -235,6 +243,7 @@ var _sand: StandardMaterial3D
 var _foam: StandardMaterial3D
 var _rng := RandomNumberGenerator.new()
 var _keepout: Array = []   # [Vector2 center, radius]
+var _jetty_rects: Array = []   # every jetty, as a solid rectangle for boats that collide with them
 var _mover: AnimatableBody3D
 var _mover_t := 0.0
 var _mover_a := Vector3(-28.2, -0.4, 14)
@@ -455,6 +464,18 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 			"interview":
 				if office == null:
 					_build_office(q)
+			"tug":
+				if towing == null:
+					_build_tug(q)
+			"volcano":
+				if volcano == null:
+					_build_volcano(q)
+			"trees":
+				if reforest == null:
+					_build_reforest(q)
+			"liner":
+				if liner == null:
+					_build_liner(q)
 			"directions":
 				if town == null:
 					_build_town(q)
@@ -1198,6 +1219,199 @@ func _build_crane(q: Dictionary) -> void:
 		_star(crane.to_global(Vector3(0, y + 1.2, 0)))
 
 
+## El volcán: cools as you finish retos; climb to the crater for the sweet.
+func _build_volcano(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [150.0, 0.72]))
+	volcano = Node3D.new()
+	volcano.set_script(preload("res://scripts/volcano.gd"))
+	volcano.position = pos
+	add_child(volcano)
+	volcano.setup(int(q.get("need", 3)))
+	_keep(pos, 14.0)
+	_nostar.append([Vector2(pos.x, pos.z), 13.5])
+	_add_sweet(q, "food/popsicle", volcano.sweet_spot(), pos, 4.5)
+
+
+## Reforestación: plant young trees from the nursery in a burnt patch.
+func _build_reforest(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [300.0, 0.7]))
+	reforest = Node3D.new()
+	reforest.set_script(preload("res://scripts/reforest.gd"))
+	reforest.position = pos
+	reforest.rotation.y = atan2(-pos.x, -pos.z)
+	add_child(reforest)
+	reforest.setup()
+	_keep(pos, 8.0)
+	_keep(pos + (-pos.normalized()) * 5.5, 3.0)
+	_nostar.append([Vector2(pos.x, pos.z), 7.0])
+	var s := _add_sweet(q, "food/watermelon", reforest.sweet_spot(), pos, 2.2)
+	s.visible = false
+	s.gate = func() -> bool: return reforest.done
+	reforest.sweet = s
+
+
+## El crucero: an ocean liner anchored far out at sea. A little solar boat at a jetty takes you
+## to a pontoon beside it; a gangway leads up to its decks, and the sweet is on the top deck.
+func _build_liner(q: Dictionary) -> void:
+	var a := deg_to_rad(float(q.get("at", [60.0])[0]))
+	var d := Vector3(cos(a), 0, sin(a))
+	var side := Vector3(-d.z, 0, d.x)
+	_jetty(d * (MAIN_R - 2.0), d * (MAIN_R + 7.0))
+	for k in range(int(MAIN_R) - 6, int(MAIN_R) + 1, 2):
+		_keep(d * k, 2.6)
+	var sign := Props.place(self, "sign", d * (MAIN_R - 3.5) + side * 2.4, atan2(d.x, d.z) + PI, 2.5, "box")
+	var sl := Label3D.new()
+	sl.text = "Al crucero"
+	sl.font_size = 38
+	sl.pixel_size = 0.005
+	sl.modulate = Color(0.2, 0.3, 0.6)
+	sl.position = Vector3(0, 1.1, 0.22)
+	sign.add_child(sl)
+	# The liner: side-on to the island, its local +X towards the island.
+	liner = Node3D.new()
+	add_child(liner)
+	liner.position = d * (MAIN_R + 40.0)
+	liner.rotation.y = atan2(d.z, -d.x)
+	var m := Props.model("water/ship-ocean-liner")
+	m.scale = Vector3.ONE * 2.0
+	m.position.y = -3.0
+	liner.add_child(m)
+	var body := StaticBody3D.new()
+	body.add_to_group("solid_ground")
+	liner.add_child(body)
+	for mi in m.find_children("*", "MeshInstance3D", true, false):
+		var cs := CollisionShape3D.new()
+		cs.shape = (mi as MeshInstance3D).mesh.create_trimesh_shape()
+		cs.transform = m.transform * (mi as MeshInstance3D).transform
+		body.add_child(cs)
+	# A floating pontoon beside it and a gangway along the hull up to the promenade deck.
+	var wood := Props.mat(Color(0.7, 0.5, 0.32))
+	var pont_c := Vector3(13.2, -0.1, -2.0)
+	_liner_box(body, Vector3(4.6, 0.4, 5.0), pont_c, wood)
+	var from := Vector3(10.9, 0.05, -2.0)
+	var to := Vector3(4.1, 4.75, -2.0)         # square-on to the hull, onto the promenade deck
+	var ramp := StaticBody3D.new()
+	ramp.add_to_group("solid_ground")
+	liner.add_child(ramp)
+	ramp.position = (from + to) / 2.0
+	ramp.basis = Basis.looking_at(to - from, Vector3.UP)     # (local to the liner)
+	var rm := BoxMesh.new()
+	rm.size = Vector3(2.0, 0.15, from.distance_to(to) + 0.4)
+	rm.material = Props.mat(Color(0.3, 0.35, 0.45))
+	var rmi := MeshInstance3D.new()
+	rmi.mesh = rm
+	ramp.add_child(rmi)
+	var rcs := CollisionShape3D.new()
+	var rsh := BoxShape3D.new()
+	rsh.size = rm.size
+	rcs.shape = rsh
+	ramp.add_child(rcs)
+	var tag := Label3D.new()
+	tag.text = "El Crucero Verde"
+	tag.font = preload("res://scripts/ui.gd").ui_font(700)
+	tag.font_size = 130
+	tag.pixel_size = 0.01
+	tag.outline_size = 20
+	tag.modulate = Color(0.6, 1.0, 0.6)
+	tag.outline_modulate = Color(0.1, 0.25, 0.2)
+	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	tag.position = Vector3(0, 16.0, 0)
+	liner.add_child(tag)
+	# A landing at the top of the gangway, joined to the promenade.
+	_liner_box(body, Vector3(1.4, 0.2, 2.6), Vector3(4.1, 4.62, -2.0), Props.mat(Color(0.3, 0.35, 0.45)))
+	_add_sweet(q, "food/cake", liner.to_global(Vector3(1.5, 9.4, 0.0)), liner.position, 1.8)
+	# The solar boat.
+	liner_boat = Node3D.new()
+	liner_boat.set_script(preload("res://scripts/rowboat.gd"))
+	add_child(liner_boat)
+	liner_boat.global_position = d * (MAIN_R + 9.5) + side * 0.4
+	liner_boat.rotation.y = atan2(-d.x, -d.z)
+	liner_boat.boat_name = "speedboat"
+	liner_boat.seat_offset = Vector3(0, 0.75, 0.9)
+	liner_boat.DRAG = 5.0
+	liner_boat.setup("water/boat-speed-c", 2.2, PI, 11.0, 6.0)
+	liner_boat.add_wake()
+	var pont := liner.to_global(pont_c)
+	liner_boat.shores = [[Vector3.ZERO, MAIN_R], [EAST_ISLAND, 5.0], [WEST_ISLAND, 5.0], [PRIZE_CENTER, 6.0],
+		[Vector3(pont.x, 0.0, pont.z), 2.5, pont + Vector3(0, 0.5, 0)]]
+	for i in 4:
+		var sh = liner_boat.shores[i]
+		liner_boat.blockers.append([Vector2(sh[0].x, sh[0].z), sh[1] + 2.2])
+	liner_boat.rects = _jetty_rects.duplicate()
+	liner_boat.rects.append([Vector2(liner.position.x, liner.position.z), Vector2(4.8, 21.3), liner.rotation.y])
+	liner_boat.rects.append([Vector2(pont.x, pont.z), Vector2(2.3, 2.5), liner.rotation.y])
+
+
+func _liner_box(body: StaticBody3D, size: Vector3, pos: Vector3, m: Material) -> void:
+	var b := BoxMesh.new()
+	b.size = size
+	b.material = m
+	var mi := MeshInstance3D.new()
+	mi.mesh = b
+	mi.position = pos
+	body.add_child(mi)
+	var cs := CollisionShape3D.new()
+	var sh := BoxShape3D.new()
+	sh.size = size
+	cs.shape = sh
+	cs.position = pos
+	body.add_child(cs)
+
+
+## El remolcador: a tug at a jetty, a container ship waiting far out at sea, and a berth by a
+## quay behind the crane ("berth_at": [angle]). Tow the ship in for the sweet.
+func _build_tug(q: Dictionary) -> void:
+	var ja := deg_to_rad(float(q.get("at", [232.0])[0]))
+	var d := Vector3(cos(ja), 0, sin(ja))
+	var side := Vector3(-d.z, 0, d.x)
+	_jetty(d * (MAIN_R - 2.0), d * (MAIN_R + 7.0))
+	for k in range(int(MAIN_R) - 6, int(MAIN_R) + 1, 2):
+		_keep(d * k, 2.6)
+	var sign := Props.place(self, "sign", d * (MAIN_R - 3.5) + side * 2.4, atan2(d.x, d.z) + PI, 2.5, "box")
+	var sl := Label3D.new()
+	sl.text = "El remolcador"
+	sl.font_size = 34
+	sl.pixel_size = 0.005
+	sl.modulate = Color(0.2, 0.4, 0.3)
+	sl.position = Vector3(0, 1.1, 0.22)
+	sign.add_child(sl)
+	tug = Node3D.new()
+	tug.set_script(preload("res://scripts/rowboat.gd"))
+	add_child(tug)
+	tug.global_position = d * (MAIN_R + 9.5) + side * 0.4
+	tug.rotation.y = atan2(-d.x, -d.z)
+	tug.boat_name = "tug"
+	tug.seat_offset = Vector3(0, 1.0, 1.6)
+	tug.DRAG = 3.0
+	tug.setup("water/boat-tug-b", 2.4, PI, 9.0, 4.0)
+	tug.add_wake()
+	tug.shores = [[Vector3.ZERO, MAIN_R], [EAST_ISLAND, 5.0], [WEST_ISLAND, 5.0], [PRIZE_CENTER, 6.0]]
+	for sh in tug.shores:
+		tug.blockers.append([Vector2(sh[0].x, sh[0].z), sh[1] + 2.2])
+	# The quay and the berth behind the crane.
+	var ba := deg_to_rad(float(q.get("berth_at", [212.0])[0]))
+	var bd := Vector3(cos(ba), 0, sin(ba))
+	var bside := Vector3(-bd.z, 0, bd.x)
+	_jetty(bd * (MAIN_R - 2.0) - bside * 11.0, bd * (MAIN_R + 12.0) - bside * 11.0)
+	var berth := bd * (MAIN_R + 10.0)
+	# The ship, far out to sea.
+	var sa := deg_to_rad(float(q.get("ship_at", [246.0])[0]))
+	var ship_pos := Vector3(cos(sa), 0, sin(sa)) * (MAIN_R + 42.0)
+	towing = Node3D.new()
+	towing.set_script(preload("res://scripts/tow.gd"))
+	add_child(towing)
+	towing.setup(ship_pos, sa + PI / 2, berth, MAIN_R)
+	towing.tug = tug
+	# The tug bumps into the jetties and the ship (but sails through the buoys).
+	tug.rects = _jetty_rects.duplicate()
+	tug.dynamic_rects = func() -> Array: return [towing.ship_rect()]
+	towing.quay = _jetty_rects[_jetty_rects.size() - 1]
+	var s := _add_sweet(q, "food/candy-bar", bd * (MAIN_R + 11.0) - bside * 11.0 + Vector3(0, 0.6, 0), berth, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return towing.done
+	towing.sweet = s
+
+
 ## La entrevista: the boss's office, with the sweet on the desk. The interview itself is a run
 ## of sentence-builder questions (see main._on_sweet).
 func _build_office(q: Dictionary) -> void:
@@ -1209,11 +1423,14 @@ func _build_office(q: Dictionary) -> void:
 	office.rotation.y = face
 	add_child(office)
 	office.setup({"sign": str(q.get("sign", "Oficina de empleo")), "character": str(q.get("character", "character-female-f")), "hat": "",
-		"speaker": "La jefa", "greeting": "Buenos días.\n¿Buscas trabajo?", "thanks": "", "awning": Color(0.3, 0.45, 0.75),
+		"speaker": "La jefa", "greeting": "Buenos días. ¿Buscas trabajo?\n¡Ven a la entrevista!", "thanks": "", "awning": Color(0.3, 0.45, 0.75),
 		"counter": [["furniture/books", 8.0, -1.6]], "items": [], "passive": true})
 	_keep(pos, 5.0)
 	_keep(pos + Vector3(-pos.x, 0, -pos.z).normalized() * 4.0, 2.5)
-	_add_sweet(q, "food/cookie", office.to_global(Vector3(1.3, 0.75, 1.55)), pos, 4.0)
+	# The cookie stays hidden until you get the job (a cookie on the desk makes it look like a
+	# bakery); walking up to the desk starts the interview.
+	var s := _add_sweet(q, "food/cookie", office.to_global(Vector3(0.0, 0.75, 1.55)), pos, 4.0)
+	s.visible = false
 
 
 ## A sweet tucked away somewhere quiet ("at": [angle, fraction]) - e.g. a message in a bottle
@@ -1299,6 +1516,7 @@ func _jetty(from: Vector3, to: Vector3) -> void:
 	var length := from.distance_to(to)
 	body.position = (from + to) / 2.0
 	body.rotation.y = atan2(to.x - from.x, to.z - from.z)
+	_jetty_rects.append([Vector2(body.position.x, body.position.z), Vector2(1.5, length / 2.0), body.rotation.y])
 	var deck := BoxMesh.new()
 	deck.size = Vector3(3.0, 0.3, length)
 	deck.material = Props.mat(Color(0.7, 0.48, 0.32))
@@ -1580,7 +1798,13 @@ func _stars() -> void:
 		Vector3(-27, 0.5, 8), Vector3(-26, 0.5, -14), Vector3(-4, 0.5, -26), Vector3(4, 0.5, -26),
 	]
 	for p in pts:
-		_star(ex(p))
+		var e := ex(p)
+		var blocked := false
+		for z in _nostar:
+			if Vector2(e.x, e.z).distance_to(z[0]) < z[1]:
+				blocked = true
+		if not blocked:
+			_star(e)
 	# Star Island bonus
 	_star(Vector3(-3.2, 0.5, PRIZE_CENTER.z + 2))
 	_star(Vector3(3.2, 0.5, PRIZE_CENTER.z + 2))

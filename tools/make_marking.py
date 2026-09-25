@@ -15,11 +15,14 @@ lavar duchar acostar despertar mirar ganar gastar llevar usar ayudar cambiar res
 llamar practicar empezar celebrar preparar regalar limpiar odiar encantar gustar molar mejorar
 organizar participar dejar olvidar contar encontrar probar pensar recomendar bucear veranear
 acampar chatear descargar navegar relajar quejar entrar terminar comenzar almorzar desayunar
-explorar broncear bajar caminar andar nevar tardar costar""".split()
+explorar broncear bajar caminar andar nevar tardar costar
+salvar ahorrar reciclar plantar apagar contaminar fumar causar respetar mandar enviar contestar archivar
+cuidar pintar dibujar cantar aprobar preocupar importar interesar invitar soplar tirar reutilizar
+separar cortar reparar repartir arreglar enseñar ordenar diseñar investigar""".split()
 ER = """comer beber aprender correr vender perder conocer parecer coger volver llover responder
-comprender romper meter barrer entender""".split()
+comprender romper meter barrer entender proteger recoger crecer ofrecer suspender deber""".split()
 IR = """vivir escribir salir decidir subir abrir dormir divertir preferir sentir pedir seguir
-descubrir recibir compartir repetir servir elegir asistir""".split()
+descubrir recibir compartir repetir servir elegir asistir prohibir construir añadir""".split()
 
 # Irregular preterite: full override (yo, tú, él, nosotros, vosotros, ellos)
 PRET_IRR = {
@@ -131,7 +134,7 @@ data = {
                  "lo peor es", "lo bueno", "lo malo", "lo pasé", "lo paso", "lo pasamos", "fue increíble", "fue inolvidable",
                  "fue genial", "fue un desastre", "fue horroroso", "fue divertido", "fue aburrido", "fue impresionante",
                  "fue flipante", "qué horror", "qué desastre", "qué guay", "qué bien", "creo que", "pienso que",
-                 "en mi opinión", "para mí", "a mi parecer", "me parece", "me pareció", "estoy de acuerdo",
+                 "en mi opinión", "para mí", "a mi parecer", "me parece", "me pareció", "estoy de acuerdo", "me preocupa", "me preocupan", "es fundamental", "es importante",
                  "estoy a favor", "estoy en contra", "no estoy de acuerdo", "me interesa", "lo odio", "qué pesado", "es injusto", "es justo",
                  "no me gustó", "no me gusta", "me gustaría", "me encantaría", "sería", "era increíble", "era aburrido"],
     "time_phrases": ["ayer", "anoche", "anteayer", "el año pasado", "el verano pasado", "el invierno pasado",

@@ -11,6 +11,10 @@ var out_dir := ""
 func _ready() -> void:
 	out_dir = OS.get_user_data_dir().path_join("shots")
 	DirAccess.make_dir_recursive_absolute(out_dir)
+	# Watchdog: if a step errors or gets stuck, don't leave the window sitting there.
+	get_tree().create_timer(180.0).timeout.connect(func():
+		print("WATCHDOG: test took too long - quitting")
+		get_tree().quit())
 	_run.call_deferred()
 
 
@@ -62,6 +66,8 @@ func _run() -> void:
 			await _retos6(p, cam)
 		elif Game.current_island == 6:
 			await _retos7(p, cam)
+		elif Game.current_island == 7:
+			await _retos8(p, cam)
 		else:
 			await _retos1(p, cam)
 		return
@@ -1271,6 +1277,27 @@ func _retos3(p: CharacterBody3D, cam) -> void:
 	get_tree().quit()
 
 
+## Writes `text` into an open sentence panel and sends it. If it doesn't earn enough stars,
+## closes the panel (so one weak answer can't block the rest of the test). Returns true if sent.
+func _sentence(text: String, shot := "") -> bool:
+	var box: TextEdit = _first("TextEdit")
+	if not box:
+		print("  SENTENCE: no panel open")
+		return false
+	box.text = text
+	_press("Comprobar")
+	await _wait(0.4)
+	if shot != "":
+		await _shot(shot)
+	if _press("¡Enviar!"):
+		await _wait(1.2)
+		return true
+	print("  SENTENCE: not enough stars for: %s" % text)
+	_press("Salir")
+	await _wait(0.6)
+	return false
+
+
 ## Types a whole chat conversation (waits for each reply box). Returns when the chat closes.
 func _chat(replies: Array, shot_prefix: String) -> void:
 	for i in replies.size():
@@ -1738,20 +1765,27 @@ func _retos7(p: CharacterBody3D, cam) -> void:
 		await _wait(1.0)
 	print("  sweets now %d" % Game.sweets)
 
-	# La grúa: get on at the bottom, ride up, walk across to the stack.
-	var t1 := Time.get_ticks_msec()
-	while cr.lift.position.y > cr.BOTTOM + 0.01 and Time.get_ticks_msec() - t1 < 20000:
-		await _wait(0.1)
-	_teleport(p, cam, cr.lift.global_position + Vector3(0, cr.CONT_H + 0.4, 0), cr.rotation.y)
-	await _wait(0.4)
-	var start_y := p.global_position.y
-	var peak := start_y
-	var t2 := Time.get_ticks_msec()
-	while Time.get_ticks_msec() - t2 < 9000:
-		await _wait(0.2)
-		peak = maxf(peak, p.global_position.y)
-		if cr.lift.position.y > cr.top_y() - cr.CONT_H:
+	# La grúa: get on at the bottom, ride up, walk across to the stack. If she misses the
+	# lift (or ends up somewhere else), try again - at most 3 times, then move on.
+	var start_y := 0.0
+	var peak := 0.0
+	for attempt in 3:
+		var t1 := Time.get_ticks_msec()
+		while cr.lift.position.y > cr.BOTTOM + 0.01 and Time.get_ticks_msec() - t1 < 16000:
+			await _wait(0.1)
+		_teleport(p, cam, cr.lift.global_position + Vector3(0, cr.CONT_H + 0.4, 0), cr.rotation.y)
+		await _wait(0.4)
+		start_y = p.global_position.y
+		peak = start_y
+		var t2 := Time.get_ticks_msec()
+		while Time.get_ticks_msec() - t2 < 8000:
+			await _wait(0.2)
+			peak = maxf(peak, p.global_position.y)
+			if cr.lift.position.y > cr.top_y() - cr.CONT_H:
+				break
+		if peak > cr.to_global(Vector3(0, cr.top_y() - 1.0, 0)).y:
 			break
+		print("  crane attempt %d: only got to y=%.1f - trying again" % [attempt + 1, peak])
 	print("CRANE ride: from y=%.1f up to y=%.1f (stack top %.1f)" % [start_y, peak, cr.to_global(Vector3(0, cr.top_y(), 0)).y])
 	await _shot("r7_05_crane_top")
 	# Step across (+X local).
@@ -1773,8 +1807,56 @@ func _retos7(p: CharacterBody3D, cam) -> void:
 		_press("Grab the sweet!")
 		await _wait(1.0)
 
+	# El remolcador: drive the tug out to the ship, hook it, lead it into the port.
+	var tg = w.tug
+	var tw = w.towing
+	await _aerial("r7_05b_ship", tw.ship.global_position + Vector3(0, 3, 0), 10.0, (-tw.ship.global_position.normalized()) * 30.0)
+	_teleport(p, cam, tg.global_position + Vector3(0, 1.5, 0), 0.0)
+	await _wait(0.6)
+	print("TUG: riding=%s" % (p.vehicle != null))
+	await _shot("r7_05c_tug")
+	Input.action_press("move_forward")
+	var steps := 0
+	var passed_a := false
+	while steps < 600 and not tw.done:
+		steps += 1
+		var target: Vector3
+		if not tw.hooked:
+			target = tw.bow()
+		else:
+			# Like a player would: swing wide past the seaward end of the quay, then drag the
+			# ship across the berth (the quay is on the berth's -side).
+			var bd: Vector3 = tw.berth.normalized()
+			var bs := Vector3(-bd.z, 0, bd.x)
+			var wp_a: Vector3 = tw.berth + bs * 28.0 + bd * 1.0
+			var wp_b: Vector3 = tw.berth - bs * 24.0 + bd * 9.0
+			if not passed_a and Vector2(tg.global_position.x - wp_a.x, tg.global_position.z - wp_a.z).length() < 5.0:
+				passed_a = true
+			target = wp_b if passed_a else wp_a
+		var to := Vector2(target.x - tg.global_position.x, target.z - tg.global_position.z)
+		cam.yaw = atan2(-to.x, -to.y)
+		if steps == 150:
+			await _shot("r7_05d_towing")
+		await _wait(0.1)
+	Input.action_release("move_forward")
+	print("TUG: hooked=%s in port=%s after %.1f s, sweet visible=%s" % [tw.hooked, tw.done, steps * 0.1, tw.sweet.visible])
+	await _aerial("r7_05e_port", tw.berth + Vector3(0, 2, 0), 18.0, (-tw.berth.normalized()) * 22.0)
+	if p.vehicle:
+		tg.rider = null
+		p.unride(tw.sweet.global_position + Vector3(0, -0.3, 0))
+	await _wait(1.0)
+	ln = _first("LineEdit")
+	if ln:
+		ln.text = "mi tio trabaja en el puerto"
+		_press("Check!")
+		await _wait(0.4)
+		_press("Grab the sweet!")
+		await _wait(1.0)
+	print("  sweets now %d" % Game.sweets)
+
 	# La entrevista: three questions in a row; leave after the first, come back.
 	var of = w.office
+	print("INTERVIEW cookie hidden before: %s" % (not w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == of.position)[0].visible))
 	var isw = w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == of.position)[0]
 	_teleport(p, cam, of.to_global(Vector3(0, 0.3, 6.0)), of.rotation.y)
 	await _wait(0.8)
@@ -1838,6 +1920,141 @@ func _retos7(p: CharacterBody3D, cam) -> void:
 		await _wait(0.8)
 		await _shot("r7_09_reto_%d_%s" % [i, str(r.reto.get("kind", ""))])
 		i += 1
+	print("SWEETS: %d / %d   RETOS: %d / %d" % [Game.sweets, Game.total_sweets, Game.retos_done, Game.total_retos])
+	get_tree().quit()
+
+
+## La Isla de los Retos, Isla 8 (El planeta): the volcano, the new forest, the ocean liner.
+func _retos8(p: CharacterBody3D, cam) -> void:
+	var w = main.world
+	print("RETOS8: retos=%d sweets=%d" % [Game.total_retos, Game.total_sweets])
+	await _aerial("r8_01_island", Vector3.ZERO, 95.0, Vector3(0, 0, 45))
+	var vo = w.volcano
+	await _aerial("r8_02_volcano", vo.global_position + Vector3(0, 5, 0), 6.0, (-vo.global_position.normalized()) * 26.0)
+
+	# El volcán: the lava pushes you back until 3 retos are done.
+	var toward: Vector3 = -vo.global_position.normalized()
+	_teleport(p, cam, vo.global_position + toward * 11.2 + Vector3(0, 0.3, 0), atan2(toward.x, toward.z))
+	await _wait(0.8)
+	var d0: float = Vector2(p.global_position.x - vo.global_position.x, p.global_position.z - vo.global_position.z).length()
+	print("VOLCANO hot: pushed out to %.1f m from the middle (want > 12)" % d0)
+	Game.retos_done = 3          # (the retos themselves are tested on every other island)
+	await _wait(2.5)
+	print("  after 3 retos: cooled=%s" % vo.cooled)
+	# Climb the terraces for real: jump up two steps, then pop up to the rim.
+	var up: Vector3 = -toward
+	cam.yaw = atan2(-up.x, -up.z)
+	_teleport(p, cam, vo.global_position + toward * 10.6 + Vector3(0, 0.3, 0), cam.yaw)
+	await _wait(0.4)
+	for k in 2:
+		Input.action_press("move_forward")
+		Input.action_press("jump")
+		await _wait(0.35)
+		Input.action_release("jump")
+		await _wait(0.5)
+		Input.action_release("move_forward")
+		await _wait(0.3)
+	print("  climbed to y=%.1f (each step is 1.45)" % p.global_position.y)
+	_teleport(p, cam, vo.rim_spot(), cam.yaw)
+	await _wait(0.8)
+	await _shot("r8_03_crater")
+	var vs = w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == vo.position)[0]
+	_teleport(p, cam, vs.global_position + Vector3(0, -0.5, 0), cam.yaw)
+	await _wait(0.8)
+	await _sentence("Si fuera presidente, prohibiría los plásticos porque me preocupan los océanos, y ahora reciclo todos los días.", "r8_04_volcano_sentence")
+	print("  sweets now %d" % Game.sweets)
+
+	# Reforestación: five trips from the nursery to the holes.
+	var rf = w.reforest
+	var face: float = rf.rotation.y
+	for i in 5:
+		_teleport(p, cam, rf.nursery_spot() + rf.global_transform.basis.z * 2.5, face)
+		await _wait(0.2)
+		_teleport(p, cam, rf.nursery_spot(), face)
+		await _wait(0.4)
+		_teleport(p, cam, rf.hole_spot(i), face)
+		await _wait(0.5)
+		if i == 2:
+			await _shot("r8_05_planting")
+	print("FOREST: planted=%d done=%s" % [rf.planted.size(), rf.done])
+	await _wait(1.2)
+	await _aerial("r8_06_forest", rf.to_global(Vector3(0, 1, -1)), 8.0, (-rf.global_position.normalized()) * 12.0)
+	_teleport(p, cam, rf.sweet.global_position + Vector3(0, -0.8, 0), face)
+	await _wait(0.8)
+	var ln: LineEdit = _first("LineEdit")
+	if ln:
+		ln.text = "deberíamos plantar más árboles"
+		_press("Check!")
+		await _wait(0.4)
+		_press("Grab the sweet!")
+		await _wait(1.0)
+
+	# El crucero: sail the solar boat to the pontoon, hop off, up the gangway, up to the top deck.
+	var lb = w.liner_boat
+	var ln_node: Node3D = w.liner
+	await _aerial("r8_07_liner", ln_node.global_position + Vector3(0, 6, 0), 10.0, (-ln_node.global_position.normalized()) * 50.0)
+	_teleport(p, cam, lb.global_position + Vector3(0, 1.5, 0), 0.0)
+	await _wait(0.6)
+	var pont: Vector3 = ln_node.to_global(Vector3(13.2, 0, -2.0))
+	Input.action_press("move_forward")
+	var steps := 0
+	while steps < 250:
+		steps += 1
+		var to := Vector2(pont.x - lb.global_position.x, pont.z - lb.global_position.z)
+		cam.yaw = atan2(-to.x, -to.y)
+		if to.length() < 5.5:
+			break
+		await _wait(0.1)
+	Input.action_release("move_forward")
+	await _wait(0.8)
+	Input.action_press("jump")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("jump")
+	await _wait(0.8)
+	print("LINER: reached the pontoon after %.1f s, off the boat=%s, y=%.1f" % [steps * 0.1, p.vehicle == null, p.global_position.y])
+	await _shot("r8_08_pontoon")
+	# Walk up the gangway.
+	var top: Vector3 = ln_node.to_global(Vector3(4.1, 4.75, -2.0))
+	var bottom: Vector3 = ln_node.to_global(Vector3(12.0, 0.4, -2.0))
+	_teleport(p, cam, bottom + Vector3(0, 0.3, 0), 0.0)
+	var dirv := top - bottom
+	cam.yaw = atan2(-dirv.x, -dirv.z)
+	Input.action_press("move_forward")
+	await _wait(1.5)
+	Input.action_release("move_forward")
+	await _wait(0.4)
+	print("  up the gangway: y=%.1f (promenade ~4.7)" % p.global_position.y)
+	if p.vehicle:           # fell in and got put back in the boat: get out for the rest of the test
+		lb.rider = null
+		p.unride(top + Vector3(0, 0.5, 0))
+		await _wait(0.5)
+	await _shot("r8_09_gangway")
+	_teleport(p, cam, ln_node.to_global(Vector3(1.5, 9.0, 4.0)), cam.yaw)
+	await _wait(0.8)
+	print("  on the top deck: y=%.1f (want ~8.5)" % p.global_position.y)
+	await _shot("r8_10_top_deck")
+	var cs2 = w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == ln_node.position)[0]
+	_teleport(p, cam, cs2.global_position + Vector3(0, -0.5, 0), cam.yaw)
+	await _wait(0.8)
+	await _sentence("Prefiero viajar en tren porque es más ecológico que el avión, y el verano pasado fui a Francia en tren.")
+
+	var chat = w.retos.filter(func(r): return str(r.reto.get("kind", "")) == "chat")[0]
+	_teleport(p, cam, chat.to_global(Vector3(0, 0.3, 1.2)), cam.yaw)
+	await _chat(["Reciclo el plástico y apago la luz.", "Voy al instituto en bici.", "Creo que el problema más grave es el cambio climático.", "¡Sí, claro!"], "r8_11")
+	print("CHAT: done=%s" % chat.done)
+	var notice = w.retos.filter(func(r): return str(r.reto.get("kind", "")) == "notice")[0]
+	_teleport(p, cam, notice.to_global(Vector3(0, 0.3, 1.2)), cam.yaw)
+	await _wait(0.8)
+	var edits := _all(main.ui.root, []).filter(func(n): return n is LineEdit and n.visible)
+	var gaps := ["fumar", "es", "piensan", "causa", "estúpida", "dejó", "participa", "dura"]
+	for k in mini(edits.size(), gaps.size()):
+		edits[k].text = gaps[k]
+	_press("Comprobar")
+	await _wait(0.4)
+	_press("¡Arreglar el tablón!")
+	await _wait(1.0)
+	print("NOTICE: gaps=%d done=%s" % [edits.size(), notice.done])
 	print("SWEETS: %d / %d   RETOS: %d / %d" % [Game.sweets, Game.total_sweets, Game.retos_done, Game.total_retos])
 	get_tree().quit()
 
