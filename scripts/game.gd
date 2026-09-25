@@ -173,7 +173,71 @@ func best_sweets(file: String) -> int:
 func save_result(file: String, rating: int, sweets_found: int) -> void:
 	if "--autotest" in OS.get_cmdline_user_args():
 		return
-	_best[file] = {"stars": maxi(rating, best_rating(file)), "sweets": maxi(sweets_found, best_sweets(file))}
+	var b = _best.get(file, {})
+	if not b is Dictionary:
+		b = {}
+	b["stars"] = maxi(rating, best_rating(file))
+	b["sweets"] = maxi(sweets_found, best_sweets(file))
+	_best[file] = b
+	_write_progress()
+
+
+## Remembers that reto number `index` on an island is done (and how many it has).
+func save_reto(file: String, index: int, total: int) -> void:
+	if "--autotest" in OS.get_cmdline_user_args():
+		return
+	var b = _best.get(file, {})
+	if not b is Dictionary:
+		b = {"stars": int(b)}
+	var done: Array = b.get("retos", [])
+	if not float(index) in done and not index in done:
+		done.append(index)
+	b["retos"] = done
+	b["retos_total"] = total
+	_best[file] = b
+	_write_progress()
+
+
+func retos_done_on(file: String) -> int:
+	var b = _best.get(file, {})
+	return (b.get("retos", []) as Array).size() if b is Dictionary else 0
+
+
+func retos_total_on(file: String) -> int:
+	var b = _best.get(file, {})
+	return int(b.get("retos_total", 0)) if b is Dictionary else 0
+
+
+## Everything still missing before El Diamante can be taken: one line per island, empty when
+## every bridge and every reto in the course is done. This island's retos count live.
+func diamond_missing() -> PackedStringArray:
+	var out := PackedStringArray()
+	var course: Array = config.get("course", [])
+	for i in course.size():
+		var file := str(course[i].file)
+		var title := str(course[i].get("title", "Isla %d" % (i + 1)))
+		var bits := PackedStringArray()
+		if best_rating(file) < 1:
+			bits.append("the bridge")
+		var done := retos_done_on(file)
+		var total := retos_total_on(file)
+		if i == current_island:
+			done = maxi(done, retos_done)
+			total = total_retos
+		if total == 0:
+			bits.append("all its retos")
+		elif done < total:
+			bits.append("retos %d / %d" % [done, total])
+		if not bits.is_empty():
+			out.append("**Isla %d - %s:** %s" % [i + 1, title, ", ".join(bits)])
+	return out
+
+
+func diamond_ready() -> bool:
+	return diamond_missing().is_empty()
+
+
+func _write_progress() -> void:
 	var f := FileAccess.open(PROGRESS_FILE, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(_best))

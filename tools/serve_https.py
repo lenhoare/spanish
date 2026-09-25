@@ -76,8 +76,8 @@ def main() -> None:
     ctx.load_cert_chain(cert, key)
     server = http.server.ThreadingHTTPServer(("0.0.0.0", PORT), partial(NoCacheHandler, directory=WEB))
     server.socket = ctx.wrap_socket(server.socket, server_side=True)
-    # Plain HTTP too, for quick testing on this PC (localhost counts as secure).
-    plain = http.server.ThreadingHTTPServer(("127.0.0.1", HTTP_PORT), partial(NoCacheHandler, directory=WEB))
+    # Plain HTTP too, on all interfaces (secure only on localhost; other machines need HTTPS for full features).
+    plain = http.server.ThreadingHTTPServer(("0.0.0.0", HTTP_PORT), partial(NoCacheHandler, directory=WEB))
     threading.Thread(target=plain.serve_forever, daemon=True).start()
     print(f"Serving the game at  https://{ip}:{PORT}  and  http://localhost:{HTTP_PORT}")
     print("Files are sent with no-cache headers, so a normal refresh always gets the latest build.")

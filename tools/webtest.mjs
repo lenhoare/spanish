@@ -23,7 +23,7 @@ function killTestChromes() {
 }
 
 const [url, outDir, mode] = process.argv.slice(2);
-const phone = mode === "phone";
+const phone = mode === "phone" || mode === "askbox" || mode === "phonecard";
 mkdirSync(outDir, { recursive: true });
 killTestChromes();
 const port = 9333;
@@ -92,6 +92,36 @@ await send("Page.navigate", { url });
 for (let i = 0; i < 120 && !logs.some((l) => l.includes("Godot Engine")); i++) await sleep(500);
 await sleep(6000);
 await shot(`${mode || "desktop"}_1_title.png`);
+if (mode === "phonecard") {
+  // Phone: Play, then (?devcard=1) a typed question card opens as a strip at the top.
+  // Tap its answer field, type with the "phone keyboard", check the card shows the text.
+  await tap(Math.round(W * 0.21), Math.round(H * 0.85));
+  await sleep(2500);
+  await tap(Math.round(W * 0.19), Math.round(H * 0.36));   // Isla 1
+  await sleep(7000);
+  await shot("phonecard_1_open.png");
+  await tap(Math.round(W * 0.35), 70);
+  await sleep(500);
+  const f = await send("Runtime.evaluate", { expression: "document.activeElement && document.activeElement.tagName + ':' + document.activeElement.type", returnByValue: true });
+  console.log("FOCUSED:", f.result.result.value);
+  await send("Input.insertText", { text: "bailo" });
+  await sleep(700);
+  await shot("phonecard_2_typed.png");
+  const fs = await send("Runtime.evaluate", { expression: "!!document.fullscreenElement", returnByValue: true });
+  console.log("FULLSCREEN:", fs.result.result.value);
+  ws.close();
+  process.exit(0);
+}
+if (mode === "askbox") {
+  // The phone text box: open it, type, press OK, check the game would get the answer.
+  await send("Runtime.evaluate", { expression: "window.liAsk('Translate into Spanish: \u0022I went\u0022', 'fu', false)" });
+  await sleep(600);
+  await shot("askbox_1_open.png");
+  const r = await send("Runtime.evaluate", { expression: "document.getElementById('li-in').value = 'fui'; document.getElementById('li-ok').click(); window.liState + ':' + window.liValue", returnByValue: true });
+  console.log("ASKBOX result:", r.result.result.value);
+  ws.close();
+  process.exit(0);
+}
 if (mode === "chooser") {
   // Pick the first game on the chooser and look at its title screen.
   await tap(640, 275);

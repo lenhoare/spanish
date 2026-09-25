@@ -41,6 +41,8 @@ var _bold_font: Font
 var _title: Control
 var _picker: Control
 var _rotate_hint: ColorRect
+var _asking := false          # a phone text box is open (web_ask)
+var _typing := false          # the phone keyboard is typing into a question card
 var _page_turn := Callable()   # set while the lesson viewer is open (arrow keys turn pages)
 
 
@@ -692,21 +694,38 @@ func ask_question(q: Dictionary, kind: String) -> String:
 	Game.sfx("card" if kind == "card" else "open")
 	var dim := _dim()
 	var accent: Color = {"card": PINK, "chest": ORANGE, "sweet": Color("#c04fd8"), "detective": Color("#2e86de")}.get(kind, PINK)
-	var card := _panel(CREAM, accent, 24, 8)
-	card.set_anchors_preset(Control.PRESET_CENTER)
-	card.custom_minimum_size = Vector2(minf(820, root.size.x - 40), 0)
-	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	# Phones: a typed answer opens the same card as a wide strip across the top of the screen,
+	# leaving the bottom half for the phone keyboard (and hiding the scores meanwhile).
+	var phone: bool = (q.choices as Array).is_empty() and phone_layout()
+	if phone and str(Game.config.get("phone_keyboard", "game")) == "game":
+		dim.queue_free()
+		return await _ask_typed_phone(q, kind, accent)
+	var card := _panel(CREAM, accent, 20 if phone else 24, 6 if phone else 8)
+	if phone:
+		card.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE, Control.PRESET_MODE_MINSIZE, 14)
+		card.offset_left = 28
+		card.offset_right = -28
+		card.offset_top = 14
+		card.grow_vertical = Control.GROW_DIRECTION_END
+		if _hud:
+			_hud.visible = false
+		if touch:
+			touch.visible = false        # the joystick and JUMP button
+	else:
+		card.set_anchors_preset(Control.PRESET_CENTER)
+		card.custom_minimum_size = Vector2(minf(820, root.size.x - 40), 0)
+		card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+		card.grow_vertical = Control.GROW_DIRECTION_BOTH
 	dim.add_child(card)
 
 	var v := VBoxContainer.new()
-	v.add_theme_constant_override("separation", 14)
+	v.add_theme_constant_override("separation", 10 if phone else 14)
 	card.add_child(v)
 
 	var head := Label.new()
 	head.text = {"card": "QUESTION CARD", "chest": "QUIZ CHEST", "sweet": "SWEET CHALLENGE  (extension)", "detective": "RETO: ¿QUIÉN LO DICE?"}.get(kind, "QUESTION")
 	head.add_theme_font_override("font", _bold_font)
-	head.add_theme_font_size_override("font_size", 24)
+	head.add_theme_font_size_override("font_size", 20 if phone else 24)
 	head.add_theme_color_override("font_color", accent)
 	v.add_child(head)
 	var rule := ColorRect.new()
@@ -715,9 +734,11 @@ func ask_question(q: Dictionary, kind: String) -> String:
 	v.add_child(rule)
 
 	var ql := Label.new()
-	ql.text = q.question
+	ql.text = q.question.replace("\n", "  ") if phone else q.question
 	ql.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	ql.add_theme_font_size_override("font_size", 30)
+	ql.add_theme_font_size_override("font_size", 26 if phone else 30)
+	if phone:
+		ql.add_theme_constant_override("line_spacing", 6)
 	ql.add_theme_color_override("font_color", INK)
 	v.add_child(ql)
 
@@ -755,6 +776,7 @@ func ask_question(q: Dictionary, kind: String) -> String:
 		finish_btn.text = {"card": "Build the bridge!", "chest": "Open the chest!", "sweet": "Grab the sweet!", "detective": "¡Siguiente!"}.get(kind, "Yay!")
 		finish_btn.custom_minimum_size.y = 70
 		bottom.add_child(finish_btn)
+		bottom.visible = true          # (hidden on phones while typing)
 		finish_btn.pressed.connect(func(): _question_done.emit("correct"))
 		_bounce(card)
 
@@ -838,17 +860,34 @@ func ask_question(q: Dictionary, kind: String) -> String:
 					line.text = ""
 		check.pressed.connect(submit)
 		line.text_submitted.connect(submit)
-		if OS.has_feature("web") and Game.is_touch():
-			# Mobile browsers: use the native text prompt - it always brings up the keyboard
-			# (and phone keyboards can type accents).
+		if phone:
+			# Phones: tapping the answer field focuses an invisible browser text field (the only
+			# way to bring up a phone keyboard); what's typed shows up here as it's typed.
+			line.custom_minimum_size.y = 58
+			line.add_theme_font_size_override("font_size", 26)
+			line.add_theme_color_override("font_uneditable_color", INK)
+			check.custom_minimum_size = Vector2(140, 58)
 			line.editable = false
 			line.placeholder_text = "Tap here to type..."
-			line.gui_input.connect(func(e: InputEvent):
-				if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
-					var r = JavaScriptBridge.eval("window.prompt(%s, '') || ''" % JSON.stringify(q.question))
-					line.text = str(r)
-					if line.text.strip_edges() != "":
-						submit.call())
+			leave.get_parent().remove_child(leave)
+			row.add_child(leave)
+			bottom.visible = false
+			if str(Game.config.get("phone_keyboard", "game")) == "game":
+				# Our own keyboard (no autocorrect, Spanish letters built in, matches the game).
+				line.placeholder_text = "Type your answer..."
+				var kb := game_keyboard(dim, line, submit)
+				answer_area.visibility_changed.connect(func(): kb.visible = answer_area.visible)
+			else:
+				# The phone's own keyboard, via an invisible browser text field.
+				var start_typing := func():
+					if OS.has_feature("web"):
+						JavaScriptBridge.eval("window.liTypeStart && window.liTypeStart(%s)" % JSON.stringify(line.text))
+					_type_into(line, answer_area, submit)
+				line.gui_input.connect(func(e: InputEvent):
+					if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
+						start_typing.call())
+				# Once answered, the result and its button go back in the card's own bottom row.
+				finish_btn.tree_entered.connect(func(): bottom.visible = true)
 		else:
 			# Accent buttons: English keyboards can't easily type á, ñ, ¿ ...
 			var keys := HBoxContainer.new()
@@ -869,9 +908,462 @@ func ask_question(q: Dictionary, kind: String) -> String:
 	_pop_in(card)
 	var result: String = await _question_done
 	Game.sfx("click" if result == "correct" else "close")
+	if phone:
+		_typing = false
+		if OS.has_feature("web"):
+			JavaScriptBridge.eval("window.liTypeStop && window.liTypeStop()")
+		if _hud:
+			_hud.visible = true
+		if touch:
+			touch.visible = true
 	dim.queue_free()
 	Game.ui_open = false
 	return result
+
+
+## Typed questions on a phone: one floating panel over the (still visible) game world, with
+## the question on top - the answer typed straight into its blank - and our own keyboard
+## below. Same results as ask_question: "correct", "skipped" or "locked".
+func _ask_typed_phone(q: Dictionary, kind: String, accent: Color) -> String:
+	var dim := ColorRect.new()
+	dim.color = Color(0.12, 0.06, 0.25, 0.25)       # lighter than desktop: the world stays bright
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.add_child(dim)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.move_child(touch, -1)
+	if _hud:
+		_hud.visible = false
+	if touch:
+		touch.visible = false
+	var W := root.size.x
+	var H := root.size.y
+	var panel := _panel(CREAM, accent, 26, 6)
+	var psb := panel.get_theme_stylebox("panel") as StyleBoxFlat
+	psb.content_margin_left = 18
+	psb.content_margin_right = 18
+	psb.content_margin_top = 12
+	psb.content_margin_bottom = 14
+	var pw := minf(W * 0.9, 1100.0)
+	panel.custom_minimum_size.x = pw
+	dim.add_child(panel)
+	panel.anchor_left = 0.5
+	panel.anchor_right = 0.5
+	panel.anchor_top = 1.0
+	panel.anchor_bottom = 1.0
+	panel.offset_left = -pw / 2.0
+	panel.offset_right = pw / 2.0
+	panel.offset_bottom = -maxf(12.0, H * 0.03)
+	panel.offset_top = panel.offset_bottom
+	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 8)
+	panel.add_child(v)
+
+	# Top row: a little coloured tab saying what this is, any hint in brackets, and a close ✕.
+	var lines := PackedStringArray(str(q.question).split("\n"))
+	var blank := RegEx.create_from_string("_{2,}")
+	var main_i := -1
+	for i in lines.size():
+		if blank.search(lines[i]):
+			main_i = i
+			break
+	var sentence := ""
+	var extra := ""
+	if main_i >= 0:
+		sentence = lines[main_i]
+		var rest := PackedStringArray()
+		for i in lines.size():
+			if i != main_i and lines[i].strip_edges() != "":
+				rest.append(lines[i].strip_edges())
+		extra = "  ".join(rest)
+	else:
+		sentence = "  ".join(lines)
+	var top := HBoxContainer.new()
+	top.add_theme_constant_override("separation", 12)
+	v.add_child(top)
+	var tab := _panel(accent, Color(0, 0, 0, 0), 12, 0)
+	var tsb := tab.get_theme_stylebox("panel") as StyleBoxFlat
+	tsb.content_margin_left = 12
+	tsb.content_margin_right = 12
+	tsb.content_margin_top = 2
+	tsb.content_margin_bottom = 2
+	top.add_child(tab)
+	var tab_l := Label.new()
+	tab_l.text = {"card": "Pregunta", "chest": "Cofre", "sweet": "Dulce", "detective": "Reto"}.get(kind, "Pregunta")
+	tab_l.add_theme_font_override("font", _bold_font)
+	tab_l.add_theme_font_size_override("font_size", 18)
+	tab_l.add_theme_color_override("font_color", Color.WHITE)
+	tab.add_child(tab_l)
+	var hint_l := Label.new()
+	hint_l.text = extra
+	hint_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hint_l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hint_l.add_theme_font_size_override("font_size", 20)
+	hint_l.add_theme_color_override("font_color", Color("#7a6fb0"))
+	hint_l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	top.add_child(hint_l)
+	var close := _button("X", Color("#9a94b8"))
+	close.add_theme_font_size_override("font_size", 20)
+	close.custom_minimum_size = Vector2(52, 42)
+	for st in ["normal", "hover", "pressed"]:
+		var s := (close.get_theme_stylebox(st) as StyleBoxFlat).duplicate() as StyleBoxFlat
+		s.content_margin_left = 4
+		s.content_margin_right = 4
+		s.content_margin_top = 0
+		close.add_theme_stylebox_override(st, s)
+	top.add_child(close)
+
+	# The question, with the answer typed into its blank (or on its own line below it).
+	var qfont := int(clampf(H * 0.05, 22.0, 30.0))
+	var ql := RichTextLabel.new()
+	ql.bbcode_enabled = true
+	ql.fit_content = true
+	ql.scroll_active = false
+	ql.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	ql.add_theme_font_size_override("normal_font_size", qfont)
+	ql.add_theme_font_size_override("bold_font_size", int(qfont * 1.15))
+	ql.add_theme_font_override("bold_font", _bold_font)
+	ql.add_theme_color_override("default_color", INK)
+	v.add_child(ql)
+	var answer_l: RichTextLabel = null
+	if main_i < 0:
+		answer_l = RichTextLabel.new()
+		answer_l.bbcode_enabled = true
+		answer_l.fit_content = true
+		answer_l.scroll_active = false
+		answer_l.add_theme_font_size_override("bold_font_size", int(qfont * 1.3))
+		answer_l.add_theme_font_override("bold_font", _bold_font)
+		v.add_child(answer_l)
+	var feedback := Label.new()
+	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	feedback.add_theme_font_size_override("font_size", 20)
+	feedback.visible = false
+	v.add_child(feedback)
+
+	var st := {"ans": "", "pos": 0, "tries": 0, "locked": false, "col": "#4b3aa8", "cursor": true, "done": false}
+	var redraw := func():
+		# The cursor is always there (so nothing moves); it blinks by turning invisible.
+		# A block cursor: the letter at the cursor is highlighted (so it takes no extra room);
+		# at the end it highlights a blank that is always there. It blinks by colour only.
+		var full: String = str(st.ans)
+		var p: int = clampi(int(st.pos), 0, full.length())
+		var on: bool = st.cursor and not st.done
+		var bg: String = "#b3a8e8" if on else "#00000000"
+		var at := full.substr(p, 1) if p < full.length() else " "
+		var left := full.left(p).replace("[", "[lb]")
+		var right := full.substr(p + 1).replace("[", "[lb]") if p < full.length() else ""
+		var tail := "" if st.done and p >= full.length() else "[bgcolor=%s]%s[/bgcolor]" % [bg, at.replace("[", "[lb]")]
+		var shown := ""
+		if full == "":
+			# Empty: the cursor sits on the first dash of the blank (so it starts on the left).
+			shown = "[color=#b3a8e8][bgcolor=%s]_[/bgcolor]_____[/color]" % bg
+		else:
+			shown = "[u][b][color=%s]%s%s%s[/color][/b][/u]" % [st.col, left, tail, right]
+		var esc := sentence.replace("[", "[lb]")
+		if main_i >= 0:
+			var m := blank.search(esc)
+			ql.text = "[center]%s %s %s[/center]" % [esc.substr(0, m.get_start()), shown, esc.substr(m.get_end())]
+		else:
+			ql.text = "[center]%s[/center]" % esc
+			answer_l.text = "[center]%s[/center]" % shown
+	redraw.call()
+
+	# The keyboard, part of the same panel.
+	var kb := VBoxContainer.new()
+	kb.add_theme_constant_override("separation", 5)
+	v.add_child(kb)
+	var bottom := HBoxContainer.new()
+	bottom.alignment = BoxContainer.ALIGNMENT_END
+	bottom.visible = false
+	v.add_child(bottom)
+
+	var finish := func(res: String): _question_done.emit(res)
+	var shrink := func():
+		# Keyboard gone: let the panel shrink back to fit what's left (it grows upwards).
+		await get_tree().process_frame
+		panel.offset_top = panel.offset_bottom
+		panel.reset_size()
+	var submit := func():
+		if st.done or str(st.ans).strip_edges() == "":
+			return
+		var verdict: int = Game.check_answer(st.ans, q.answers)
+		if verdict == Game.RIGHT or verdict == Game.RIGHT_BUT_ACCENTS:
+			st.done = true
+			if kind not in ["sweet", "detective"]:
+				Game.record_attempt(q.id, true)
+			Game.sfx("correct")
+			st.col = "#1f8a52"
+			redraw.call()
+			kb.visible = false
+			close.visible = false
+			tab_l.text = "¡Correcto!"
+			(tab.get_theme_stylebox("panel") as StyleBoxFlat).bg_color = GREEN
+			feedback.visible = true
+			feedback.add_theme_color_override("font_color", Color("#1f8a52"))
+			var msg: String = q.explanation if q.explanation != "" else "¡Muy bien, %s!" % Game.hero_name
+			if verdict == Game.RIGHT_BUT_ACCENTS:
+				msg += "\nWatch the accents - it's spelled:  %s" % q.answers[0]
+			feedback.text = msg
+			var go := _button({"card": "¡A construir el puente!", "chest": "¡Abre el cofre!", "sweet": "¡Toma el dulce!", "detective": "¡Siguiente!"}.get(kind, "¡Genial!"), GREEN)
+			go.custom_minimum_size.y = 62
+			bottom.add_child(go)
+			bottom.visible = true
+			go.pressed.connect(finish.bind("correct"))
+			shrink.call()
+			_bounce(panel)
+			return
+		# Wrong.
+		st.tries += 1
+		if kind not in ["sweet", "detective"]:
+			Game.record_attempt(q.id, false)
+		Game.sfx("wrong")
+		_shake(panel)
+		st.col = "#c2410c"
+		redraw.call()
+		feedback.visible = true
+		feedback.add_theme_color_override("font_color", Color("#c2410c"))
+		if st.tries >= 3 and kind != "chest":
+			st.locked = true
+			st.done = true
+			kb.visible = false
+			feedback.text = "Not quite. %s\n%s locked itself! Jump at the whiteboard to read, then come back." % [q.hint, {"card": "The card", "sweet": "The sweet"}.get(kind, "It")]
+			var back := _button("¡A la pizarra!", ORANGE)
+			back.custom_minimum_size.y = 58
+			bottom.add_child(back)
+			bottom.visible = true
+			back.pressed.connect(finish.bind("locked"))
+			shrink.call()
+			return
+		feedback.text = "Not quite - try again!  Hint: %s" % q.hint
+		await get_tree().create_timer(0.6).timeout
+		st.ans = ""
+		st.pos = 0
+		st.col = "#4b3aa8"
+		redraw.call()
+
+	var key_h := clampf(H * 0.085, 34.0, 56.0)
+	_kb_rows(kb, pw - 36.0, key_h,
+		func(t: String):
+			if st.done:
+				return
+			var a: String = str(st.ans)
+			st.ans = a.left(st.pos) + t + a.substr(st.pos)
+			st.pos += t.length()
+			st.col = "#4b3aa8"
+			st.cursor = true
+			redraw.call()
+			Game.sfx("click", 1.6, -12),
+		func():
+			if st.done or int(st.pos) == 0:
+				return
+			var a: String = str(st.ans)
+			st.ans = a.left(st.pos - 1) + a.substr(st.pos)
+			st.pos -= 1
+			st.cursor = true
+			redraw.call()
+			Game.sfx("click", 1.2, -12),
+		submit, "¡Comprobar!",
+		func(step: int):
+			if st.done:
+				return
+			st.pos = clampi(int(st.pos) + step, 0, str(st.ans).length())
+			st.cursor = true
+			redraw.call()
+			Game.sfx("click", 1.4, -14))
+	close.pressed.connect(func(): finish.call("locked" if st.locked else "skipped"))
+
+	# A blinking cursor while typing.
+	var blink := Timer.new()
+	blink.wait_time = 0.5
+	blink.autostart = true
+	panel.add_child(blink)
+	blink.timeout.connect(func():
+		st.cursor = not st.cursor
+		redraw.call())
+
+	_pop_in(panel)
+	var result: String = await _question_done
+	Game.sfx("click" if result == "correct" else "close")
+	if _hud:
+		_hud.visible = true
+	if touch:
+		touch.visible = true
+	dim.queue_free()
+	Game.ui_open = false
+	return result
+
+
+## The rows of our keyboard: Spanish letters, lowercase letters, "borrar", space and a submit
+## key (`ok_label`), sized to `width`.
+func _kb_rows(box: VBoxContainer, width: float, key_h: float, on_key: Callable, on_del: Callable, on_ok: Callable, ok_label: String, on_move := Callable()) -> void:
+	var gap := 5.0
+	var key_w := floorf((width - gap * 9.0) / 10.0)
+	var font_px := int(key_h * 0.55)
+	var make_key := func(label: String, col: Color, w: float) -> Button:
+		var b := _button(label, col)
+		for st in ["normal", "hover", "pressed", "disabled"]:
+			var s := (b.get_theme_stylebox(st) as StyleBoxFlat).duplicate() as StyleBoxFlat
+			s.content_margin_left = 2
+			s.content_margin_right = 2
+			s.content_margin_top = 0
+			s.set_corner_radius_all(12)
+			b.add_theme_stylebox_override(st, s)
+		b.add_theme_font_size_override("font_size", font_px)
+		b.add_theme_constant_override("outline_size", 4)
+		b.custom_minimum_size = Vector2(w, key_h)
+		return b
+	var add_row := func() -> HBoxContainer:
+		var r := HBoxContainer.new()
+		r.alignment = BoxContainer.ALIGNMENT_CENTER
+		r.add_theme_constant_override("separation", int(gap))
+		box.add_child(r)
+		return r
+	for spec in [[["á", "é", "í", "ó", "ú", "ñ", "ü"], PINK], [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"], PURPLE],
+			[["a", "s", "d", "f", "g", "h", "j", "k", "l"], PURPLE], [["z", "x", "c", "v", "b", "n", "m"], PURPLE]]:
+		var r: HBoxContainer = add_row.call()
+		var accents: bool = spec[0][0] == "á"
+		if accents and on_move.is_valid():
+			# Cursor arrows at the far ends of the accent row (above q and p).
+			r.alignment = BoxContainer.ALIGNMENT_BEGIN
+			var lb: Button = make_key.call("<", Color("#9a94b8"), key_w)
+			lb.pressed.connect(on_move.bind(-1))
+			r.add_child(lb)
+			var sp1 := Control.new()
+			sp1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			r.add_child(sp1)
+		for k in spec[0]:
+			var b: Button = make_key.call(str(k), spec[1], key_w)
+			b.pressed.connect(on_key.bind(str(k)))
+			r.add_child(b)
+		if accents and on_move.is_valid():
+			var sp2 := Control.new()
+			sp2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			r.add_child(sp2)
+			var rb: Button = make_key.call(">", Color("#9a94b8"), key_w)
+			rb.pressed.connect(on_move.bind(1))
+			r.add_child(rb)
+		if spec[0][0] == "z":
+			var del: Button = make_key.call("borrar", ORANGE, key_w * 2.0 + gap)
+			del.pressed.connect(on_del)
+			r.add_child(del)
+	var r4: HBoxContainer = add_row.call()
+	var space: Button = make_key.call("espacio", Color("#9a94b8"), key_w * 5.5)
+	space.pressed.connect(on_key.bind(" "))
+	r4.add_child(space)
+	var ok: Button = make_key.call(ok_label, GREEN, key_w * 3.0 + gap * 2.0)
+	ok.pressed.connect(on_ok)
+	r4.add_child(ok)
+
+
+## Our own on-screen keyboard for phones, along the bottom of the screen: a row of Spanish
+## letters, lowercase letters, space, "borrar" and OK (which submits). Types into `line`.
+func game_keyboard(parent: Control, line: LineEdit, submit: Callable) -> Control:
+	var panel := PanelContainer.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("#4b3aa8", 0.92)
+	sb.corner_radius_top_left = 22
+	sb.corner_radius_top_right = 22
+	sb.set_content_margin_all(8)
+	sb.content_margin_left = 14
+	sb.content_margin_right = 14
+	panel.add_theme_stylebox_override("panel", sb)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	parent.add_child(panel)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE, Control.PRESET_MODE_MINSIZE)
+	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	var w := root.size.x - 28.0
+	var gap := 6.0
+	var key_w := floorf((w - gap * 9.0) / 10.0)
+	var key_h := clampf((root.size.y * 0.5 - 16.0 - gap * 4.0) / 5.0, 36.0, 62.0)
+	var font_px := int(key_h * 0.55)
+	var rows := VBoxContainer.new()
+	rows.add_theme_constant_override("separation", int(gap))
+	panel.add_child(rows)
+	var make_key := func(label: String, col: Color, width: float) -> Button:
+		var b := _button(label, col)
+		for st in ["normal", "hover", "pressed", "disabled"]:
+			var s := (b.get_theme_stylebox(st) as StyleBoxFlat).duplicate() as StyleBoxFlat
+			s.content_margin_left = 2
+			s.content_margin_right = 2
+			s.content_margin_top = 0
+			s.set_corner_radius_all(12)
+			b.add_theme_stylebox_override(st, s)
+		b.add_theme_font_size_override("font_size", font_px)
+		b.add_theme_constant_override("outline_size", 4)
+		b.custom_minimum_size = Vector2(width, key_h)
+		return b
+	var type_text := func(t: String):
+		line.text += t
+		line.caret_column = line.text.length()
+		Game.sfx("click", 1.6, -12)
+	var add_row := func(keys: Array, col: Color) -> HBoxContainer:
+		var r := HBoxContainer.new()
+		r.alignment = BoxContainer.ALIGNMENT_CENTER
+		r.add_theme_constant_override("separation", int(gap))
+		rows.add_child(r)
+		for k in keys:
+			var b: Button = make_key.call(str(k), col, key_w)
+			b.pressed.connect(type_text.bind(str(k)))
+			r.add_child(b)
+		return r
+	add_row.call(["á", "é", "í", "ó", "ú", "ñ", "ü"], PINK)
+	add_row.call(["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"], PURPLE)
+	add_row.call(["a", "s", "d", "f", "g", "h", "j", "k", "l"], PURPLE)
+	var r3: HBoxContainer = add_row.call(["z", "x", "c", "v", "b", "n", "m"], PURPLE)
+	var del: Button = make_key.call("borrar", ORANGE, key_w * 2.0 + gap)
+	del.pressed.connect(func():
+		if line.text.length() > 0:
+			line.text = line.text.left(line.text.length() - 1)
+			line.caret_column = line.text.length()
+			Game.sfx("click", 1.2, -12))
+	r3.add_child(del)
+	var r4 := HBoxContainer.new()
+	r4.alignment = BoxContainer.ALIGNMENT_CENTER
+	r4.add_theme_constant_override("separation", int(gap))
+	rows.add_child(r4)
+	var space: Button = make_key.call("espacio", Color("#9a94b8"), key_w * 6.0 + gap * 5.0)
+	space.pressed.connect(type_text.bind(" "))
+	r4.add_child(space)
+	var ok: Button = make_key.call("OK", GREEN, key_w * 2.0 + gap)
+	ok.pressed.connect(func(): submit.call())
+	r4.add_child(ok)
+	return panel
+
+
+## Phone layout for typed answers: on the web on a touch screen (or forced for testing with
+## the --phone-card command line option).
+func phone_layout() -> bool:
+	return (OS.has_feature("web") and Game.is_touch()) or "--phone-card" in OS.get_cmdline_user_args()
+
+
+## While the phone keyboard is up: copy what's typed in the invisible browser field into the
+## card's answer field, and Enter submits. Stops when the answer area goes (answered/closed).
+func _type_into(line: LineEdit, area: Control, submit: Callable) -> void:
+	if _typing:
+		return
+	_typing = true
+	var shown := line.text
+	while _typing and is_instance_valid(line) and area.visible:
+		await get_tree().process_frame
+		if not OS.has_feature("web"):
+			continue
+		if line.text != shown:
+			# The game changed it (e.g. cleared after a wrong answer): tell the browser field.
+			JavaScriptBridge.eval("window.liTypeSet && window.liTypeSet(%s)" % JSON.stringify(line.text))
+			shown = line.text
+		var typed := str(JavaScriptBridge.eval("window.liTypeValue || ''"))
+		if typed != line.text:
+			line.text = typed
+			line.caret_column = typed.length()
+			shown = typed
+		if str(JavaScriptBridge.eval("window.liTypeEnter ? '1' : ''")) == "1":
+			JavaScriptBridge.eval("window.liTypeEnter = false")
+			submit.call()
+			shown = line.text
+	_typing = false
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.liTypeStop && window.liTypeStop()")
 
 
 # ------------------------------------------------------------------ game chooser
@@ -1011,8 +1503,9 @@ func ask_sentence(ch: Dictionary, title := "RETO: LA POSTAL") -> int:
 		box.placeholder_text = "Tap here to write..."
 		box.gui_input.connect(func(e: InputEvent):
 			if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
-				var r = JavaScriptBridge.eval("window.prompt(%s, %s) || %s" % [JSON.stringify(ql.text), JSON.stringify(box.text), JSON.stringify(box.text)])
-				box.text = str(r))
+				var r = await web_ask(ql.text, box.text, true)
+				if r != null:
+					box.text = str(r))
 	else:
 		var keys := HBoxContainer.new()
 		keys.add_theme_constant_override("separation", 6)
@@ -1173,7 +1666,9 @@ func ask_notice(reto: Dictionary) -> bool:
 			le.editable = false
 			le.gui_input.connect(func(e: InputEvent):
 				if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
-					le.text = str(JavaScriptBridge.eval("window.prompt(%s, %s) || ''" % [JSON.stringify("(%d) %s" % [i + 1, gaps[i].get("verb", "")]), JSON.stringify(le.text)])))
+					var r = await web_ask("(%d) %s" % [i + 1, gaps[i].get("verb", "")], le.text)
+					if r != null:
+						le.text = str(r))
 	var feedback := Label.new()
 	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	feedback.add_theme_font_size_override("font_size", 22)
@@ -1386,9 +1881,10 @@ func ask_chat(reto: Dictionary) -> bool:
 		line.placeholder_text = "Tap here to reply..."
 		line.gui_input.connect(func(e: InputEvent):
 			if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
-				var r = JavaScriptBridge.eval("window.prompt(%s, '') || ''" % JSON.stringify(task.text))
-				line.text = str(r)
-				submit.call())
+				var r = await web_ask(task.text, line.text)
+				if r != null:
+					line.text = str(r)
+					submit.call())
 	else:
 		var keys := HBoxContainer.new()
 		keys.add_theme_constant_override("separation", 5)
@@ -1499,6 +1995,33 @@ static func chat_match(text: String, options: Array) -> Dictionary:
 		if ok:
 			return opt
 	return {}
+
+
+## Phones: typing happens in a game-styled HTML box at the top of the screen (above the phone
+## keyboard), defined in the web page's head (see export_presets.cfg). Returns the text, or
+## null if the student cancelled.
+func web_ask(question: String, value: String, multiline := false) -> Variant:
+	if not OS.has_feature("web"):
+		return null
+	if _asking:
+		return null
+	if str(JavaScriptBridge.eval("typeof window.liAsk")) != "function":
+		# An old cached page without the text box: fall back to the browser's own prompt.
+		var r = JavaScriptBridge.eval("window.prompt(%s, %s)" % [JSON.stringify(question), JSON.stringify(value)])
+		return null if r == null else str(r)
+	_asking = true
+	JavaScriptBridge.eval("window.liAsk(%s, %s, %s)" % [JSON.stringify(question), JSON.stringify(value), "true" if multiline else "false"])
+	var result: Variant = null
+	while true:
+		await get_tree().process_frame
+		var st := str(JavaScriptBridge.eval("window.liState || ''"))
+		if st == "ok":
+			result = str(JavaScriptBridge.eval("window.liValue || ''"))
+			break
+		if st == "cancel":
+			break
+	_asking = false
+	return result
 
 
 ## A text to read (e.g. a hotel review), in Markdown. Waits until closed.

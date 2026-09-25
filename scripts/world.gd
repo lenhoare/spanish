@@ -190,7 +190,7 @@ const THEMES := {
 	"digital":  {"grass": Color(0.42, 0.42, 0.68), "dirt": Color(0.45, 0.33, 0.6),  "sand": Color(0.82, 0.78, 0.96), "sky": Color(0.16, 0.12, 0.42), "horizon": Color(0.98, 0.55, 0.78), "deep": Color(0.06, 0.18, 0.5), "shallow": Color(0.25, 0.55, 0.95), "sun": Color(1.0, 0.8, 0.9), "sun_energy": 0.9, "trees": ["tree-pine", "tree-pine-small", "tree"], "props": [["proc/lamp", 2.0, 16], ["proc/screen", 1.6, 8]]},
 	"festival": {"grass": Color(0.93, 0.56, 0.74), "dirt": Color(0.75, 0.42, 0.7), "sand": Color(1.0, 0.9, 0.82), "sky": Color(0.42, 0.55, 1.0), "horizon": Color(1.0, 0.85, 0.93), "deep": Color(0.25, 0.35, 0.85), "shallow": Color(0.45, 0.7, 1.0), "trees": ["fair/tree", "fair/tree-large"], "tree_scale": 2.2, "props": [["fair/stall-food", 2.6, 5], ["fair/stall-drinks", 2.6, 5], ["proc/speaker", 2.0, 8], ["arcade/claw-machine", 2.6, 4]]},
 	"industria": {"grass": Color(0.46, 0.49, 0.56), "dirt": Color(0.88, 0.55, 0.2), "sand": Color(0.85, 0.82, 0.74), "sky": Color(0.4, 0.6, 0.85), "horizon": Color(0.9, 0.9, 0.95), "deep": Color(0.08, 0.3, 0.55), "shallow": Color(0.2, 0.5, 0.75), "trees": ["tree-pine", "tree-pine-small"], "tree_scale": 0.9, "props": [["water/cargo-container-a", 1.4, 8, "box"], ["water/cargo-container-c", 1.4, 8, "box"], ["conveyor/box-large", 1.4, 10, "box"], ["barrel", 2.0, 10]]},
-	"volcan":   {"grass": Color(0.36, 0.3, 0.33), "dirt": Color(0.9, 0.42, 0.15), "sand": Color(0.25, 0.22, 0.25), "sky": Color(0.5, 0.35, 0.45), "horizon": Color(1.0, 0.62, 0.42), "deep": Color(0.08, 0.2, 0.45), "shallow": Color(0.2, 0.42, 0.6), "sun": Color(1.0, 0.75, 0.6), "trees": ["graveyard/pine-crooked", "tree-pine", "tree-pine-small"], "props": [["pirate/rocks-a", 0.9, 10], ["pirate/rocks-b", 0.9, 10]]},
+	"volcan":   {"grass": Color(0.36, 0.3, 0.33), "dirt": Color(0.56, 0.46, 0.47), "sand": Color(0.25, 0.22, 0.25), "sky": Color(0.5, 0.35, 0.45), "horizon": Color(1.0, 0.62, 0.42), "deep": Color(0.08, 0.2, 0.45), "shallow": Color(0.2, 0.42, 0.6), "sun": Color(1.0, 0.75, 0.6), "trees": ["graveyard/pine-crooked", "tree-pine", "tree-pine-small"], "props": [["pirate/rocks-a", 0.9, 10], ["pirate/rocks-b", 0.9, 10]]},
 	"fiesta":   {"grass": Color(0.5, 0.74, 0.32), "dirt": Color(0.86, 0.52, 0.32), "sand": Color(1.0, 0.86, 0.6), "sky": Color(0.32, 0.58, 1.0), "horizon": Color(1.0, 0.86, 0.66), "deep": Color(0.06, 0.36, 0.78), "shallow": Color(0.2, 0.64, 0.95), "trees": ["tree", "fair/tree-large", "tree"], "props": [["proc/bunting", 1.0, 12, ""], ["graveyard/lantern-candle", 2.6, 10], ["fair/stall-drinks", 2.6, 4]]},
 	"ciudad":   {"grass": Color(0.42, 0.74, 0.74), "dirt": Color(0.4, 0.5, 0.62), "sand": Color(1.0, 0.93, 0.78), "sky": Color(0.22, 0.52, 0.98), "horizon": Color(0.85, 0.94, 1.0), "deep": Color(0.03, 0.16, 0.5), "shallow": Color(0.12, 0.34, 0.78), "trees": ["tree", "tree", "fair/tree-large"], "tree_scale": 1.0, "props": [["holiday/bench", 2.4, 10], ["fair/trash", 2.6, 8], ["flag", 2.0, 6]]},
 	"campus":   {"grass": Color(0.86, 0.66, 0.28), "dirt": Color(0.72, 0.42, 0.26), "sand": Color(0.98, 0.88, 0.62), "sky": Color(0.35, 0.55, 0.92), "horizon": Color(1.0, 0.9, 0.75), "deep": Color(0.08, 0.35, 0.72), "shallow": Color(0.25, 0.6, 0.9), "trees": ["tree", "tree", "tree-pine", "tree-pine-small"], "props": [["holiday/bench", 2.4, 14], ["flag", 2.0, 6]]},
@@ -228,6 +228,12 @@ var volcano: Node3D
 var reforest: Node3D
 var liner: Node3D
 var liner_boat: Node3D
+var diamond: Node3D
+var climb_wall: Node3D
+var bus: CharacterBody3D
+var bus_route: Node3D
+var regatta: Node3D
+signal diamond_touched
 var _nostar: Array = []    # [Vector2 centre, radius]: big set-pieces the fixed star trail must avoid
 var tug: Node3D
 var market: Node3D
@@ -470,6 +476,15 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 			"volcano":
 				if volcano == null:
 					_build_volcano(q)
+			"climb":
+				if climb_wall == null:
+					_build_climb(q)
+			"regatta":
+				if regatta == null:
+					_build_regatta(q)
+			"bus":
+				if bus_route == null:
+					_build_bus(q)
 			"trees":
 				if reforest == null:
 					_build_reforest(q)
@@ -695,7 +710,17 @@ func _build_boat_trip(q: Dictionary) -> void:
 	add_child(rowboat)
 	rowboat.global_position = d * (MAIN_R + 9.0) + side * 0.5
 	rowboat.rotation.y = atan2(-d.x, -d.z)
-	rowboat.setup()
+	if str(q.get("boat", "")) == "speed":
+		# A speedboat instead of oars (Retos Isla 1).
+		rowboat.boat_name = "speedboat"
+		rowboat.seat_offset = Vector3(0, 0.75, 0.9)
+		rowboat.current_mul = 2.0
+		rowboat.DRAG = 6.0
+		rowboat.setup("water/boat-speed-a", 2.2, PI, 14.0, 7.0)
+		rowboat.add_wake()
+		sl.text = "¡Lancha!"
+	else:
+		rowboat.setup()
 	rowboat.shores = [[Vector3.ZERO, MAIN_R], [SECRET_ISLAND, SECRET_R], [EAST_ISLAND, 5.0], [WEST_ISLAND, 5.0], [PRIZE_CENTER, 6.0]]
 	for s in rowboat.shores:
 		rowboat.blockers.append([Vector2(s[0].x, s[0].z), s[1] + 2.2])
@@ -978,6 +1003,9 @@ func _build_headteacher(q: Dictionary) -> void:
 	for z in range(3, -26, -2):
 		for x in [-3.5, 0.0, 3.5]:
 			_keep(headteacher.to_global(Vector3(x, 0, z)), 2.4)
+	for z in range(0, -26, -4):
+		var cp: Vector3 = headteacher.to_global(Vector3(0, 0, z))
+		_nostar.append([Vector2(cp.x, cp.z), 5.5])
 	var s := _add_sweet(q, "food/donut-chocolate", headteacher.sweet_spot(), mid, 4.0)
 	headteacher.sweet = s
 
@@ -1219,6 +1247,113 @@ func _build_crane(q: Dictionary) -> void:
 		_star(crane.to_global(Vector3(0, y + 1.2, 0)))
 
 
+## La regata: a speedboat at a jetty and a timed race right round the island through buoy
+## gates (well clear of the coast and the little islands). The sweet appears on the jetty.
+func _build_regatta(q: Dictionary) -> void:
+	var a0 := deg_to_rad(float(q.get("at", [225.0])[0]))
+	var d := Vector3(cos(a0), 0, sin(a0))
+	var side := Vector3(-d.z, 0, d.x)
+	_jetty(d * (MAIN_R - 2.0), d * (MAIN_R + 7.0))
+	for k in range(int(MAIN_R) - 6, int(MAIN_R) + 1, 2):
+		_keep(d * k, 2.6)
+	var sign := Props.place(self, "sign", d * (MAIN_R - 3.5) + side * 2.4, atan2(d.x, d.z) + PI, 2.5, "box")
+	var sl := Label3D.new()
+	sl.text = "¡La regata!"
+	sl.font_size = 38
+	sl.pixel_size = 0.005
+	sl.modulate = Color(0.2, 0.3, 0.6)
+	sl.position = Vector3(0, 1.1, 0.22)
+	sign.add_child(sl)
+	var boat := Node3D.new()
+	boat.set_script(preload("res://scripts/rowboat.gd"))
+	add_child(boat)
+	boat.global_position = d * (MAIN_R + 9.5) + side * 0.4
+	boat.rotation.y = atan2(-d.x, -d.z)
+	boat.boat_name = "speedboat"
+	boat.seat_offset = Vector3(0, 0.75, 0.9)
+	boat.current_mul = 2.0
+	boat.DRAG = 6.0
+	boat.setup("water/boat-speed-a", 2.2, PI, 14.0, 7.0)
+	boat.add_wake()
+	boat.shores = [[Vector3.ZERO, MAIN_R], [EAST_ISLAND, 5.0], [WEST_ISLAND, 5.0], [PRIZE_CENTER, 6.0]]
+	for sh in boat.shores:
+		boat.blockers.append([Vector2(sh[0].x, sh[0].z), sh[1] + 2.2])
+	boat.rects = _jetty_rects.duplicate()
+	rowboat = boat
+	# The gates: the start just off the jetty, then all the way round (going the long way
+	# past Star Island in the north), and back.
+	var pts: Array[Vector3] = []
+	var n := int(q.get("gates", 8))
+	for k in n:
+		var a := a0 - TAU * (k + 1) / n      # start just left of the jetty, then round the other way (away from the jetty)
+		var r := MAIN_R + 24.0
+		var u := Vector3(cos(a), 0, sin(a))
+		if u.dot(PRIZE_CENTER.normalized()) > 0.8:
+			r = PRIZE_CENTER.length() + 16.0      # round the outside of Star Island
+		pts.append(u * r)
+	regatta = Node3D.new()
+	regatta.set_script(preload("res://scripts/regatta.gd"))
+	add_child(regatta)
+	regatta.setup(pts, float(q.get("time", 75.0)))
+	regatta.boat = boat
+	for bp in regatta.buoys:
+		boat.blockers.append([Vector2(bp.x, bp.z), 0.6])     # solid buoys: bump them and you lose time
+	var s := _add_sweet(q, "food/ice-cream", d * (MAIN_R - 1.5) + Vector3(0, 0.6, 0), d * MAIN_R, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return regatta.done
+	regatta.sweet = s
+
+
+## El muro de escalada: climb only the holds of the colour the signs name. Faces the middle.
+func _build_climb(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [180.0, 0.62]))
+	climb_wall = Node3D.new()
+	climb_wall.set_script(preload("res://scripts/climbing_wall.gd"))
+	climb_wall.position = pos
+	climb_wall.rotation.y = atan2(-pos.x, -pos.z)
+	add_child(climb_wall)
+	climb_wall.setup(q)
+	for x in range(-9, 10, 2):
+		for z in [-1.0, 1.5, 4.0]:
+			_keep(climb_wall.to_global(Vector3(x, 0, z)), 1.8)
+	_nostar.append([Vector2(pos.x, pos.z), 6.5])
+	_add_sweet(q, "food/candy-bar", climb_wall.sweet_spot(), pos, 4.0)
+
+
+## La excursión: a ring road with the school bus, places to visit and classmates at stops.
+func _build_bus(q: Dictionary) -> void:
+	var road_r := MAIN_R * float(q.get("road", 0.9))
+	bus_route = Node3D.new()
+	bus_route.set_script(preload("res://scripts/bus_route.gd"))
+	add_child(bus_route)
+	bus_route.setup(q, road_r)
+	# Keep the road (and a strip each side) clear of trees and stars.
+	var n := int(TAU * road_r / 2.5)
+	for k in n:
+		var a := TAU * k / n
+		_keep(Vector3(cos(a), 0, sin(a)) * road_r, 3.4)
+	for pl in q.get("places", []):
+		var pa := deg_to_rad(float(pl.at))
+		var bp := Vector3(cos(pa), 0, sin(pa)) * (road_r - 5.7)
+		_keep(bp, 4.0)
+		_nostar.append([Vector2(bp.x, bp.z), 3.5])
+	# The bus waits at the depot, pointing along the road.
+	var dp: Vector3 = bus_route.depot_spot()
+	bus = CharacterBody3D.new()
+	bus.set_script(preload("res://scripts/bus.gd"))
+	var tangent := Vector3(-dp.z, 0, dp.x).normalized()
+	bus.position = dp + Vector3(0, 0.3, 0)
+	bus.rotation.y = atan2(-tangent.x, -tangent.z)
+	add_child(bus)
+	bus.setup()
+	bus.island_r = MAIN_R - 1.8
+	bus_route.bus = bus
+	var s := _add_sweet(q, "food/donut-sprinkles", dp.normalized() * (road_r + 4.2) + Vector3(0, 0.6, 0), dp, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return bus_route.done
+	bus_route.sweet = s
+
+
 ## El volcán: cools as you finish retos; climb to the crater for the sweet.
 func _build_volcano(q: Dictionary) -> void:
 	var pos := _at(q.get("at", [150.0, 0.72]))
@@ -1337,6 +1472,20 @@ func _build_liner(q: Dictionary) -> void:
 	for i in 4:
 		var sh = liner_boat.shores[i]
 		liner_boat.blockers.append([Vector2(sh[0].x, sh[0].z), sh[1] + 2.2])
+	# El Diamante: a far island beyond the liner (the course's "diamond" option).
+	if Game.config.get("diamond", false):
+		var dpos := d.rotated(Vector3.UP, -0.42) * (MAIN_R + 58.0)
+		_island(dpos, 7.0)
+		diamond = Node3D.new()
+		diamond.set_script(preload("res://scripts/diamond.gd"))
+		diamond.position = dpos
+		add_child(diamond)
+		diamond.setup(Game.diamond_ready())
+		diamond.touched.connect(func(): diamond_touched.emit())
+		for pp in [Vector3(-4.5, 0, 2.5), Vector3(4.0, 0, -3.5), Vector3(3.0, 0, 4.2)]:
+			Props.place(self, "pirate/palm-detailed-bend", dpos + pp, _rng.randf() * TAU, 1.4, "trunk")
+		liner_boat.shores.append([dpos, 7.0])
+		liner_boat.blockers.append([Vector2(dpos.x, dpos.z), 9.2])
 	liner_boat.rects = _jetty_rects.duplicate()
 	liner_boat.rects.append([Vector2(liner.position.x, liner.position.z), Vector2(4.8, 21.3), liner.rotation.y])
 	liner_boat.rects.append([Vector2(pont.x, pont.z), Vector2(2.3, 2.5), liner.rotation.y])

@@ -12,7 +12,7 @@ func _ready() -> void:
 	out_dir = OS.get_user_data_dir().path_join("shots")
 	DirAccess.make_dir_recursive_absolute(out_dir)
 	# Watchdog: if a step errors or gets stuck, don't leave the window sitting there.
-	get_tree().create_timer(180.0).timeout.connect(func():
+	get_tree().create_timer(240.0).timeout.connect(func():
 		print("WATCHDOG: test took too long - quitting")
 		get_tree().quit())
 	_run.call_deferred()
@@ -1015,6 +1015,24 @@ func _retos1(p: CharacterBody3D, cam) -> void:
 		_press("¡Enviar!")
 		await _wait(1.0)
 	print("SWEETS: %d / %d   RETOS: %d / %d" % [Game.sweets, Game.total_sweets, Game.retos_done, Game.total_retos])
+		# La regata: drive the speedboat through every gate for real.
+	var rg = w.regatta
+	var boat = w.rowboat
+	await _aerial("r1_11_regatta", Vector3(0, 0, 0), 150.0, Vector3(0, 0, 60))
+	_teleport(p, cam, boat.global_position + Vector3(0, 1.5, 0), 0.0)
+	await _wait(0.6)
+	Input.action_press("move_forward")
+	var steps := 0
+	while steps < 900 and not rg.done:
+		steps += 1
+		var g: Vector3 = rg.gates[rg.next_i]
+		var to := Vector2(g.x - boat.global_position.x, g.z - boat.global_position.z)
+		cam.yaw = atan2(-to.x, -to.y)
+		if steps == 120:
+			await _shot("r1_12_racing")
+		await _wait(0.1)
+	Input.action_release("move_forward")
+	print("REGATTA: done=%s time left=%.1f after %.1f s, next gate=%d" % [rg.done, rg.time_left, steps * 0.1, rg.next_i])
 	get_tree().quit()
 
 
@@ -1045,7 +1063,7 @@ func _retos2(p: CharacterBody3D, cam) -> void:
 
 	# El horario: ring the bell, try a wrong room, then run to the right one - three times.
 	var face_board: float = tt.rotation.y
-	_teleport(p, cam, tt.to_global(Vector3(0, 0.3, 9.0)), face_board)
+	_teleport(p, cam, tt.to_global(Vector3(5.5, 0.3, 6.0)), face_board)
 	cam.pitch = deg_to_rad(-12)
 	await _wait(0.5)
 	await _aerial("r2_04_board", tt.to_global(Vector3(-1.5, 2.2, 3.0)), 1.0, (-tt.global_position.normalized()) * 9.0)
@@ -1158,6 +1176,43 @@ func _retos2(p: CharacterBody3D, cam) -> void:
 	await _wait(1.0)
 	print("NOTICE: gaps=%d done=%s" % [edits.size(), notice.done])
 	print("SWEETS: %d / %d   RETOS: %d / %d" % [Game.sweets, Game.total_sweets, Game.retos_done, Game.total_retos])
+		# El muro: a decoy hold is not solid; the real route is.
+	var cw = w.climb_wall
+	var face_w: float = cw.rotation.y + PI
+	await _aerial("r2_14_wall", cw.to_global(Vector3(0, 7, 0)), 3.0, (-cw.global_position.normalized()) * 18.0)
+	var lv0: Array = cw.route[0]
+	var decoy_x: float = cw.XS[(int(lv0[0]) + 2) % 4]
+	_teleport(p, cam, cw.to_global(Vector3(decoy_x, cw.STEP + 0.5, 0.6)), face_w)
+	await _wait(0.8)
+	print("WALL decoy: fell to y=%.1f (want ~0)" % p.global_position.y)
+	for lv in cw.route.size():
+		_teleport(p, cam, cw.hold_spot(lv), face_w)
+		await _wait(0.35)
+	print("  on the last real hold: y=%.1f (hold top ~%.1f)" % [p.global_position.y, cw.STEP * cw.route.size() + 0.15])
+	await _shot("r2_15_wall_climb")
+	var toward_w: Vector3 = -cw.global_transform.basis.z
+	cam.yaw = atan2(-toward_w.x, -toward_w.z)
+	Input.action_press("move_forward")
+	Input.action_press("jump")
+	await _wait(0.35)
+	Input.action_release("jump")
+	await _wait(0.4)
+	Input.action_release("move_forward")
+	await _wait(0.6)
+	print("  jumped onto the top: y=%.1f (top %.1f)" % [p.global_position.y, cw.top_y()])
+	var wsw = w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == cw.position)[0]
+	_teleport(p, cam, wsw.global_position + Vector3(0, -0.6, 0), cam.yaw)
+	await _wait(0.8)
+	var ln2: LineEdit = _first("LineEdit")
+	if ln2:
+		ln2.text = "mi instituto tiene un polideportivo nuevo"
+		_press("Check!")
+		await _wait(0.4)
+		_press("Grab the sweet!")
+		await _wait(1.0)
+
+	print("BUS present=%s (want false - turned off)" % (w.bus != null))
+	print("SWEETS after wall + bus: %d / %d" % [Game.sweets, Game.total_sweets])
 	get_tree().quit()
 
 
@@ -2039,6 +2094,22 @@ func _retos8(p: CharacterBody3D, cam) -> void:
 	await _wait(0.8)
 	await _sentence("Prefiero viajar en tren porque es más ecológico que el avión, y el verano pasado fui a Francia en tren.")
 
+	# El Diamante: locked (nothing is saved during tests), so it lists what's missing.
+	var dm = w.diamond
+	print("DIAMOND: exists=%s" % (dm != null))
+	if dm:
+		await _aerial("r8_12_diamond", dm.global_position + Vector3(0, 3, 0), 8.0, (-dm.global_position.normalized()) * 22.0)
+		if p.vehicle:
+			lb.rider = null
+			p.unride(dm.global_position + Vector3(0, 0.5, 5.0))
+		_teleport(p, cam, dm.global_position + Vector3(0, 0.5, 5.0), 0.0)
+		await _wait(0.5)
+		_teleport(p, cam, dm.global_position + Vector3(0, 0.5, 2.2), 0.0)
+		await _wait(1.0)
+		await _shot("r8_13_diamond_locked")
+		print("  panel open=%s won=%s (want true/false)" % [Game.ui_open, dm.won])
+		_press("Entendido")
+		await _wait(0.5)
 	var chat = w.retos.filter(func(r): return str(r.reto.get("kind", "")) == "chat")[0]
 	_teleport(p, cam, chat.to_global(Vector3(0, 0.3, 1.2)), cam.yaw)
 	await _chat(["Reciclo el plástico y apago la luz.", "Voy al instituto en bici.", "Creo que el problema más grave es el cambio climático.", "¡Sí, claro!"], "r8_11")
@@ -2067,7 +2138,26 @@ func _phone_pass() -> void:
 	await _shot("p2_lesson")
 	main.ui._lesson_closed.emit()
 	await _wait(0.3)
-	main.ui.ask_question(main.lesson.sweets[0], "sweet")
+	var typed = main.lesson.cards.filter(func(c): return (c.choices as Array).is_empty())
+	main.ui.ask_question(typed[0] if typed.size() > 0 else main.lesson.cards[0], "card")
 	await _wait(0.8)
-	await _shot("p3_sweet")
+	await _shot("p3_card")
+	# Type with the game keyboard: a wrong answer, then the right one.
+	var q0 = typed[0] if typed.size() > 0 else main.lesson.cards[0]
+	# "nx", back one, "o" -> "nox"?  no: "n", "x", <, "o"  gives "nox"; then > and borrar -> "no".
+	for ch in ["n", "x", "<", "o", ">", "borrar"]:
+		_press(ch)
+	await _wait(0.3)
+	await _shot("p4_typing")
+	_press("¡Comprobar!")
+	await _wait(0.4)
+	await _shot("p4_card_wrong")
+	await _wait(0.8)
+	for ch in str(q0.answers[0]):
+		_press("espacio" if ch == " " else ch)
+	await _wait(0.2)
+	_press("¡Comprobar!")
+	await _wait(0.8)
+	await _shot("p5_card_right")
+	print("PHONE CARD: next button=%s" % (_button("¡A construir el puente!") != null))
 	get_tree().quit()

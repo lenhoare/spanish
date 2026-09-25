@@ -176,6 +176,7 @@ func _start_game() -> void:
 	world.whiteboard_touched.connect(_on_whiteboard)
 	world.read_panel.connect(func(title: String, text: String): ui.show_reading(title, text))
 	world.prize_claimed.connect(_on_prize)
+	world.diamond_touched.connect(_on_diamond)
 	world.bridge.completed.connect(func():
 		Game.show_toast("The bridge is complete! Cross it to reach Star Island!"))
 	ui.show_hud()
@@ -183,6 +184,18 @@ func _start_game() -> void:
 		Game.return_to_picker = true
 		get_tree().reload_current_scene())
 
+	# Developer check (web): ?devlesson=1 opens the whiteboard lesson straight away.
+	if OS.has_feature("web") and str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('devlesson') || ''")) != "":
+		await get_tree().create_timer(1.0).timeout
+		ui.open_lesson(lesson.pages, 1)
+		return
+	# Developer check (web): ?devcard=1 opens a typed question card straight away.
+	if OS.has_feature("web") and str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('devcard') || ''")) != "":
+		var typed: Array = (lesson.cards as Array).filter(func(c): return (c.choices as Array).is_empty())
+		if typed.size() > 0:
+			await get_tree().create_timer(1.0).timeout
+			ui.ask_question(typed[0], "card")
+			return
 	await get_tree().create_timer(0.6).timeout
 	Game.show_toast("¡Hola, %s! Welcome to %s" % [Game.hero_name, lesson.title])
 	await get_tree().create_timer(3.5).timeout
@@ -355,7 +368,7 @@ func _on_reto(node: Node3D, part: int) -> void:
 				Game.sfx("win", 1.3, -4)
 				Game.add_coins(stars * 2)
 				if first:
-					_reto_done()
+					_reto_done(node)
 				Game.show_toast("¡Postal enviada! %d estrellas, +%d coins%s" % [stars, stars * 2, "" if stars >= 5 else " - can you get 5?"])
 		"notice":
 			var fixed: bool = await ui.ask_notice(node.reto)
@@ -363,7 +376,7 @@ func _on_reto(node: Node3D, part: int) -> void:
 			if fixed and node.record(1):
 				player.celebrate()
 				Game.add_coins(10)
-				_reto_done()
+				_reto_done(node)
 				Game.show_toast("¡El tablón está arreglado! +10 coins")
 		"chat":
 			var ok: bool = await ui.ask_chat(node.reto)
@@ -371,7 +384,7 @@ func _on_reto(node: Node3D, part: int) -> void:
 			if ok and node.record(1):
 				player.celebrate()
 				Game.add_coins(10)
-				_reto_done()
+				_reto_done(node)
 				Game.show_toast("¡Qué buena conversación! +10 coins")
 		"detective":
 			if part >= 0:
@@ -396,17 +409,35 @@ func _on_reto(node: Node3D, part: int) -> void:
 			node.finish()
 			player.celebrate()
 			Game.add_coins(15)
-			_reto_done()
+			_reto_done(node)
 			Game.show_toast("¡Detective genial! Every answer right. +15 coins")
 
 
-func _reto_done() -> void:
+func _reto_done(node: Node3D = null) -> void:
 	Game.retos_done += 1
+	# Remembered per island (which ones, so they add up over several visits) for El Diamante.
+	if node and node in world.retos:
+		Game.save_reto(str(Game.config.course[Game.current_island].file), world.retos.find(node), Game.total_retos)
 	Game.retos_changed.emit()
 	if Game.retos_done == Game.total_retos:
 		Game.sfx("win")
 		await get_tree().create_timer(2.5).timeout
 		Game.show_toast("¡Todos los retos! Every challenge on the island complete!")
+
+
+## El Diamante: only for someone who has finished every bridge and every reto.
+func _on_diamond() -> void:
+	var missing := Game.diamond_missing()
+	if missing.is_empty():
+		world.diamond.win(player)
+		player.celebrate()
+		Game.sfx("win")
+		_confetti(player.global_position + Vector3(0, 2, 0))
+		await get_tree().create_timer(1.5).timeout
+		await ui.show_reading("", "# ¡El Diamante es tuyo!\n\n## ¡Enhorabuena, %s!\n\nEvery bridge built, every reto completed on every island. You are a true champion of Spanish. **¡Eres increíble!**" % Game.hero_name)
+		return
+	Game.sfx("click")
+	await ui.show_reading("", "# El Diamante\n\nOnly a true champion can take the diamond: **every bridge and every reto** on every island. Still to do:\n\n- %s" % "\n- ".join(missing))
 
 
 func _on_prize() -> void:

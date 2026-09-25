@@ -6,6 +6,7 @@ var target: Node3D
 var yaw := 0.0
 var pitch := deg_to_rad(-22.0)
 var distance := 6.5
+var _excluded: Array = []
 
 var _arm: SpringArm3D
 var camera: Camera3D
@@ -55,6 +56,13 @@ func _process(delta: float) -> void:
 	# In a boat: pull back and look down a bit more, so the boat doesn't fill the screen.
 	var in_boat: bool = "vehicle" in target and target.vehicle != null
 	var want_len := distance * (1.7 if in_boat else 1.0)
+	if in_boat and target.vehicle is CollisionObject3D:
+		# A land vehicle (the bus) has a solid body: don't let it squash the camera in close.
+		var rid: RID = (target.vehicle as CollisionObject3D).get_rid()
+		if not _excluded.has(rid):
+			_excluded.append(rid)
+			_arm.add_excluded_object(rid)
+		want_len = distance * 2.1
 	if not _zoomed:
 		_arm.spring_length = lerpf(_arm.spring_length, want_len, 1.0 - exp(-3.0 * delta))
 	var want_pitch := deg_to_rad(-30.0) if in_boat else pitch

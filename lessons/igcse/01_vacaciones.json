@@ -550,6 +550,24 @@
       }
     },
     {
+      "id": "r1-sweet-isla",
+      "kind": "regatta",
+      "at": [
+        225.0
+      ],
+      "gates": 10,
+      "time": 40.0,
+      "question": "Translate into Spanish:\n\"Next year I am going to travel by boat.\"",
+      "answers": [
+        "el año que viene voy a viajar en barco",
+        "el año próximo voy a viajar en barco",
+        "voy a viajar en barco el año que viene",
+        "el año que viene viajaré en barco"
+      ],
+      "hint": "el año que viene + ir a + infinitive; by boat = en barco.",
+      "explanation": "El año que viene voy a viajar en barco."
+    },
+    {
       "id": "r1-sweet-problema",
       "kind": "traveller",
       "question": "Háblame de un problema que tuviste durante las vacaciones.",
