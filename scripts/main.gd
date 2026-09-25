@@ -257,7 +257,28 @@ func _on_sweet(sweet: Node3D) -> void:
 	if _check_locked(sweet):
 		return
 	var result: String
-	if sweet.question.has("sentence"):
+	if sweet.question.has("interview"):
+		# A job interview: several sentence-builder questions in a row. Progress is kept if
+		# you walk away halfway.
+		var qs: Array = sweet.question.interview
+		var i: int = sweet.get_meta("interview_i", 0)
+		result = "correct"
+		while i < qs.size():
+			var ch: Dictionary = qs[i]
+			var stars: int = await ui.ask_sentence(ch, "LA ENTREVISTA (%d / %d)" % [i + 1, qs.size()])
+			if stars < int(ch.get("stars_needed", 3)):
+				result = "skipped"
+				break
+			i += 1
+			sweet.set_meta("interview_i", i)
+			if i < qs.size():
+				Game.sfx("correct")
+				Game.show_toast("\"Muy bien. Siguiente pregunta...\" (%d / %d)" % [i, qs.size()])
+				await get_tree().create_timer(0.8).timeout
+		if result == "correct":
+			Game.show_toast("\"¡Enhorabuena! ¡Estás contratado/a!\" You got the job!")
+			await get_tree().create_timer(1.0).timeout
+	elif sweet.question.has("sentence"):
 		# Sentence-builder sweet: earn enough stars to take it.
 		var ch: Dictionary = sweet.question.sentence
 		var stars: int = await ui.ask_sentence(ch, "SWEET CHALLENGE")

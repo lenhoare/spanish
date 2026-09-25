@@ -1,0 +1,952 @@
+{
+  "format": "lesson-island/1",
+  "title": "El trabajo",
+  "subject": "IGCSE - Módulo 7",
+  "intro": "Jobs, work experience, job interviews and your plans for the future.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Los trabajos",
+        "markdown": "# ¿En qué trabaja?\n**Es** médico/a, enfermero/a, profesor/a, abogado/a, ingeniero/a, cocinero/a,\nmecánico/a, periodista, veterinario/a, bombero/a, peluquero/a, dependiente/a...\n> No article with jobs: **Mi madre es enfermera.** (not *una enfermera*)\n\n**Trabaja en** un hospital, una oficina, una tienda, un taller, al aire libre.\n**Trabaja a tiempo completo / a tiempo parcial.**"
+      },
+      {
+        "title": "Mi trabajo ideal",
+        "markdown": "# ¿Qué te gustaría hacer en el futuro?\n**Me gustaría ser** veterinario/a **porque** me encantan los animales.\n**Quisiera trabajar** en el extranjero / con niños / al aire libre.\n**Sería** un trabajo **creativo, variado, bien pagado, estimulante**.\n\n# Lo más importante para mí\n**Lo más importante es** ganar mucho dinero / ayudar a la gente / tener un buen horario."
+      },
+      {
+        "title": "Experiencia laboral",
+        "markdown": "# ¿Has trabajado alguna vez?\n**Hice** mis prácticas laborales en una oficina. **Trabajé** en una tienda.\n**Tenía que** contestar el teléfono, archivar documentos, servir a los clientes.\n**Empezaba** a las nueve y **terminaba** a las cinco.\n**Aprendí** mucho. **Mis colegas eran** muy amables.\n\n> *Tenía que / empezaba* = imperfect (what it was usually like).\n> *Hice / aprendí* = preterite (the whole experience)."
+      },
+      {
+        "title": "La entrevista",
+        "markdown": "# Preguntas de la entrevista\n**¿Por qué quieres este trabajo?** - **Quiero** este trabajo **porque** me interesa...\n**¿Cómo eres?** - **Soy** responsable, trabajador/a, puntual, paciente, creativo/a.\n**¿Qué experiencia tienes?** - **El año pasado trabajé** en...\n**¿Hablas idiomas?** - **Hablo** inglés y **un poco de** español.\n**¿Cuándo puedes empezar?** - **Puedo empezar** el lunes."
+      },
+      {
+        "title": "El futuro",
+        "markdown": "# ¿Cuáles son tus planes?\n**Voy a** hacer el bachillerato. **Iré** a la universidad.\n**Haré** un año sabático y **viajaré** por el mundo.\n**Trabajaré** como voluntario/a en un orfanato.\n**Si** saco buenas notas, **estudiaré** medicina. (si + present, future)\n**Espero** / **Tengo la intención de** / **Quiero** + infinitive"
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\n1. A **verb in the right tense** - *me gustaría, trabajaré, trabajé*\n2. A **time phrase** - *en el futuro, el año pasado, después del instituto*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *lo más importante es, creo que, me encanta*\n5. A **second tense** - *el año pasado hice mis prácticas...*\n\n> **En el futuro me gustaría ser** periodista **porque me encanta** escribir.\n> **El año pasado hice** mis prácticas en un periódico."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r7-enfermera",
+      "question": "Translate into Spanish:\n\"My mother is a nurse.\"",
+      "answers": [
+        "mi madre es enfermera"
+      ],
+      "hint": "No article with jobs - page 1.",
+      "explanation": "Mi madre es enfermera."
+    },
+    {
+      "id": "r7-gustaria",
+      "question": "Translate into Spanish:\n\"I would like to be a vet.\"",
+      "answers": [
+        "me gustaría ser veterinario",
+        "me gustaría ser veterinaria"
+      ],
+      "hint": "me gustaría ser... - page 2.",
+      "explanation": "Me gustaría ser veterinario/a."
+    },
+    {
+      "id": "r7-hice",
+      "question": "El año pasado ____ mis prácticas laborales en una oficina.",
+      "choices": [
+        "hice",
+        "hacía",
+        "hago",
+        "haré"
+      ],
+      "correct": 0,
+      "hint": "El año pasado + the whole experience = preterite - page 3.",
+      "explanation": "Hice mis prácticas."
+    },
+    {
+      "id": "r7-tenia",
+      "question": "En mis prácticas ____ que contestar el teléfono.",
+      "choices": [
+        "tenía",
+        "tuve",
+        "tengo",
+        "tendré"
+      ],
+      "correct": 0,
+      "hint": "What it was usually like = imperfect - page 3.",
+      "explanation": "Tenía que contestar el teléfono."
+    },
+    {
+      "id": "r7-ire",
+      "question": "Translate into Spanish:\n\"I will go to university.\"",
+      "answers": [
+        "iré a la universidad",
+        "voy a ir a la universidad"
+      ],
+      "hint": "Future of ir - page 5.",
+      "explanation": "Iré a la universidad."
+    },
+    {
+      "id": "r7-sisaco",
+      "question": "Si ____ buenas notas, estudiaré medicina.\n(sacar - \"I get\")",
+      "answers": [
+        "saco"
+      ],
+      "hint": "si + present, then the future - page 5.",
+      "explanation": "Si saco buenas notas..."
+    }
+  ],
+  "chests": [
+    {
+      "id": "r7-sueldo",
+      "question": "\"el sueldo\" is...",
+      "choices": [
+        "the salary",
+        "the boss",
+        "the timetable",
+        "the job advert"
+      ],
+      "correct": 0,
+      "hint": "Money!",
+      "explanation": "El sueldo = the salary / pay.",
+      "level": 1
+    },
+    {
+      "id": "r7-parcial",
+      "question": "\"a tiempo parcial\" means...",
+      "choices": [
+        "part-time",
+        "full-time",
+        "overtime",
+        "on time"
+      ],
+      "correct": 0,
+      "hint": "Page 1.",
+      "explanation": "A tiempo parcial = part-time.",
+      "level": 1
+    },
+    {
+      "id": "r7-sabatico",
+      "question": "\"un año sabático\" is...",
+      "choices": [
+        "a gap year",
+        "a sabbath",
+        "a school year",
+        "a year abroad at university"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "Un año sabático = a gap year.",
+      "level": 2
+    },
+    {
+      "id": "r7-trabajador",
+      "question": "\"Soy trabajadora\" means...",
+      "choices": [
+        "I'm hard-working",
+        "I'm a worker",
+        "I'm working",
+        "I work a lot of hours"
+      ],
+      "correct": 0,
+      "hint": "Page 4 - personality.",
+      "explanation": "Trabajador/a = hard-working.",
+      "level": 2
+    },
+    {
+      "id": "r7-estudiare",
+      "question": "Si saco buenas notas, ____ medicina.",
+      "choices": [
+        "estudiaré",
+        "estudié",
+        "estudiaba",
+        "estudio"
+      ],
+      "correct": 0,
+      "hint": "si + present → future.",
+      "explanation": "Estudiaré medicina.",
+      "level": 3
+    },
+    {
+      "id": "r7-encantaba",
+      "question": "Antes ____ en un hospital, pero ahora trabajo al aire libre.",
+      "choices": [
+        "trabajaba",
+        "trabajo",
+        "trabajaré",
+        "trabaje"
+      ],
+      "correct": 0,
+      "hint": "Antes = what used to happen: imperfect.",
+      "explanation": "Antes trabajaba en un hospital.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "at": [
+        20.0,
+        0.84
+      ],
+      "question": "¿En qué te gustaría trabajar en el futuro? ¿Por qué?",
+      "tense": "conditional",
+      "topic_words": [
+        "trabaj",
+        "empleo",
+        "empresa",
+        "oficina",
+        "sueldo",
+        "dinero",
+        "ganar",
+        "jefe",
+        "jefa",
+        "colega",
+        "compañer",
+        "médico",
+        "medico",
+        "enfermer",
+        "profesor",
+        "abogad",
+        "ingenier",
+        "cocinero",
+        "mecánico",
+        "mecanico",
+        "periodista",
+        "veterinari",
+        "policía",
+        "policia",
+        "bombero",
+        "peluquer",
+        "dependient",
+        "camarer",
+        "carrera",
+        "universidad",
+        "estudiar",
+        "voluntari",
+        "año sabático",
+        "ano sabatico",
+        "futuro",
+        "experiencia",
+        "prácticas",
+        "practicas",
+        "ayudar",
+        "gente",
+        "niños",
+        "ninos",
+        "animales",
+        "viajar",
+        "extranjero",
+        "idiomas",
+        "equipo",
+        "horario"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "me gustaría ser",
+        "porque",
+        "lo más importante es",
+        "sin embargo",
+        "el año pasado",
+        "trabajé"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        150.0,
+        0.75
+      ],
+      "question": "Háblame de tus prácticas laborales o de un trabajo que hiciste.",
+      "tense": "preterite",
+      "topic_words": [
+        "trabaj",
+        "empleo",
+        "empresa",
+        "oficina",
+        "sueldo",
+        "dinero",
+        "ganar",
+        "jefe",
+        "jefa",
+        "colega",
+        "compañer",
+        "médico",
+        "medico",
+        "enfermer",
+        "profesor",
+        "abogad",
+        "ingenier",
+        "cocinero",
+        "mecánico",
+        "mecanico",
+        "periodista",
+        "veterinari",
+        "policía",
+        "policia",
+        "bombero",
+        "peluquer",
+        "dependient",
+        "camarer",
+        "carrera",
+        "universidad",
+        "estudiar",
+        "voluntari",
+        "año sabático",
+        "ano sabatico",
+        "futuro",
+        "experiencia",
+        "prácticas",
+        "practicas",
+        "ayudar",
+        "gente",
+        "niños",
+        "ninos",
+        "animales",
+        "viajar",
+        "extranjero",
+        "idiomas",
+        "equipo",
+        "horario",
+        "hice",
+        "trabajé",
+        "trabaje",
+        "aprendí",
+        "aprendi",
+        "tenía que",
+        "tenia que"
+      ],
+      "stars_needed": 3
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        345.0,
+        0.84
+      ],
+      "question": "¿Cuáles son tus planes para el futuro, aparte del trabajo?",
+      "tense": "future",
+      "topic_words": [
+        "trabaj",
+        "empleo",
+        "empresa",
+        "oficina",
+        "sueldo",
+        "dinero",
+        "ganar",
+        "jefe",
+        "jefa",
+        "colega",
+        "compañer",
+        "médico",
+        "medico",
+        "enfermer",
+        "profesor",
+        "abogad",
+        "ingenier",
+        "cocinero",
+        "mecánico",
+        "mecanico",
+        "periodista",
+        "veterinari",
+        "policía",
+        "policia",
+        "bombero",
+        "peluquer",
+        "dependient",
+        "camarer",
+        "carrera",
+        "universidad",
+        "estudiar",
+        "voluntari",
+        "año sabático",
+        "ano sabatico",
+        "futuro",
+        "experiencia",
+        "prácticas",
+        "practicas",
+        "ayudar",
+        "gente",
+        "niños",
+        "ninos",
+        "animales",
+        "viajar",
+        "extranjero",
+        "idiomas",
+        "equipo",
+        "horario",
+        "casarme",
+        "hijos",
+        "casa",
+        "viajaré",
+        "viajare",
+        "viviré",
+        "vivire",
+        "iré",
+        "ire",
+        "haré",
+        "hare"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "notice",
+      "at": [
+        175.0,
+        0.85
+      ],
+      "intro": "The job advert has been smudged! Write each word in the right form to fix it.",
+      "text": "Ahora me {1} mi trabajo porque trabajo al aire libre. Antes {2} en un hospital, pero el sueldo era muy malo. {3} empezar a las diez de la mañana y {4} a las cuatro de la tarde. El trabajo no {5} muy difícil; tenía que {6} el teléfono y mandar correos {7}. Me llevaba bien con mi jefe porque era muy comprensivo. {8} muchas cosas {9}.",
+      "hint": "Ahora = present (me encanta...). Antes = what used to happen: imperfect. Adjectives agree!",
+      "gaps": [
+        {
+          "verb": "encantar",
+          "answers": [
+            "encanta"
+          ]
+        },
+        {
+          "verb": "trabajar",
+          "answers": [
+            "trabajaba"
+          ]
+        },
+        {
+          "verb": "soler",
+          "answers": [
+            "Solía",
+            "solía"
+          ]
+        },
+        {
+          "verb": "terminar",
+          "answers": [
+            "terminaba"
+          ]
+        },
+        {
+          "verb": "ser",
+          "answers": [
+            "era"
+          ]
+        },
+        {
+          "verb": "contestar",
+          "answers": [
+            "contestar"
+          ]
+        },
+        {
+          "verb": "electrónico",
+          "answers": [
+            "electrónicos"
+          ]
+        },
+        {
+          "verb": "aprender",
+          "answers": [
+            "Aprendí",
+            "aprendí"
+          ]
+        },
+        {
+          "verb": "nuevo",
+          "answers": [
+            "nuevas"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "at": [
+        100.0,
+        0.82
+      ],
+      "sign": "Mi primer trabajo",
+      "greeting": "¿Quién lo dice?",
+      "speakers": [
+        {
+          "name": "Rafael",
+          "bubble": "Trabajé en una empresa.",
+          "character": "character-male-b",
+          "review": "# Rafael\n\nMi primer trabajo fue en una empresa de marketing y lo recuerdo perfectamente. Era un trabajo administrativo, así que sacaba muchas fotocopias, archivaba documentos y me encargaba de repartir el correo. No era un trabajo muy interesante, pero mis colegas eran muy amables y aprendí mucho sobre el mundo laboral."
+        },
+        {
+          "name": "Elena",
+          "bubble": "Trabajé en la biblioteca.",
+          "character": "character-female-c",
+          "review": "# Elena\n\nMi primera experiencia de trabajo tuvo lugar en la biblioteca de la universidad. El sueldo no era muy bueno, sin embargo, el horario era fantástico porque me permitía asistir a clase y aún tenía tiempo para estudiar. Mis tareas eran muy variadas: colocaba y organizaba los libros, estaba en la recepción dando la bienvenida a estudiantes y muchas veces ayudaba en la sala de ordenadores."
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién organizaba los papeles y los documentos?",
+          "choices": [
+            "Rafael",
+            "Elena",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Photocopies, files...",
+          "explanation": "Rafael - archivaba documentos."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién no ganaba mucho dinero?",
+          "choices": [
+            "Rafael",
+            "Elena",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "El sueldo...",
+          "explanation": "Elena - el sueldo no era muy bueno."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién podía trabajar y estudiar a la vez?",
+          "choices": [
+            "Rafael",
+            "Elena",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "The timetable...",
+          "explanation": "Elena - el horario le permitía asistir a clase."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién trabajaba con gente simpática?",
+          "choices": [
+            "Rafael",
+            "Elena",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Colleagues...",
+          "explanation": "Rafael - sus colegas eran muy amables."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién hablaba con los alumnos de la universidad?",
+          "choices": [
+            "Rafael",
+            "Elena",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "At reception...",
+          "explanation": "Elena - daba la bienvenida a estudiantes."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién aprendió algo de su trabajo?",
+          "choices": [
+            "Rafael",
+            "Elena",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Look for 'aprendí'.",
+          "explanation": "Rafael - aprendió mucho sobre el mundo laboral."
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "at": [
+        255.0,
+        0.72
+      ],
+      "name": "Diego",
+      "character": "character-male-f",
+      "color": "#f28c28",
+      "turns": [
+        {
+          "them": [
+            "¡Hola! Estoy buscando un trabajo para el verano.",
+            "¿Tú trabajas?"
+          ],
+          "task": "Say whether you work (or not) and where: trabajo en..., no trabajo pero...",
+          "hint": "Use the present: trabajo en una tienda, hago de canguro, no trabajo porque...",
+          "need": [
+            {
+              "all": [
+                "\\b(trabajo|no trabajo|ayudo|hago de|cuido|reparto|lavo|paseo|trabajaba|trabaje)\\b"
+              ],
+              "reply": [
+                "¡Ah, qué interesante!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Qué te gustaría hacer en el futuro?"
+          ],
+          "task": "Say what job you'd like: me gustaría ser..., quiero ser...",
+          "hint": "Use 'me gustaría ser' or 'quiero ser' + a job (médico, profesora, periodista...).",
+          "need": [
+            {
+              "all": [
+                "\\b(me gustaria|quiero|quisiera|espero|voy a|sere|seria|tengo la intencion de)\\b"
+              ],
+              "reply": [
+                "¡Qué guay! Yo quiero ser bombero."
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Y qué es lo más importante para ti en un trabajo?"
+          ],
+          "task": "Say what matters most: lo más importante es...",
+          "hint": "Start 'Lo más importante es...' + ganar dinero / ayudar a la gente / tener buenos colegas.",
+          "need": [
+            {
+              "all": [
+                "\\b(lo mas importante|lo que mas|para mi|es importante|me importa|prefiero)\\b"
+              ],
+              "reply": [
+                "Estoy de acuerdo."
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "Oye, hay una entrevista en la oficina de empleo. ¿Vienes conmigo mañana?"
+          ],
+          "task": "Say yes - or say you can't and give a reason.",
+          "hint": "Say 'sí, vale' / '¡claro!' - or 'no puedo porque tengo que...'.",
+          "need": [
+            {
+              "all": [
+                "\\bno puedo\\b",
+                "\\b(porque|ya que|tengo que)\\b"
+              ],
+              "reply": [
+                "¡Qué pena! ¡Deséame suerte!"
+              ]
+            },
+            {
+              "all": [
+                "\\b(si|vale|claro|genial|de acuerdo|por supuesto|me encantaria|me gustaria|guay|venga|perfecto)\\b"
+              ],
+              "none": [
+                "\\bno\\b"
+              ],
+              "reply": [
+                "¡Genial! ¡Nos vemos allí!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¡Hasta mañana!"
+          ]
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r7-sweet-entrevista",
+      "kind": "interview",
+      "at": [
+        300.0,
+        0.7
+      ],
+      "question": "La entrevista",
+      "interview": [
+        {
+          "question": "La jefa: ¿Por qué quieres este trabajo?",
+          "tense": "present",
+          "topic_words": [
+            "trabaj",
+            "empleo",
+            "empresa",
+            "oficina",
+            "sueldo",
+            "dinero",
+            "ganar",
+            "jefe",
+            "jefa",
+            "colega",
+            "compañer",
+            "médico",
+            "medico",
+            "enfermer",
+            "profesor",
+            "abogad",
+            "ingenier",
+            "cocinero",
+            "mecánico",
+            "mecanico",
+            "periodista",
+            "veterinari",
+            "policía",
+            "policia",
+            "bombero",
+            "peluquer",
+            "dependient",
+            "camarer",
+            "carrera",
+            "universidad",
+            "estudiar",
+            "voluntari",
+            "año sabático",
+            "ano sabatico",
+            "futuro",
+            "experiencia",
+            "prácticas",
+            "practicas",
+            "ayudar",
+            "gente",
+            "niños",
+            "ninos",
+            "animales",
+            "viajar",
+            "extranjero",
+            "idiomas",
+            "equipo",
+            "horario",
+            "quiero",
+            "me interesa",
+            "me encanta",
+            "responsable",
+            "puntual"
+          ],
+          "stars_needed": 3
+        },
+        {
+          "question": "La jefa: ¿Qué experiencia tienes? Háblame de un trabajo que hiciste.",
+          "tense": "preterite",
+          "topic_words": [
+            "trabaj",
+            "empleo",
+            "empresa",
+            "oficina",
+            "sueldo",
+            "dinero",
+            "ganar",
+            "jefe",
+            "jefa",
+            "colega",
+            "compañer",
+            "médico",
+            "medico",
+            "enfermer",
+            "profesor",
+            "abogad",
+            "ingenier",
+            "cocinero",
+            "mecánico",
+            "mecanico",
+            "periodista",
+            "veterinari",
+            "policía",
+            "policia",
+            "bombero",
+            "peluquer",
+            "dependient",
+            "camarer",
+            "carrera",
+            "universidad",
+            "estudiar",
+            "voluntari",
+            "año sabático",
+            "ano sabatico",
+            "futuro",
+            "experiencia",
+            "prácticas",
+            "practicas",
+            "ayudar",
+            "gente",
+            "niños",
+            "ninos",
+            "animales",
+            "viajar",
+            "extranjero",
+            "idiomas",
+            "equipo",
+            "horario",
+            "hice",
+            "trabajé",
+            "trabaje",
+            "ayudé",
+            "ayude"
+          ],
+          "stars_needed": 3
+        },
+        {
+          "question": "La jefa: ¿Dónde te ves dentro de diez años?",
+          "tense": "future",
+          "topic_words": [
+            "trabaj",
+            "empleo",
+            "empresa",
+            "oficina",
+            "sueldo",
+            "dinero",
+            "ganar",
+            "jefe",
+            "jefa",
+            "colega",
+            "compañer",
+            "médico",
+            "medico",
+            "enfermer",
+            "profesor",
+            "abogad",
+            "ingenier",
+            "cocinero",
+            "mecánico",
+            "mecanico",
+            "periodista",
+            "veterinari",
+            "policía",
+            "policia",
+            "bombero",
+            "peluquer",
+            "dependient",
+            "camarer",
+            "carrera",
+            "universidad",
+            "estudiar",
+            "voluntari",
+            "año sabático",
+            "ano sabatico",
+            "futuro",
+            "experiencia",
+            "prácticas",
+            "practicas",
+            "ayudar",
+            "gente",
+            "niños",
+            "ninos",
+            "animales",
+            "viajar",
+            "extranjero",
+            "idiomas",
+            "equipo",
+            "horario",
+            "viviré",
+            "vivire",
+            "seré",
+            "sere",
+            "tendré",
+            "tendre",
+            "diez años",
+            "diez anos"
+          ],
+          "stars_needed": 3
+        }
+      ]
+    },
+    {
+      "id": "r7-sweet-cinta",
+      "kind": "sorter",
+      "at": [
+        60.0,
+        0.76
+      ],
+      "need": 6,
+      "question": "Translate into Spanish:\n\"I would like to work abroad.\"",
+      "answers": [
+        "me gustaría trabajar en el extranjero",
+        "quisiera trabajar en el extranjero",
+        "me gustaria trabajar en el extranjero"
+      ],
+      "hint": "Page 2 - me gustaría + infinitive; abroad = en el extranjero.",
+      "explanation": "Me gustaría trabajar en el extranjero.",
+      "jobs": [
+        {
+          "job": "médico",
+          "items": [
+            [
+              "un botiquín",
+              "proc/firstaid",
+              3.0
+            ],
+            [
+              "una mascarilla",
+              "proc/mask",
+              3.5
+            ]
+          ]
+        },
+        {
+          "job": "cocinero",
+          "items": [
+            [
+              "una sartén",
+              "proc/pan",
+              3.0
+            ],
+            [
+              "unos huevos",
+              "food/egg",
+              5.0
+            ]
+          ]
+        },
+        {
+          "job": "profesor",
+          "items": [
+            [
+              "unos libros",
+              "furniture/books",
+              8.0
+            ],
+            [
+              "una pizarra",
+              "proc/chalkboard",
+              3.0
+            ]
+          ]
+        },
+        {
+          "job": "mecánico",
+          "items": [
+            [
+              "una llave inglesa",
+              "proc/wrench",
+              3.0
+            ],
+            [
+              "una rueda",
+              "proc/tyre",
+              3.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r7-sweet-grua",
+      "kind": "crane",
+      "at": [
+        215.0,
+        0.78
+      ],
+      "question": "Translate into Spanish:\n\"I am going to take a gap year.\"",
+      "answers": [
+        "voy a hacer un año sabático",
+        "haré un año sabático",
+        "voy a tomar un año sabático"
+      ],
+      "hint": "Page 5 - ir a + hacer; a gap year = un año sabático.",
+      "explanation": "Voy a hacer un año sabático."
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Estás contratado! You conquered Isla 7."
+  }
+}

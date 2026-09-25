@@ -60,6 +60,8 @@ func _run() -> void:
 			await _retos5(p, cam)
 		elif Game.current_island == 5:
 			await _retos6(p, cam)
+		elif Game.current_island == 6:
+			await _retos7(p, cam)
 		else:
 			await _retos1(p, cam)
 		return
@@ -1560,7 +1562,7 @@ func _retos6(p: CharacterBody3D, cam) -> void:
 	_teleport(p, cam, rs.to_global(Vector3(0, 0.3, 8.0)), face_rs)
 	cam.pitch = deg_to_rad(-12)
 	await _wait(1.0)
-	await _shot("r6_04_customers")
+	await _aerial("r6_04_customers", rs.to_global(Vector3(0, 1.2, 1.5)), 2.5, (-rs.global_position.normalized()) * 8.0)
 	var dishes: Array = rs.reto.dishes
 	var idx := func(id: String) -> int:
 		for k in dishes.size():
@@ -1589,14 +1591,24 @@ func _retos6(p: CharacterBody3D, cam) -> void:
 	_teleport(p, cam, boat.global_position + Vector3(0, 1.5, 0), 0.0)
 	await _wait(0.6)
 	print("FISHING: riding=%s" % (p.vehicle != null))
-	var goal := Vector2(w.fishing.global_position.x, w.fishing.global_position.z)
-	Input.action_press("move_forward")
+	# Row to where the fish will leap next (the leaps are evenly spaced along a line).
+	var fs = w.fishing
 	var steps := 0
-	while steps < 240 and rs.carrying != "fish":
+	var rowing := false
+	while steps < 600 and rs.carrying != "fish":
 		steps += 1
-		var bp := Vector2(boat.global_position.x, boat.global_position.z)
-		var to := goal - bp
+		var np = fs.next_point()
+		var target: Vector3 = fs.to_global(np) if np != null else fs.global_position
+		var to := Vector2(target.x - boat.global_position.x, target.z - boat.global_position.z)
 		cam.yaw = atan2(-to.x, -to.y)
+		var want := to.length() > 1.2
+		if want and not rowing:
+			Input.action_press("move_forward")
+		elif not want and rowing:
+			Input.action_release("move_forward")
+		rowing = want
+		if steps == 25:
+			await _shot("r6_06a_fish_jump")
 		await _wait(0.1)
 	Input.action_release("move_forward")
 	print("  caught=%s carrying=%s after %.1f s" % [w.fishing.caught, rs.carrying, steps * 0.1])
@@ -1606,6 +1618,10 @@ func _retos6(p: CharacterBody3D, cam) -> void:
 		boat.rider = null
 		p.unride(rs.table_spot(0) + rs.global_transform.basis.z * 2.0)
 	await _wait(0.3)
+	# Walk past the counter with the fish: it must NOT be swapped for a dish.
+	_teleport(p, cam, rs.dish_spot(2), face_rs)
+	await _wait(0.5)
+	print("  after passing the counter: carrying=%s (want fish)" % rs.carrying)
 	_teleport(p, cam, rs.table_spot(0) + rs.global_transform.basis.z * 2.0, face_rs)
 	await _wait(0.4)
 	_teleport(p, cam, rs.table_spot(0), face_rs)
@@ -1676,6 +1692,151 @@ func _retos6(p: CharacterBody3D, cam) -> void:
 		cam.pitch = deg_to_rad(-15)
 		await _wait(0.8)
 		await _shot("r6_11_reto_%d_%s" % [i, str(r.reto.get("kind", ""))])
+		i += 1
+	print("SWEETS: %d / %d   RETOS: %d / %d" % [Game.sweets, Game.total_sweets, Game.retos_done, Game.total_retos])
+	get_tree().quit()
+
+
+## La Isla de los Retos, Isla 7 (El trabajo): the interview, the conveyor belt, the crane.
+func _retos7(p: CharacterBody3D, cam) -> void:
+	var w = main.world
+	print("RETOS7: retos=%d sweets=%d" % [Game.total_retos, Game.total_sweets])
+	await _aerial("r7_01_island", Vector3.ZERO, 95.0, Vector3(0, 0, 45))
+	var so = w.sorter
+	await _aerial("r7_02_sorter", so.to_global(Vector3(0, 1, 0)), 9.0, (-so.global_position.normalized()) * 16.0)
+	var cr = w.crane
+	var side: Vector3 = cr.global_transform.basis.z
+	await _aerial("r7_03_crane", cr.to_global(Vector3(1, 6, 0)), 3.0, side * 22.0)
+
+	# La cinta: stand on the right pad for each thing before it reaches the scanner.
+	var face: float = so.rotation.y
+	_teleport(p, cam, so.pad_spot(0) + so.global_transform.basis.z * 6.0, face)
+	cam.pitch = deg_to_rad(-15)
+	await _wait(1.0)
+	var t0 := Time.get_ticks_msec()
+	var wrong_done := false
+	while not so.done and Time.get_ticks_msec() - t0 < 90000:
+		var it = so.next_item()
+		if it != null:
+			var j: int = it.job
+			if not wrong_done:
+				j = (j + 1) % 4
+				wrong_done = true
+			_teleport(p, cam, so.pad_spot(j), face)
+		await _wait(0.4)
+		if so.sorted == 2 and Time.get_ticks_msec() - t0 < 40000:
+			await _shot("r7_04_sorting")
+	print("SORTER: sorted=%d done=%s sweet visible=%s" % [so.sorted, so.done, so.sweet.visible])
+	_teleport(p, cam, so.sweet.global_position + Vector3(0, -0.6, 0), face)
+	await _wait(0.8)
+	var ln: LineEdit = _first("LineEdit")
+	if ln:
+		ln.text = "me gustaria trabajar en el extranjero"
+		_press("Check!")
+		await _wait(0.4)
+		_press("Grab the sweet!")
+		await _wait(1.0)
+	print("  sweets now %d" % Game.sweets)
+
+	# La grúa: get on at the bottom, ride up, walk across to the stack.
+	var t1 := Time.get_ticks_msec()
+	while cr.lift.position.y > cr.BOTTOM + 0.01 and Time.get_ticks_msec() - t1 < 20000:
+		await _wait(0.1)
+	_teleport(p, cam, cr.lift.global_position + Vector3(0, cr.CONT_H + 0.4, 0), cr.rotation.y)
+	await _wait(0.4)
+	var start_y := p.global_position.y
+	var peak := start_y
+	var t2 := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - t2 < 9000:
+		await _wait(0.2)
+		peak = maxf(peak, p.global_position.y)
+		if cr.lift.position.y > cr.top_y() - cr.CONT_H:
+			break
+	print("CRANE ride: from y=%.1f up to y=%.1f (stack top %.1f)" % [start_y, peak, cr.to_global(Vector3(0, cr.top_y(), 0)).y])
+	await _shot("r7_05_crane_top")
+	# Step across (+X local).
+	var xdir: Vector3 = cr.global_transform.basis.x
+	cam.yaw = atan2(-xdir.x, -xdir.z)
+	Input.action_press("move_forward")
+	await _wait(0.9)
+	Input.action_release("move_forward")
+	await _wait(0.6)
+	print("  after stepping across: y=%.1f, on the stack=%s" % [p.global_position.y, p.global_position.y > cr.to_global(Vector3(0, cr.top_y() - 0.5, 0)).y])
+	var cs = w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == cr.position)[0]
+	_teleport(p, cam, cs.global_position + Vector3(0, -0.5, 0), cam.yaw)
+	await _wait(0.8)
+	ln = _first("LineEdit")
+	if ln:
+		ln.text = "voy a hacer un año sabático"
+		_press("Check!")
+		await _wait(0.4)
+		_press("Grab the sweet!")
+		await _wait(1.0)
+
+	# La entrevista: three questions in a row; leave after the first, come back.
+	var of = w.office
+	var isw = w.sweets.filter(func(s): return is_instance_valid(s) and s.get_meta("area") == of.position)[0]
+	_teleport(p, cam, of.to_global(Vector3(0, 0.3, 6.0)), of.rotation.y)
+	await _wait(0.8)
+	await _shot("r7_06_office")
+	var answers := ["Quiero este trabajo porque me encanta ayudar a la gente y soy muy responsable, además el año pasado trabajé en una tienda.",
+		"El verano pasado trabajé en una oficina y aprendí mucho porque mis colegas eran muy simpáticos.",
+		"Dentro de diez años seré médico porque me encanta ayudar a la gente, y ahora estudio mucho."]
+	_teleport(p, cam, isw.global_position + Vector3(0, -0.4, 0), of.rotation.y)
+	await _wait(0.8)
+	var box: TextEdit = _first("TextEdit")
+	if box:
+		box.text = answers[0]
+		_press("Comprobar")
+		await _wait(0.4)
+		await _shot("r7_07_interview_q1")
+		_press("¡Enviar!")
+		await _wait(2.0)
+	box = _first("TextEdit")
+	if box:
+		_press("Salir")
+		await _wait(0.5)
+	print("INTERVIEW left after q1: progress=%d" % isw.get_meta("interview_i", 0))
+	_teleport(p, cam, of.to_global(Vector3(0, 0.3, 6.0)), of.rotation.y)
+	await _wait(2.0)
+	_teleport(p, cam, isw.global_position + Vector3(0, -0.4, 0), of.rotation.y)
+	await _wait(0.8)
+	for k in [1, 2]:
+		box = _first("TextEdit")
+		if not box:
+			break
+		box.text = answers[k]
+		_press("Comprobar")
+		await _wait(0.4)
+		_press("¡Enviar!")
+		await _wait(2.0)
+	await _wait(1.5)
+	print("INTERVIEW: sweet collected=%s" % (not is_instance_valid(isw) or isw.collected))
+
+	var chat = w.retos.filter(func(r): return str(r.reto.get("kind", "")) == "chat")[0]
+	_teleport(p, cam, chat.to_global(Vector3(0, 0.3, 1.2)), cam.yaw)
+	await _chat(["Trabajo en una tienda los sábados.", "Me gustaría ser periodista.", "Lo más importante es ayudar a la gente.", "¡Sí, claro!"], "r7_08")
+	print("CHAT: done=%s" % chat.done)
+	var notice = w.retos.filter(func(r): return str(r.reto.get("kind", "")) == "notice")[0]
+	_teleport(p, cam, notice.to_global(Vector3(0, 0.3, 1.2)), cam.yaw)
+	await _wait(0.8)
+	var edits := _all(main.ui.root, []).filter(func(n): return n is LineEdit and n.visible)
+	var gaps := ["encanta", "trabajaba", "Solía", "terminaba", "era", "contestar", "electrónicos", "Aprendí", "nuevas"]
+	for k in mini(edits.size(), gaps.size()):
+		edits[k].text = gaps[k]
+	_press("Comprobar")
+	await _wait(0.4)
+	_press("¡Arreglar el tablón!")
+	await _wait(1.0)
+	print("NOTICE: gaps=%d done=%s" % [edits.size(), notice.done])
+	var i := 0
+	for r in w.retos:
+		var pos: Vector3 = r.global_position
+		var from := pos + (-pos.normalized()) * 9.0 + Vector3(0, 0.3, 0)
+		_teleport(p, cam, from, atan2(-(pos - from).x, -(pos - from).z))
+		cam.pitch = deg_to_rad(-15)
+		await _wait(0.8)
+		await _shot("r7_09_reto_%d_%s" % [i, str(r.reto.get("kind", ""))])
 		i += 1
 	print("SWEETS: %d / %d   RETOS: %d / %d" % [Game.sweets, Game.total_sweets, Game.retos_done, Game.total_retos])
 	get_tree().quit()

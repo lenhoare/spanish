@@ -60,6 +60,34 @@ static func procedural(name: String) -> Node3D:
 			add.call(Vector3(0.02, 0.05, 0.01), Vector3(-0.03, 0.12, 0), Color(0.7, 0.7, 0.72))
 			add.call(Vector3(0.02, 0.05, 0.01), Vector3(0.03, 0.12, 0), Color(0.7, 0.7, 0.72))
 			add.call(Vector3(0.4, 0.025, 0.025), Vector3(0.24, 0.02, 0), Color(0.95, 0.95, 0.97))
+		"firstaid":     # un botiquín
+			add.call(Vector3(0.36, 0.26, 0.16), Vector3(0, 0.13, 0), Color(0.97, 0.97, 0.97))
+			add.call(Vector3(0.18, 0.05, 0.01), Vector3(0, 0.14, 0.085), Color(0.9, 0.15, 0.2))
+			add.call(Vector3(0.05, 0.18, 0.01), Vector3(0, 0.14, 0.085), Color(0.9, 0.15, 0.2))
+			add.call(Vector3(0.14, 0.04, 0.04), Vector3(0, 0.28, 0), Color(0.3, 0.3, 0.35))
+		"mask":         # una mascarilla
+			add.call(Vector3(0.3, 0.18, 0.05), Vector3(0, 0.12, 0), Color(0.6, 0.85, 1.0))
+			add.call(Vector3(0.42, 0.02, 0.02), Vector3(0, 0.17, -0.02), Color(0.95, 0.95, 0.97))
+			add.call(Vector3(0.42, 0.02, 0.02), Vector3(0, 0.07, -0.02), Color(0.95, 0.95, 0.97))
+		"pan":          # una sartén
+			add.call(Vector3(0.36, 0.06, 0.36), Vector3(0, 0.03, 0), Color(0.2, 0.2, 0.25))
+			add.call(Vector3(0.3, 0.02, 0.3), Vector3(0, 0.065, 0), Color(0.35, 0.35, 0.4))
+			add.call(Vector3(0.34, 0.04, 0.06), Vector3(0.33, 0.05, 0), Color(0.45, 0.28, 0.18))
+		"whisk":        # una batidora de varillas -> keep simple: un rodillo (rolling pin)
+			add.call(Vector3(0.36, 0.08, 0.08), Vector3(0, 0.05, 0), Color(0.9, 0.75, 0.5))
+			add.call(Vector3(0.12, 0.04, 0.04), Vector3(0.24, 0.05, 0), Color(0.65, 0.45, 0.3))
+			add.call(Vector3(0.12, 0.04, 0.04), Vector3(-0.24, 0.05, 0), Color(0.65, 0.45, 0.3))
+		"chalkboard":   # una pizarra
+			add.call(Vector3(0.44, 0.3, 0.03), Vector3(0, 0.17, 0), Color(0.55, 0.38, 0.25))
+			add.call(Vector3(0.38, 0.24, 0.01), Vector3(0, 0.17, 0.02), Color(0.15, 0.35, 0.25))
+			add.call(Vector3(0.14, 0.02, 0.005), Vector3(-0.06, 0.2, 0.027), Color(0.95, 0.95, 0.95))
+		"wrench":       # una llave inglesa
+			add.call(Vector3(0.4, 0.04, 0.07), Vector3(0, 0.03, 0), Color(0.7, 0.72, 0.78))
+			add.call(Vector3(0.08, 0.04, 0.16), Vector3(0.22, 0.03, 0), Color(0.7, 0.72, 0.78))
+			add.call(Vector3(0.14, 0.05, 0.08), Vector3(-0.1, 0.03, 0), Color(0.9, 0.3, 0.25))
+		"tyre":         # una rueda
+			add.call(Vector3(0.34, 0.34, 0.14), Vector3(0, 0.17, 0), Color(0.15, 0.15, 0.18))
+			add.call(Vector3(0.18, 0.18, 0.15), Vector3(0, 0.17, 0), Color(0.75, 0.75, 0.8))
 		"bunting":      # papel picado: two poles with a string of coloured flags
 			for x in [-1.6, 1.6]:
 				add.call(Vector3(0.1, 2.8, 0.1), Vector3(x, 1.4, 0), Color(0.55, 0.4, 0.3))

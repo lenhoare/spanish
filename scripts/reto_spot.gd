@@ -206,7 +206,8 @@ func _build_chat() -> void:
 		ap.get_animation(anim).loop_mode = Animation.LOOP_LINEAR
 		ap.play(anim)
 		if anim == "sit":
-			npc.position.y = 0.05
+			npc.position.y = 0.62         # up on the bench seat
+			npc.position.z = -0.2
 	# The floating phone: a dark case, a glowing screen and three message bubbles.
 	_float = Node3D.new()
 	add_child(_float)

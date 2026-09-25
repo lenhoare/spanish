@@ -19,6 +19,7 @@ var _carry_node: Node3D
 var _bubbles: Array[Label3D] = []
 var _chef_label: Label3D
 var _cool := 0.0
+var _nag := 0.0
 
 
 func setup(r: Dictionary) -> void:
@@ -75,9 +76,9 @@ func setup(r: Dictionary) -> void:
 		add_child(chair)
 		var who := Props.character(str(o.get("character", "character-female-a")))
 		who.scale = Vector3.ONE * 1.6
-		who.position = tpos + Vector3(0, 0, -1.2)
+		who.position = tpos + Vector3(0, 0.62, -1.0)     # sitting up on the chair
 		add_child(who)
-		_idle(who)
+		_sit(who)
 		var bubble := _label(self, str(o.say), 38, tpos + Vector3(0, 3.6, -1.2), Color.WHITE)
 		bubble.width = 380
 		bubble.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -94,6 +95,14 @@ func setup(r: Dictionary) -> void:
 		area.body_entered.connect(_on_table.bind(i))
 	if needs_fish():
 		_chef_label.text = str(r.get("chef_says", "¡Hoy no hay pescado!\n¡Pesca uno en el mar!"))
+
+
+func fish_served() -> bool:
+	var orders: Array = reto.get("orders", [])
+	for i in orders.size():
+		if str(orders[i].get("want", "")) == "fish" and served.has(i):
+			return true
+	return false
 
 
 func needs_fish() -> bool:
@@ -118,6 +127,7 @@ func table_spot(i: int) -> Vector3:
 
 func _process(delta: float) -> void:
 	_cool -= delta
+	_nag -= delta
 	if _carry_node and is_instance_valid(_carry_node):
 		_carry_node.rotation.y += delta * 2.0
 
@@ -130,6 +140,8 @@ func carry(id: String, model_name: String, scale := 2.5) -> void:
 	if _carry_node and is_instance_valid(_carry_node):
 		_carry_node.queue_free()
 	carrying = id
+	if id == "fish":
+		_chef_label.text = "¡Un pescado! ¡Llévalo a la mesa!"
 	_carry_node = Props.model(model_name)
 	_carry_node.scale = Vector3.ONE * scale
 	player.add_child(_carry_node)
@@ -148,6 +160,12 @@ func _on_dish(body: Node, k: int) -> void:
 		return
 	var d: Dictionary = reto.get("dishes", [])[k]
 	if carrying == str(d.id):
+		return
+	if carrying == "fish":
+		# The fish was hard work - never swap it away by walking past the counter.
+		if _nag <= 0:
+			_nag = 2.0
+			Game.show_toast("¡Llevas el pescado! Take it to the customer who ordered fish.")
 		return
 	carry(str(d.id), str(d.model), float(d.get("scale", 2.5)) * 0.8)
 	Game.sfx("click", 1.2)
@@ -190,6 +208,15 @@ func _on_table(body: Node, i: int) -> void:
 		sweet.visible = true
 		sweet.scale = Vector3.ONE * 0.01
 		create_tween().tween_property(sweet, "scale", Vector3.ONE, 0.6).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
+
+func _sit(n: Node3D) -> void:
+	var anims := n.find_children("*", "AnimationPlayer", true, false)
+	if anims.size() > 0:
+		var ap := anims[0] as AnimationPlayer
+		var an := "sit" if ap.has_animation("sit") else "idle"
+		ap.get_animation(an).loop_mode = Animation.LOOP_LINEAR
+		ap.play(an)
 
 
 func _idle(n: Node3D) -> void:

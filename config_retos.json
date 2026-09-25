@@ -22,6 +22,7 @@
     { "file": "lessons/igcse/03_familia.json", "title": "Familia y tecnología", "theme": "digital" },
     { "file": "lessons/igcse/04_festival.json", "title": "El tiempo libre", "theme": "festival" },
     { "file": "lessons/igcse/05_ciudad.json", "title": "La ciudad", "theme": "ciudad" },
-    { "file": "lessons/igcse/06_fiesta.json", "title": "La fiesta", "theme": "fiesta" }
+    { "file": "lessons/igcse/06_fiesta.json", "title": "La fiesta", "theme": "fiesta" },
+    { "file": "lessons/igcse/07_trabajo.json", "title": "El trabajo", "theme": "industria" }
   ]
 }

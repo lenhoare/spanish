@@ -132,7 +132,7 @@ static func normalise(d: Dictionary) -> Dictionary:
 			if q.has("sentence"):
 				s["sentence"] = q.sentence
 			# Set-piece settings (e.g. the timetable race's rounds, or "at" for its position).
-			for k in ["at", "rounds", "timetable", "rooms", "pads", "sign", "character", "greeting", "stalls", "budget", "model", "orders", "dishes", "chef", "chef_says", "fishing_at"]:
+			for k in ["at", "rounds", "timetable", "rooms", "pads", "sign", "character", "greeting", "stalls", "budget", "model", "orders", "dishes", "chef", "chef_says", "fishing_at", "interview", "jobs", "need"]:
 				if q.has(k):
 					s[k] = q[k]
 			out.sweets.append(s)

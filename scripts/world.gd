@@ -188,10 +188,11 @@ const THEMES := {
 	"candy":    {"grass": Color(0.82, 0.33, 0.55), "dirt": Color(0.9, 0.7, 0.45),   "sand": Color(1.0, 0.94, 0.82),  "sky": Color(0.5, 0.62, 1.0),   "horizon": Color(1.0, 0.86, 0.93), "deep": Color(0.3, 0.45, 0.9),  "shallow": Color(0.55, 0.78, 1.0),  "trees": ["tree", "tree", "tree-pine"]},
 	"tropical": {"grass": Color(0.32, 0.57, 0.22), "dirt": Color(0.85, 0.62, 0.38), "sand": Color(1.0, 0.9, 0.62), "sky": Color(0.15, 0.55, 0.98), "horizon": Color(0.75, 0.95, 1.0), "deep": Color(0.0, 0.45, 0.75), "shallow": Color(0.15, 0.85, 0.85), "trees": ["pirate/palm-straight", "pirate/palm-bend", "pirate/palm-detailed-bend", "tree"], "tree_scale": 0.75, "props": [["city/detail-parasol-a", 6.0, 14], ["city/detail-parasol-b", 6.0, 10]]},
 	"digital":  {"grass": Color(0.42, 0.42, 0.68), "dirt": Color(0.45, 0.33, 0.6),  "sand": Color(0.82, 0.78, 0.96), "sky": Color(0.16, 0.12, 0.42), "horizon": Color(0.98, 0.55, 0.78), "deep": Color(0.06, 0.18, 0.5), "shallow": Color(0.25, 0.55, 0.95), "sun": Color(1.0, 0.8, 0.9), "sun_energy": 0.9, "trees": ["tree-pine", "tree-pine-small", "tree"], "props": [["proc/lamp", 2.0, 16], ["proc/screen", 1.6, 8]]},
-	"festival": {"grass": Color(0.45, 0.72, 0.33), "dirt": Color(0.85, 0.55, 0.35), "sand": Color(1.0, 0.88, 0.62), "sky": Color(0.35, 0.55, 1.0), "horizon": Color(1.0, 0.85, 0.72), "deep": Color(0.07, 0.36, 0.8), "shallow": Color(0.2, 0.62, 0.95), "trees": ["fair/tree", "fair/tree-large"], "tree_scale": 2.2, "props": [["fair/stall-food", 2.6, 5], ["fair/stall-drinks", 2.6, 5], ["proc/speaker", 2.0, 8], ["arcade/claw-machine", 2.6, 4]]},
+	"festival": {"grass": Color(0.93, 0.56, 0.74), "dirt": Color(0.75, 0.42, 0.7), "sand": Color(1.0, 0.9, 0.82), "sky": Color(0.42, 0.55, 1.0), "horizon": Color(1.0, 0.85, 0.93), "deep": Color(0.25, 0.35, 0.85), "shallow": Color(0.45, 0.7, 1.0), "trees": ["fair/tree", "fair/tree-large"], "tree_scale": 2.2, "props": [["fair/stall-food", 2.6, 5], ["fair/stall-drinks", 2.6, 5], ["proc/speaker", 2.0, 8], ["arcade/claw-machine", 2.6, 4]]},
+	"industria": {"grass": Color(0.46, 0.49, 0.56), "dirt": Color(0.88, 0.55, 0.2), "sand": Color(0.85, 0.82, 0.74), "sky": Color(0.4, 0.6, 0.85), "horizon": Color(0.9, 0.9, 0.95), "deep": Color(0.08, 0.3, 0.55), "shallow": Color(0.2, 0.5, 0.75), "trees": ["tree-pine", "tree-pine-small"], "tree_scale": 0.9, "props": [["water/cargo-container-a", 1.4, 8, "box"], ["water/cargo-container-c", 1.4, 8, "box"], ["conveyor/box-large", 1.4, 10, "box"], ["barrel", 2.0, 10]]},
 	"fiesta":   {"grass": Color(0.5, 0.74, 0.32), "dirt": Color(0.86, 0.52, 0.32), "sand": Color(1.0, 0.86, 0.6), "sky": Color(0.32, 0.58, 1.0), "horizon": Color(1.0, 0.86, 0.66), "deep": Color(0.06, 0.36, 0.78), "shallow": Color(0.2, 0.64, 0.95), "trees": ["tree", "fair/tree-large", "tree"], "props": [["proc/bunting", 1.0, 12, ""], ["graveyard/lantern-candle", 2.6, 10], ["fair/stall-drinks", 2.6, 4]]},
-	"ciudad":   {"grass": Color(0.42, 0.7, 0.36), "dirt": Color(0.72, 0.52, 0.4), "sand": Color(0.98, 0.88, 0.66), "sky": Color(0.28, 0.55, 0.98), "horizon": Color(0.82, 0.92, 1.0), "deep": Color(0.05, 0.35, 0.75), "shallow": Color(0.18, 0.62, 0.92), "trees": ["tree", "tree", "fair/tree-large"], "tree_scale": 1.0, "props": [["holiday/bench", 2.4, 10], ["fair/trash", 2.6, 8], ["flag", 2.0, 6]]},
-	"campus":   {"grass": Color(0.38, 0.66, 0.3),  "dirt": Color(0.75, 0.5, 0.35),  "sand": Color(0.98, 0.86, 0.6),  "sky": Color(0.3, 0.58, 0.95),  "horizon": Color(0.85, 0.93, 1.0), "deep": Color(0.08, 0.38, 0.78), "shallow": Color(0.2, 0.65, 0.9),   "trees": ["tree", "tree", "tree-pine", "tree-pine-small"], "props": [["holiday/bench", 2.4, 14], ["flag", 2.0, 6]]},
+	"ciudad":   {"grass": Color(0.42, 0.74, 0.74), "dirt": Color(0.4, 0.5, 0.62), "sand": Color(1.0, 0.93, 0.78), "sky": Color(0.22, 0.52, 0.98), "horizon": Color(0.85, 0.94, 1.0), "deep": Color(0.03, 0.16, 0.5), "shallow": Color(0.12, 0.34, 0.78), "trees": ["tree", "tree", "fair/tree-large"], "tree_scale": 1.0, "props": [["holiday/bench", 2.4, 10], ["fair/trash", 2.6, 8], ["flag", 2.0, 6]]},
+	"campus":   {"grass": Color(0.86, 0.66, 0.28), "dirt": Color(0.72, 0.42, 0.26), "sand": Color(0.98, 0.88, 0.62), "sky": Color(0.35, 0.55, 0.92), "horizon": Color(1.0, 0.9, 0.75), "deep": Color(0.08, 0.35, 0.72), "shallow": Color(0.25, 0.6, 0.9), "trees": ["tree", "tree", "tree-pine", "tree-pine-small"], "props": [["holiday/bench", 2.4, 14], ["flag", 2.0, 6]]},
 	"snow":     {"grass": Color(0.84, 0.89, 0.97), "dirt": Color(0.58, 0.68, 0.85), "sand": Color(0.85, 0.9, 0.98),  "sky": Color(0.42, 0.58, 0.85), "horizon": Color(0.9, 0.95, 1.0),  "deep": Color(0.1, 0.3, 0.55),   "shallow": Color(0.4, 0.65, 0.85),  "trees": ["tree-snow", "tree-pine-snow", "tree-pine-snow-small"]},
 }
 
@@ -218,6 +219,9 @@ var restaurant: Node3D
 var fishing: Node3D
 var tomatina: Node3D
 var pinata: Node3D
+var sorter: Node3D
+var crane: Node3D
+var office: Node3D
 var market: Node3D
 var noria: Node3D
 var cards: Array[Node3D] = []
@@ -442,6 +446,15 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 			"pinata":
 				if pinata == null:
 					_build_pinata(q)
+			"sorter":
+				if sorter == null:
+					_build_sorter(q)
+			"crane":
+				if crane == null:
+					_build_crane(q)
+			"interview":
+				if office == null:
+					_build_office(q)
 			"directions":
 				if town == null:
 					_build_town(q)
@@ -1101,13 +1114,14 @@ func _build_fishing(angle_deg: float) -> void:
 	fishing = Node3D.new()
 	fishing.set_script(preload("res://scripts/fishing_spot.gd"))
 	add_child(fishing)
-	fishing.position = d.rotated(Vector3.UP, -0.25) * (MAIN_R + 32.0)
+	fishing.position = d.rotated(Vector3.UP, -0.25) * (MAIN_R + 36.0)
 	fishing.setup()
 	fishing.rowboat = rowboat
 	fishing.on_catch = func(): restaurant.carry("fish", "food/fish", 2.6)
+	fishing.active = func() -> bool: return not restaurant.done and restaurant.carrying != "fish" and not restaurant.fish_served()
 	# A few rocks on the way, and stars to row through.
-	for i in 3:
-		var t := (i + 1) / 4.0
+	for i in 2:
+		var t := 0.3 + i * 0.25
 		var mid: Vector3 = rowboat.global_position.lerp(fishing.position, t)
 		var off := side * (8.5 if i % 2 == 0 else -8.5)
 		Props.place(self, "pirate/rocks-a" if i % 2 == 0 else "pirate/rocks-b", mid + off + Vector3(0, -1.6, 0), _rng.randf() * TAU, 1.3, "")
@@ -1146,6 +1160,60 @@ func _build_pinata(q: Dictionary) -> void:
 	s.visible = false
 	s.gate = func() -> bool: return pinata.done
 	pinata.sweet = s
+
+
+## La cinta transportadora: send each thing to the right job.
+func _build_sorter(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [60.0, 0.76]))
+	sorter = Node3D.new()
+	sorter.set_script(preload("res://scripts/sorter.gd"))
+	sorter.position = pos
+	sorter.rotation.y = atan2(-pos.x, -pos.z)
+	add_child(sorter)
+	sorter.setup(q)
+	for x in range(-10, 11, 2):
+		for z in range(-4, 9, 2):
+			_keep(sorter.to_global(Vector3(x, 0, z)), 1.6)
+	var s := _add_sweet(q, "food/donut-chocolate", sorter.sweet_spot(), pos, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return sorter.done
+	sorter.sweet = s
+
+
+## La grúa: ride a container up to the top of a stack. Side-on to the middle of the island.
+func _build_crane(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [215.0, 0.78]))
+	crane = Node3D.new()
+	crane.set_script(preload("res://scripts/crane.gd"))
+	crane.position = pos
+	crane.rotation.y = atan2(-pos.x, -pos.z)
+	add_child(crane)
+	crane.setup()
+	for x in range(-6, 7, 2):
+		for z in range(-5, 6, 2):
+			_keep(crane.to_global(Vector3(x, 0, z)), 1.6)
+	_add_sweet(q, "food/cupcake", crane.sweet_spot(), pos, 3.2)
+	# Stars up the ride.
+	for y in [4.0, 7.0]:
+		_star(crane.to_global(Vector3(0, y + 1.2, 0)))
+
+
+## La entrevista: the boss's office, with the sweet on the desk. The interview itself is a run
+## of sentence-builder questions (see main._on_sweet).
+func _build_office(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [300.0, 0.7]))
+	var face := atan2(-pos.x, -pos.z)
+	office = Node3D.new()
+	office.set_script(preload("res://scripts/quest_stall.gd"))
+	office.position = pos
+	office.rotation.y = face
+	add_child(office)
+	office.setup({"sign": str(q.get("sign", "Oficina de empleo")), "character": str(q.get("character", "character-female-f")), "hat": "",
+		"speaker": "La jefa", "greeting": "Buenos días.\n¿Buscas trabajo?", "thanks": "", "awning": Color(0.3, 0.45, 0.75),
+		"counter": [["furniture/books", 8.0, -1.6]], "items": [], "passive": true})
+	_keep(pos, 5.0)
+	_keep(pos + Vector3(-pos.x, 0, -pos.z).normalized() * 4.0, 2.5)
+	_add_sweet(q, "food/cookie", office.to_global(Vector3(1.3, 0.75, 1.55)), pos, 4.0)
 
 
 ## A sweet tucked away somewhere quiet ("at": [angle, fraction]) - e.g. a message in a bottle
