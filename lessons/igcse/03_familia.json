@@ -1,0 +1,703 @@
+{
+  "format": "lesson-island/1",
+  "title": "Familia y tecnología",
+  "subject": "IGCSE - Módulo 3",
+  "intro": "Family, friends, phones and social media - plus how to text in Spanish.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Mi familia",
+        "markdown": "# Mi familia\nEn mi familia **somos** cuatro. **Vivo con** mi madre, mi padrastro y mi hermanastro.\n**Tengo** una hermana mayor / un hermano menor. **Soy** hijo único / hija única.\nMi abuela **se llama** Carmen. **Tiene** setenta años.\n\n- Mi padre **es** alto, **tiene** el pelo corto y **lleva** gafas.\n- Mi madre **es** muy comprensiva y graciosa.\n- Mis primos **viven** en Argentina.\n\n> **ser** for character (es simpático), **tener** for age and hair (tiene el pelo rubio)."
+      },
+      {
+        "title": "Relaciones",
+        "markdown": "# ¿Te llevas bien con tu familia?\n**Me llevo bien / mal con** mi hermano **porque**...\n**Nos llevamos** muy bien. **Nos apoyamos** en todo.\n**Discuto** con mi hermana **porque** siempre usa mi portátil.\n**Nos peleamos** a veces. Mis padres son **estrictos / comprensivos**.\n\n# Un buen amigo\n**Un buen amigo es alguien que** te escucha / te apoya / es leal / te hace reír.\n**Mi mejor amiga es** muy graciosa y **nos conocemos desde hace** diez años."
+      },
+      {
+        "title": "La tecnología",
+        "markdown": "# ¿Qué aplicaciones usas?\n**Uso** mi móvil **para** chatear con mis amigos / ver mis series favoritas /\ncontactar con mi familia / subir fotos / buscar y descargar música.\n\n**Es** útil, práctica, rápida, fácil de usar, gratis...\n**Es** una pérdida de tiempo. **Te engancha.**\n**Lo único malo es que** roba horas al sueño.\n**Estoy enganchado/a a** mi móvil. **Soy adicto/a a** los videojuegos."
+      },
+      {
+        "title": "¿Qué estás haciendo?",
+        "markdown": "# Estoy + gerund - what you are doing *right now*\n-ar → **-ando**: escuch**ando**, esper**ando**, descans**ando**\n-er / -ir → **-iendo**: com**iendo**, escrib**iendo**, hac**iendo**\nirregular: **leyendo**, **durmiendo**\n\n- **Estoy viendo** una peli. - **Está escuchando** música.\n\n# ¡Vamos a quedar!\n**¿Quieres salir conmigo?** - Sí, vale / ¡Claro! / **No puedo porque tengo que**...\n**¿A qué hora quedamos?** - **A las** siete.\n**¿Dónde quedamos?** - **Delante del** cine / **al lado de** la plaza / **enfrente de** mi casa."
+      },
+      {
+        "title": "Los peligros",
+        "markdown": "# Los peligros de internet\nel ciberacoso (cyberbullying) - la adicción - perder horas de sueño\nlo que publicas **se escapa para siempre**\n\n**Hay que** tener cuidado. **Se debe** proteger tu información.\n**No se debe** hablar con desconocidos.\n\n# Antes y ahora\n**En el pasado**, la gente no **tenía** móviles y **escribía** cartas.\n**Hoy en día**, casi todos los jóvenes **usan** las redes sociales.\n**Ayer mandé** diez mensajes y **subí** dos fotos."
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\n1. A **verb in the right tense** - *vivo, me llevo, uso*\n2. A **time phrase** - *hoy en día, ayer, a veces*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *creo que, lo único malo es que*\n5. A **second tense** - *ayer subí..., de pequeño tenía..., el fin de semana voy a...*\n\n> **Me llevo bien** con mi madre **porque** es comprensiva. **Sin embargo**,\n> **ayer discutí** con mi hermano **porque** usó mi portátil."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r3-llevo",
+      "question": "Translate into Spanish:\n\"I get on well with my sister.\"",
+      "answers": [
+        "me llevo bien con mi hermana",
+        "yo me llevo bien con mi hermana"
+      ],
+      "hint": "Page 2 - llevarse bien con.",
+      "explanation": "Me llevo bien con mi hermana."
+    },
+    {
+      "id": "r3-escuchando",
+      "question": "Estoy ____ música.\n(escuchar - \"listening\")",
+      "answers": [
+        "escuchando"
+      ],
+      "hint": "-ar verbs: -ando - page 4.",
+      "explanation": "Estoy escuchando música."
+    },
+    {
+      "id": "r3-mande",
+      "question": "Ayer ____ diez mensajes a mis amigos.",
+      "choices": [
+        "mandé",
+        "mando",
+        "mandaba",
+        "mandaré"
+      ],
+      "correct": 0,
+      "hint": "Ayer + a finished action = preterite - page 5.",
+      "explanation": "Mandé - I sent."
+    },
+    {
+      "id": "r3-nopuedo",
+      "question": "Translate into Spanish:\n\"I can't because I have to do my homework.\"",
+      "answers": [
+        "no puedo porque tengo que hacer los deberes",
+        "no puedo porque tengo que hacer mis deberes"
+      ],
+      "hint": "Page 4 - No puedo porque tengo que...",
+      "explanation": "No puedo porque tengo que hacer los deberes."
+    },
+    {
+      "id": "r3-uso",
+      "question": "Translate into Spanish:\n\"I use my mobile to chat with my friends.\"",
+      "answers": [
+        "uso mi móvil para chatear con mis amigos",
+        "uso el móvil para chatear con mis amigos",
+        "uso mi móvil para chatear con mis amigas"
+      ],
+      "hint": "Page 3 - uso... para...",
+      "explanation": "Uso mi móvil para chatear con mis amigos."
+    },
+    {
+      "id": "r3-leyendo",
+      "question": "Mi hermano está ____ un libro.",
+      "choices": [
+        "leyendo",
+        "leendo",
+        "leiendo",
+        "lee"
+      ],
+      "correct": 0,
+      "hint": "An irregular gerund - page 4.",
+      "explanation": "Leyendo - the i becomes y."
+    }
+  ],
+  "chests": [
+    {
+      "id": "r3-enganchado",
+      "question": "\"Estoy enganchado a mi móvil\" means...",
+      "choices": [
+        "I'm hooked on my phone",
+        "My phone is broken",
+        "I'm charging my phone",
+        "I've lost my phone"
+      ],
+      "correct": 0,
+      "hint": "Page 3.",
+      "explanation": "Enganchado = hooked.",
+      "level": 1
+    },
+    {
+      "id": "r3-perdida",
+      "question": "\"una pérdida de tiempo\" is...",
+      "choices": [
+        "a waste of time",
+        "a lost property office",
+        "a long time",
+        "a time zone"
+      ],
+      "correct": 0,
+      "hint": "Page 3.",
+      "explanation": "Una pérdida de tiempo = a waste of time.",
+      "level": 1
+    },
+    {
+      "id": "r3-quedamos",
+      "question": "\"¿Dónde quedamos?\" means...",
+      "choices": [
+        "Where shall we meet?",
+        "Where do we live?",
+        "Where are we staying?",
+        "Where is it?"
+      ],
+      "correct": 0,
+      "hint": "Page 4.",
+      "explanation": "Quedar = to arrange to meet.",
+      "level": 2
+    },
+    {
+      "id": "r3-enfrente",
+      "question": "\"enfrente de la estación\" means...",
+      "choices": [
+        "opposite the station",
+        "inside the station",
+        "behind the station",
+        "far from the station"
+      ],
+      "correct": 0,
+      "hint": "Page 4.",
+      "explanation": "Enfrente de = opposite.",
+      "level": 2
+    },
+    {
+      "id": "r3-tenia",
+      "question": "En el pasado, la gente no ____ móviles.",
+      "choices": [
+        "tenía",
+        "tuvo",
+        "tiene",
+        "tendrá"
+      ],
+      "correct": 0,
+      "hint": "Describing how things were = imperfect - page 5.",
+      "explanation": "No tenía móviles.",
+      "level": 3
+    },
+    {
+      "id": "r3-vere",
+      "question": "Si tengo tiempo el fin de semana, ____ una película.",
+      "choices": [
+        "veré",
+        "vi",
+        "veía",
+        "vería"
+      ],
+      "correct": 0,
+      "hint": "Si + present, then the future.",
+      "explanation": "Si tengo tiempo, veré una película.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "at": [
+        30.0,
+        0.84
+      ],
+      "question": "Describe a tu familia.",
+      "tense": "present",
+      "topic_words": [
+        "familia",
+        "padre",
+        "madre",
+        "padres",
+        "herman",
+        "abuel",
+        "prim",
+        "tío",
+        "tio",
+        "tía",
+        "tia",
+        "hijo",
+        "hija",
+        "padrastro",
+        "madrastra",
+        "amig",
+        "llevo",
+        "llevamos",
+        "discut",
+        "pele",
+        "apoy",
+        "comprensiv",
+        "casa",
+        "juntos"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "en mi familia somos",
+        "vivo con",
+        "me llevo bien con",
+        "porque",
+        "sin embargo",
+        "ayer",
+        "discutí"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        135.0,
+        0.84
+      ],
+      "question": "¿Cómo usaste la tecnología ayer?",
+      "tense": "preterite",
+      "topic_words": [
+        "móvil",
+        "movil",
+        "ordenador",
+        "portátil",
+        "portatil",
+        "tableta",
+        "internet",
+        "red social",
+        "redes sociales",
+        "aplicaci",
+        "app",
+        "mensaje",
+        "chate",
+        "foto",
+        "vídeo",
+        "video",
+        "subí",
+        "subi",
+        "mandé",
+        "mande",
+        "descargu",
+        "instagram",
+        "tiktok",
+        "whatsapp",
+        "youtube",
+        "juegos",
+        "series",
+        "música",
+        "musica",
+        "pantalla",
+        "tecnolog"
+      ],
+      "stars_needed": 3
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        310.0,
+        0.84
+      ],
+      "question": "¿Qué vas a hacer este fin de semana con tus amigos o tu familia?",
+      "tense": "future",
+      "topic_words": [
+        "familia",
+        "padre",
+        "madre",
+        "padres",
+        "herman",
+        "abuel",
+        "prim",
+        "tío",
+        "tio",
+        "tía",
+        "tia",
+        "hijo",
+        "hija",
+        "padrastro",
+        "madrastra",
+        "amig",
+        "llevo",
+        "llevamos",
+        "discut",
+        "pele",
+        "apoy",
+        "comprensiv",
+        "casa",
+        "juntos",
+        "móvil",
+        "movil",
+        "ordenador",
+        "portátil",
+        "portatil",
+        "tableta",
+        "internet",
+        "red social",
+        "redes sociales",
+        "aplicaci",
+        "app",
+        "mensaje",
+        "chate",
+        "foto",
+        "vídeo",
+        "video",
+        "subí",
+        "subi",
+        "mandé",
+        "mande",
+        "descargu",
+        "instagram",
+        "tiktok",
+        "whatsapp",
+        "youtube",
+        "juegos",
+        "series",
+        "música",
+        "musica",
+        "pantalla",
+        "tecnolog",
+        "fin de semana",
+        "cine",
+        "salir",
+        "quedar",
+        "partido",
+        "compras",
+        "parque"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "notice",
+      "at": [
+        195.0,
+        0.85
+      ],
+      "intro": "Someone hacked the notice board! Write each verb in the right form to fix it.",
+      "text": "En el pasado, la gente no {1} teléfonos móviles y {2} cartas. Hoy en día, casi todos los jóvenes {3} las redes sociales diariamente. Ayer yo {4} diez mensajes a mis amigos y {5} dos fotos. Si {6} tiempo el fin de semana, {7} una película en línea.",
+      "hint": "En el pasado = imperfect. Hoy en día = present. Ayer = preterite. Si + present... then future.",
+      "gaps": [
+        {
+          "verb": "tener",
+          "answers": [
+            "tenía"
+          ]
+        },
+        {
+          "verb": "escribir",
+          "answers": [
+            "escribía"
+          ]
+        },
+        {
+          "verb": "usar",
+          "answers": [
+            "usan"
+          ]
+        },
+        {
+          "verb": "mandar",
+          "answers": [
+            "mandé"
+          ]
+        },
+        {
+          "verb": "subir",
+          "answers": [
+            "subí"
+          ]
+        },
+        {
+          "verb": "tener",
+          "answers": [
+            "tengo"
+          ]
+        },
+        {
+          "verb": "ver",
+          "answers": [
+            "veré",
+            "voy a ver"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "at": [
+        345.0,
+        0.8
+      ],
+      "sign": "Redes sociales",
+      "greeting": "¿Quién lo publicó?",
+      "speakers": [
+        {
+          "name": "Carmen",
+          "bubble": "@carmen_mola",
+          "character": "character-female-b",
+          "review": "# @carmen_mola\n\nMi familia es un poco caótica, ¡jaja! Vivo con mi madre, mi padrastro y mis dos hermanastros. Me llevo bien con mi madre porque es muy comprensiva, pero discuto mucho con mi hermanastro mayor porque siempre usa mi portátil sin permiso. ¡Qué rollo! Ayer subí fotos del cumpleaños de mi abuela. Lo único malo de las redes sociales es que te enganchan: anoche solo dormí cinco horas."
+        },
+        {
+          "name": "Pablo",
+          "bubble": "@pablito_07",
+          "character": "character-male-f",
+          "review": "# @pablito_07\n\nSoy hijo único y vivo con mis padres y mi perro, Toby. Mis padres son bastante estrictos: no puedo usar el móvil a la hora de cenar. Creo que tienen razón, porque cenar juntos es importante. Uso las redes sociales para chatear con mis primos en Argentina y para ver vídeos de fútbol. Mi mejor amigo, Dani, es muy leal y gracioso. El fin de semana que viene vamos a ir al cine juntos."
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién menciona un animal?",
+          "choices": [
+            "Carmen",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who has a pet?",
+          "explanation": "Pablo - su perro, Toby."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién menciona a un abuelo o una abuela?",
+          "choices": [
+            "Carmen",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Look for a birthday...",
+          "explanation": "Carmen - el cumpleaños de su abuela."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién discute con un miembro de su familia?",
+          "choices": [
+            "Carmen",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who argues (discute)?",
+          "explanation": "Carmen - discute con su hermanastro."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién habla de las normas en casa?",
+          "choices": [
+            "Carmen",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who can't use their phone at dinner?",
+          "explanation": "Pablo - no puede usar el móvil a la hora de cenar."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién menciona el sueño?",
+          "choices": [
+            "Carmen",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who only slept five hours?",
+          "explanation": "Carmen - anoche solo durmió cinco horas."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién usa las redes sociales?",
+          "choices": [
+            "Carmen",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Photos... and chatting with cousins...",
+          "explanation": "Los dos - Carmen sube fotos; Pablo chatea con sus primos."
+        },
+        {
+          "id": "d7",
+          "question": "¿Quién habla de sus planes para el futuro?",
+          "choices": [
+            "Carmen",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Look for 'vamos a...'",
+          "explanation": "Pablo - vamos a ir al cine."
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "at": [
+        250.0,
+        0.72
+      ],
+      "name": "Sofía",
+      "character": "character-female-c",
+      "color": "#e0569b",
+      "turns": [
+        {
+          "them": [
+            "¡Hola! ¿Qué tal?",
+            "¿Qué estás haciendo ahora?"
+          ],
+          "task": "Tell Sofía what you're doing right now: estoy + -ando / -iendo.",
+          "hint": "Use estoy + a verb ending in -ando or -iendo: estoy escuchando música, estoy haciendo los deberes.",
+          "need": [
+            {
+              "all": [
+                "\\bestoy\\b",
+                "\\w+(ando|iendo|yendo)\\b"
+              ],
+              "reply": [
+                "¡Qué guay!",
+                "Yo estoy en casa, muy aburrida..."
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "Oye, ¿quieres ir al cine conmigo esta tarde?"
+          ],
+          "task": "Say yes - or say you can't and give a reason (No puedo porque...).",
+          "hint": "Say 'sí, vale' / '¡claro!' - or 'no puedo porque tengo que...'.",
+          "need": [
+            {
+              "all": [
+                "\\bno puedo\\b",
+                "\\b(porque|ya que|tengo que)\\b"
+              ],
+              "reply": [
+                "¡Qué rollo!",
+                "Bueno... ¡pues vamos mañana!"
+              ]
+            },
+            {
+              "all": [
+                "\\b(si|vale|claro|genial|de acuerdo|por supuesto|me encantaria|me gustaria|guay|venga|perfecto)\\b"
+              ],
+              "none": [
+                "\\bno\\b"
+              ],
+              "reply": [
+                "¡Genial! ¡Qué bien!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿A qué hora quedamos?"
+          ],
+          "task": "Suggest a time: a las...",
+          "hint": "Use 'a las' + a time: a las seis, a las siete y media, a la una.",
+          "need": [
+            {
+              "all": [
+                "\\ba las? (una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|\\d{1,2})\\b"
+              ],
+              "reply": [
+                "Vale, perfecto."
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Y dónde quedamos?"
+          ],
+          "task": "Say where to meet: delante de, al lado de, enfrente de...",
+          "hint": "Try 'delante del cine', 'al lado de la plaza' or 'enfrente de mi casa'.",
+          "need": [
+            {
+              "all": [
+                "\\b(delante|detras|al lado|enfrente|cerca|en la puerta|en la entrada|en el|en la|en mi casa|en tu casa)\\b"
+              ],
+              "reply": [
+                "¡Hecho!",
+                "Por cierto, ¿qué tal con tu familia? ¿Te llevas bien con ellos?"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [],
+          "task": "Tell her how you get on with your family: me llevo bien / mal con..., porque...",
+          "hint": "Say 'me llevo bien con mi madre porque es comprensiva' or 'nos llevamos bien'.",
+          "need": [
+            {
+              "all": [
+                "\\b(me llevo|nos llevamos|se lleva|me llevo muy)\\b"
+              ],
+              "reply": [
+                "¡Qué bien! Yo discuto mucho con mi hermano, ¡jaja!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "Bueno, tengo que irme.",
+            "¡Hasta luego!"
+          ]
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r3-sweet-antenas",
+      "kind": "towers",
+      "question": "Translate into Spanish:\n\"The only bad thing is that it gets you hooked.\"",
+      "answers": [
+        "lo único malo es que te engancha",
+        "lo unico malo es que te engancha"
+      ],
+      "hint": "Page 3 - lo único malo es que... / te engancha",
+      "explanation": "Lo único malo es que te engancha."
+    },
+    {
+      "id": "r3-sweet-circuito",
+      "kind": "circuit",
+      "question": "Translate into Spanish:\n\"I am reading a science fiction novel.\"",
+      "answers": [
+        "estoy leyendo una novela de ciencia ficción",
+        "estoy leyendo una novela de ciencia-ficción"
+      ],
+      "hint": "estar + gerund: leer → leyendo",
+      "explanation": "Estoy leyendo una novela de ciencia ficción."
+    },
+    {
+      "id": "r3-sweet-familia",
+      "kind": "grandma",
+      "question": "¿Por qué es importante pasar tiempo en familia?",
+      "sentence": {
+        "question": "La abuela asks: ¿Por qué es importante pasar tiempo en familia?",
+        "tense": "present",
+        "topic_words": [
+          "familia",
+          "padre",
+          "madre",
+          "padres",
+          "herman",
+          "abuel",
+          "prim",
+          "tío",
+          "tio",
+          "tía",
+          "tia",
+          "hijo",
+          "hija",
+          "padrastro",
+          "madrastra",
+          "amig",
+          "llevo",
+          "llevamos",
+          "discut",
+          "pele",
+          "apoy",
+          "comprensiv",
+          "casa",
+          "juntos",
+          "tiempo",
+          "importante",
+          "hablar",
+          "cenar",
+          "comer"
+        ],
+        "stars_needed": 3
+      }
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Conectado! You conquered Isla 3."
+  }
+}

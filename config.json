@@ -18,7 +18,7 @@
     { "file": "lessons/spanish/02_orientate.json",          "title": "¡Oriéntate!",            "theme": "sunset" },
     { "file": "lessons/spanish/03_en_forma.json",           "title": "En forma",               "theme": "mint" },
     { "file": "lessons/spanish/04_jovenes_en_accion.json",  "title": "Jóvenes en acción",      "theme": "lavender" },
-    { "file": "lessons/spanish/05_aventura_en_madrid.json", "title": "Una aventura en Madrid", "theme": "candy" },
+    { "file": "lessons/spanish/05_aventura_en_madrid.json", "title": "Una visita a la ciudad", "theme": "candy" },
     { "file": "lessons/spanish/06_tabla_de_verbos.json",    "title": "Repaso: los verbos",     "theme": "snow" }
   ]
 }

@@ -8,6 +8,9 @@ signal menu_pressed
 signal _question_done(result: String)
 signal _lesson_closed
 signal _results_done(choice: String)
+signal games_pressed
+signal _chooser_done(id: String)
+signal _panel_done(result: String)
 
 const PINK := Color("#f0508c")
 const PURPLE := Color("#7c6cf0")
@@ -27,6 +30,7 @@ var _coin_label: Label
 var _card_label: Label
 var _sweet_label: Label
 var _ingredient_label: Label
+var _retos_label: Label
 var _key_pill: Control
 var _timer_label: Label
 var _toast_box: PanelContainer
@@ -107,6 +111,7 @@ func _ready() -> void:
 	Game.sweets_changed.connect(_refresh)
 	Game.key_changed.connect(_refresh)
 	Game.ingredients_changed.connect(_refresh)
+	Game.retos_changed.connect(_refresh)
 	Game.toast.connect(show_toast)
 
 
@@ -126,6 +131,16 @@ func show_title() -> void:
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 12)
 	panel.add_child(v)
+
+	if Game.games.size() > 1 and not Game.game_locked:
+		var back := _button("< Juegos", Color("#9a94b8"))
+		back.add_theme_font_size_override("font_size", 20)
+		back.custom_minimum_size.y = 44
+		back.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		back.pressed.connect(func():
+			Game.sfx("click")
+			games_pressed.emit())
+		v.add_child(back)
 
 	var t := Label.new()
 	t.text = str(cfg.game_title)
@@ -350,6 +365,8 @@ func show_hud() -> void:
 		_sweet_label = _counter(bar, "sweet", Color("#ff6fb5"))
 	if Game.ingredients_total > 0:
 		_ingredient_label = _counter(bar, "bag", Color("#ffb43c"))
+	if Game.total_retos > 0:
+		_retos_label = _counter(bar, "letter", Color("#ffd23f"))
 	_key_pill = _counter(bar, "key", Color("#ffd23f")).get_parent().get_parent()
 	_key_pill.visible = false
 
@@ -463,6 +480,8 @@ func _refresh() -> void:
 	_card_label.text = "Bridge %d / %d" % [Game.cards_solved, Game.total_cards]
 	if _sweet_label:
 		_sweet_label.text = "%d / %d" % [Game.sweets, Game.total_sweets]
+	if _retos_label:
+		_retos_label.text = "Reto %d / %d" % [Game.retos_done, Game.total_retos]
 	if _ingredient_label:
 		_ingredient_label.text = "%d / %d" % [Game.ingredients.size(), Game.ingredients_total]
 	_key_pill.visible = Game.has_key
@@ -672,7 +691,7 @@ func ask_question(q: Dictionary, kind: String) -> String:
 	Game.ui_open = true
 	Game.sfx("card" if kind == "card" else "open")
 	var dim := _dim()
-	var accent: Color = {"card": PINK, "chest": ORANGE, "sweet": Color("#c04fd8")}.get(kind, PINK)
+	var accent: Color = {"card": PINK, "chest": ORANGE, "sweet": Color("#c04fd8"), "detective": Color("#2e86de")}.get(kind, PINK)
 	var card := _panel(CREAM, accent, 24, 8)
 	card.set_anchors_preset(Control.PRESET_CENTER)
 	card.custom_minimum_size = Vector2(minf(820, root.size.x - 40), 0)
@@ -685,7 +704,7 @@ func ask_question(q: Dictionary, kind: String) -> String:
 	card.add_child(v)
 
 	var head := Label.new()
-	head.text = {"card": "QUESTION CARD", "chest": "QUIZ CHEST", "sweet": "SWEET CHALLENGE  (extension)"}.get(kind, "QUESTION")
+	head.text = {"card": "QUESTION CARD", "chest": "QUIZ CHEST", "sweet": "SWEET CHALLENGE  (extension)", "detective": "RETO: ¿QUIÉN LO DICE?"}.get(kind, "QUESTION")
 	head.add_theme_font_override("font", _bold_font)
 	head.add_theme_font_size_override("font_size", 24)
 	head.add_theme_color_override("font_color", accent)
@@ -722,7 +741,7 @@ func ask_question(q: Dictionary, kind: String) -> String:
 	var finish_btn := _button("", GREEN)
 
 	var succeed := func(note: String):
-		if kind != "sweet":  # sweets are bonus - not part of the score
+		if kind not in ["sweet", "detective"]:  # bonus challenges - not part of the score
 			Game.record_attempt(q.id, true)
 		Game.sfx("correct")
 		answer_area.visible = false
@@ -733,20 +752,25 @@ func ask_question(q: Dictionary, kind: String) -> String:
 		feedback.add_theme_color_override("font_color", Color("#1f8a52"))
 		var msg: String = q.explanation if q.explanation != "" else "¡Muy bien, %s!" % Game.hero_name
 		feedback.text = msg if note == "" else msg + "\n" + note
-		finish_btn.text = {"card": "Build the bridge!", "chest": "Open the chest!", "sweet": "Grab the sweet!"}.get(kind, "Yay!")
+		finish_btn.text = {"card": "Build the bridge!", "chest": "Open the chest!", "sweet": "Grab the sweet!", "detective": "¡Siguiente!"}.get(kind, "Yay!")
 		finish_btn.custom_minimum_size.y = 70
 		bottom.add_child(finish_btn)
 		finish_btn.pressed.connect(func(): _question_done.emit("correct"))
 		_bounce(card)
 
 	var fail := func(lock: bool):
-		if kind != "sweet":  # sweets are bonus - not part of the score
+		if kind not in ["sweet", "detective"]:  # bonus challenges - not part of the score
 			Game.record_attempt(q.id, false)
 		Game.sfx("wrong")
 		feedback.visible = true
 		feedback.add_theme_color_override("font_color", Color("#c2410c"))
 		_shake(card)
-		if lock and kind == "chest":
+		if lock and kind == "detective":
+			answer_area.visible = false
+			head.text = "¡NO!"
+			feedback.text = "Not quite. %s\n\nRead the reviews again, then come back to the desk." % q.hint
+			leave.text = "OK"
+		elif lock and kind == "chest":
 			# Chests don't lock - just send the student back to the whiteboard.
 			answer_area.visible = false
 			head.text = "¡OH NO!"
@@ -850,6 +874,670 @@ func ask_question(q: Dictionary, kind: String) -> String:
 	return result
 
 
+# ------------------------------------------------------------------ game chooser
+
+## "Which game?" - one big card per game in games.json. Returns the chosen game's id.
+func show_game_chooser(games: Array) -> String:
+	var bg := ColorRect.new()
+	bg.color = Color("#6a5acd")
+	bg.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.add_child(bg)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var v := VBoxContainer.new()
+	v.alignment = BoxContainer.ALIGNMENT_CENTER
+	v.add_theme_constant_override("separation", 24)
+	bg.add_child(v)
+	v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var t := Label.new()
+	t.text = "¿A qué isla vas?"
+	t.add_theme_font_override("font", _title_font)
+	t.add_theme_font_size_override("font_size", 56)
+	t.add_theme_color_override("font_color", Color.WHITE)
+	t.add_theme_color_override("font_outline_color", PURPLE_DARK)
+	t.add_theme_constant_override("outline_size", 14)
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(t)
+	var row := VBoxContainer.new()      # games stacked one above the other
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 22)
+	row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	v.add_child(row)
+	for g in games:
+		var col := Color(str(g.get("color", "#f0508c")))
+		var b := _button("", col)
+		b.custom_minimum_size = Vector2(minf(560, root.size.x - 60), minf(150, root.size.y * 0.24))
+		row.add_child(b)
+		var inner := VBoxContainer.new()
+		inner.alignment = BoxContainer.ALIGNMENT_CENTER
+		inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		b.add_child(inner)
+		inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		for line in [[str(g.get("title", g.id)), 44, _title_font]]:
+			var l := Label.new()
+			l.text = line[0]
+			l.add_theme_font_override("font", line[2])
+			l.add_theme_font_size_override("font_size", line[1])
+			l.add_theme_color_override("font_color", Color.WHITE)
+			l.add_theme_color_override("font_outline_color", col.darkened(0.45))
+			l.add_theme_constant_override("outline_size", 8)
+			l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			inner.add_child(l)
+		var id := str(g.get("id", ""))
+		b.pressed.connect(func():
+			Game.sfx("open")
+			_chooser_done.emit(id))
+	# A small, out-of-the-way button for the teacher (bottom right): opens the page set as
+	# "teacher_games" in games.json, or says "Coming soon!" until there is one.
+	var teacher := _button("Teacher Games", Color("#9a94b8"))
+	teacher.add_theme_font_size_override("font_size", 16)
+	teacher.add_theme_constant_override("outline_size", 4)
+	teacher.custom_minimum_size = Vector2(0, 36)
+	for st in ["normal", "hover", "pressed"]:
+		var sb := teacher.get_theme_stylebox(st) as StyleBoxFlat
+		sb.content_margin_left = 12
+		sb.content_margin_right = 12
+		sb.content_margin_top = 4
+	bg.add_child(teacher)
+	teacher.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT, Control.PRESET_MODE_MINSIZE, 16)
+	teacher.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	teacher.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	teacher.modulate.a = 0.85
+	teacher.pressed.connect(func():
+		Game.sfx("click")
+		var url := Game.teacher_games_url
+		if url == "":
+			teacher.text = "Coming soon!"
+			get_tree().create_timer(2.0).timeout.connect(func():
+				if is_instance_valid(teacher):
+					teacher.text = "Teacher Games")
+		elif OS.has_feature("web"):
+			JavaScriptBridge.eval("window.location.href = new URL(%s, window.location.href).href" % JSON.stringify(url))
+		else:
+			OS.shell_open(url))
+	var chosen: String = await _chooser_done
+	bg.queue_free()
+	return chosen
+
+
+# ------------------------------------------------------------------ retos
+
+## The sentence builder: write an answer, see which IGCSE features it has, improve it.
+## Returns the stars of the answer that was sent (0 if the student left without sending).
+func ask_sentence(ch: Dictionary, title := "RETO: LA POSTAL") -> int:
+	Game.ui_open = true
+	Game.sfx("card")
+	var needed := int(ch.get("stars_needed", 3))
+	var target := str(ch.get("tense", "preterite"))
+	var dim := _dim()
+	var card := _panel(CREAM, Color("#e6a817"), 24, 8)
+	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.custom_minimum_size = Vector2(minf(960, root.size.x - 40), 0)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	dim.add_child(card)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 7)
+	card.add_child(v)
+
+	var head := Label.new()
+	head.text = title
+	head.add_theme_font_override("font", _bold_font)
+	head.add_theme_font_size_override("font_size", 22)
+	head.add_theme_color_override("font_color", Color("#c98a00"))
+	v.add_child(head)
+	var ql := Label.new()
+	ql.text = str(ch.get("question", ""))
+	ql.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	ql.add_theme_font_size_override("font_size", 28)
+	ql.add_theme_color_override("font_color", INK)
+	v.add_child(ql)
+	var aim := Label.new()
+	aim.text = "Aim for %d stars. Stars for: %s tense · second tense · connective · opinion · time phrase" % [needed, Marking.TENSE_NAMES.get(target, target).split(" ")[0]]
+	aim.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	aim.add_theme_font_size_override("font_size", 18)
+	aim.add_theme_color_override("font_color", Color("#8a84a8"))
+	v.add_child(aim)
+
+	var box := TextEdit.new()
+	box.placeholder_text = "Escribe aquí..."
+	box.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	box.custom_minimum_size.y = 84
+	box.add_theme_font_size_override("font_size", 24)
+	v.add_child(box)
+	if OS.has_feature("web") and Game.is_touch():
+		box.editable = false
+		box.placeholder_text = "Tap here to write..."
+		box.gui_input.connect(func(e: InputEvent):
+			if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
+				var r = JavaScriptBridge.eval("window.prompt(%s, %s) || %s" % [JSON.stringify(ql.text), JSON.stringify(box.text), JSON.stringify(box.text)])
+				box.text = str(r))
+	else:
+		var keys := HBoxContainer.new()
+		keys.add_theme_constant_override("separation", 6)
+		v.add_child(keys)
+		for chr in ACCENT_KEYS:
+			var kb := _button(chr, Color("#b3a8e8"))
+			kb.remove_theme_font_override("font")
+			kb.add_theme_font_size_override("font_size", 20)
+			kb.custom_minimum_size = Vector2(40, 36)
+			keys.add_child(kb)
+			kb.pressed.connect(func():
+				box.insert_text_at_caret(chr)
+				box.grab_focus())
+		box.call_deferred("grab_focus")
+	if ch.has("chips"):
+		# Optional scaffolding: tap a phrase to add it.
+		var chips := HFlowContainer.new()
+		chips.add_theme_constant_override("h_separation", 6)
+		chips.add_theme_constant_override("v_separation", 6)
+		v.add_child(chips)
+		for phrase in ch.chips:
+			var cb := _button(str(phrase), Color("#7fc8a9"))
+			cb.remove_theme_font_override("font")
+			cb.add_theme_font_size_override("font_size", 18)
+			cb.custom_minimum_size.y = 34
+			chips.add_child(cb)
+			cb.pressed.connect(func():
+				box.text = (box.text.strip_edges() + " " + str(phrase)).strip_edges() + " ")
+
+	var result := RichTextLabel.new()
+	result.bbcode_enabled = true
+	result.fit_content = true
+	result.scroll_active = false
+	result.add_theme_font_size_override("normal_font_size", 22)
+	result.add_theme_font_size_override("bold_font_size", 22)
+	result.add_theme_color_override("default_color", INK)
+	result.visible = false
+	v.add_child(result)
+	var bottom := HBoxContainer.new()
+	bottom.alignment = BoxContainer.ALIGNMENT_END
+	bottom.add_theme_constant_override("separation", 12)
+	v.add_child(bottom)
+	var stars_row := HBoxContainer.new()
+	stars_row.visible = false
+	stars_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom.add_child(stars_row)
+	var leave := _button("Salir", Color("#9a94b8"))
+	var check := _button("Comprobar", PURPLE)
+	var send := _button("¡Enviar!", GREEN)
+	send.visible = false
+	for b in [leave, check, send]:
+		bottom.add_child(b)
+
+	var state := {"stars": 0}
+	check.pressed.connect(func():
+		if box.text.strip_edges() == "":
+			return
+		var r: Dictionary = Marking.mark(box.text, ch)
+		state.stars = r.stars
+		Game.sfx("correct" if r.stars >= needed else "click")
+		# Their sentence with the good bits coloured in, then a checklist.
+		var bb := Marking.highlight(r) + "\n"
+		var tips := PackedStringArray()
+		for f in Marking.FEATURES:
+			var got: bool = not (r.found[f] as Array).is_empty()
+			if got:
+				bb += "[color=%s][b]✓ %s[/b][/color]    " % [Marking.COLORS[f], Marking.LABELS[f]]
+			else:
+				tips.append(Marking.tip(f, r.target))
+		if not tips.is_empty():
+			bb += "\n[color=#8a84a8]Next star: %s[/color]" % tips[0].replace("[", "[lb]")
+		for n in r.notes:
+			bb += "\n[color=#c2410c]%s[/color]" % str(n).replace("[", "[lb]")
+		result.text = bb
+		result.visible = true
+		for c in stars_row.get_children():
+			c.queue_free()
+		for i in 5:
+			var ic := Icon.new()
+			ic.kind = "star"
+			ic.color = Color("#ffd23f") if i < r.stars else Color(0.85, 0.83, 0.9)
+			ic.custom_minimum_size = Vector2(38, 38)
+			stars_row.add_child(ic)
+		stars_row.visible = true
+		send.visible = r.stars >= needed
+		check.text = "Comprobar otra vez"
+		if r.stars < needed:
+			_shake(card))
+	send.pressed.connect(func(): _panel_done.emit("send"))
+	leave.pressed.connect(func(): _panel_done.emit("leave"))
+	_pop_in(card)
+	var res: String = await _panel_done
+	Game.sfx("click" if res == "send" else "close")
+	dim.queue_free()
+	Game.ui_open = false
+	return int(state.stars) if res == "send" else 0
+
+
+## "El tablón roto": a paragraph with numbered gaps; write the right form of each verb.
+## Returns true when every gap is right.
+func ask_notice(reto: Dictionary) -> bool:
+	Game.ui_open = true
+	Game.sfx("card")
+	var gaps: Array = reto.get("gaps", [])
+	var sc := Game.text_scale()
+	var dim := _dim()
+	var card := _panel(CREAM, Color("#b07a45"), 24, 8)
+	card.set_anchors_preset(Control.PRESET_FULL_RECT)
+	for side in ["left", "top", "right", "bottom"]:
+		card.set("offset_" + side, 24 if side in ["left", "top"] else -24)
+	dim.add_child(card)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 8)
+	card.add_child(v)
+	var head := Label.new()
+	head.text = "RETO: EL TABLÓN ROTO"
+	head.add_theme_font_override("font", _bold_font)
+	head.add_theme_font_size_override("font_size", 22)
+	head.add_theme_color_override("font_color", Color("#8a5a2b"))
+	v.add_child(head)
+	var intro := Label.new()
+	intro.text = str(reto.get("intro", "Fix the notice: write each verb in the right form."))
+	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intro.add_theme_font_size_override("font_size", int(24 * sc))
+	intro.add_theme_color_override("font_color", INK)
+	v.add_child(intro)
+	var para := RichTextLabel.new()
+	para.bbcode_enabled = true
+	para.fit_content = true
+	para.scroll_active = false
+	para.add_theme_font_size_override("normal_font_size", int(26 * sc))
+	para.add_theme_font_size_override("bold_font_size", int(26 * sc))
+	para.add_theme_color_override("default_color", INK)
+	v.add_child(para)
+	var grid := GridContainer.new()
+	grid.columns = 3 if root.size.x > 800 else 2
+	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("v_separation", 6)
+	v.add_child(grid)
+	var inputs: Array[LineEdit] = []
+	for i in gaps.size():
+		var cell := HBoxContainer.new()
+		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		grid.add_child(cell)
+		var l := Label.new()
+		l.text = "(%d) %s" % [i + 1, gaps[i].get("verb", "")]
+		l.custom_minimum_size.x = 150 * sc
+		l.add_theme_font_size_override("font_size", int(22 * sc))
+		l.add_theme_color_override("font_color", Color("#8a5a2b"))
+		cell.add_child(l)
+		var le := LineEdit.new()
+		le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		le.custom_minimum_size.y = 44
+		le.add_theme_font_size_override("font_size", int(22 * sc))
+		cell.add_child(le)
+		inputs.append(le)
+		if OS.has_feature("web") and Game.is_touch():
+			le.editable = false
+			le.gui_input.connect(func(e: InputEvent):
+				if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
+					le.text = str(JavaScriptBridge.eval("window.prompt(%s, %s) || ''" % [JSON.stringify("(%d) %s" % [i + 1, gaps[i].get("verb", "")]), JSON.stringify(le.text)])))
+	var feedback := Label.new()
+	feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	feedback.add_theme_font_size_override("font_size", 22)
+	v.add_child(feedback)
+	var bottom := HBoxContainer.new()
+	bottom.alignment = BoxContainer.ALIGNMENT_END
+	bottom.add_theme_constant_override("separation", 12)
+	v.add_child(bottom)
+	var leave := _button("Salir", Color("#9a94b8"))
+	var check := _button("Comprobar", PURPLE)
+	var fix := _button("¡Arreglar el tablón!", GREEN)
+	fix.visible = false
+	for b in [leave, check, fix]:
+		bottom.add_child(b)
+
+	var render := func(marks: Array):
+		# Paragraph with {1}, {2}... replaced by the student's answers (green / red) or blanks.
+		var t := str(reto.get("text", "")).replace("[", "[lb]")
+		for i in gaps.size():
+			var shown := "[b](%d) ______[/b]" % (i + 1)
+			if marks.size() > i and inputs[i].text.strip_edges() != "":
+				shown = "[b][color=%s](%d) %s[/color][/b]" % ["#1f8a52" if marks[i] else "#c2410c", i + 1, inputs[i].text.strip_edges().replace("[", "[lb]")]
+			t = t.replace("{%d}" % (i + 1), shown)
+		para.text = t
+	render.call([])
+	check.pressed.connect(func():
+		var marks := []
+		var right := 0
+		for i in gaps.size():
+			var ok: bool = Game.check_answer(inputs[i].text, gaps[i].get("answers", [])) != Game.WRONG
+			marks.append(ok)
+			if ok:
+				right += 1
+		render.call(marks)
+		if right == gaps.size():
+			Game.sfx("correct")
+			feedback.add_theme_color_override("font_color", Color("#1f8a52"))
+			feedback.text = "¡Perfecto! %d / %d - every verb is right." % [right, gaps.size()]
+			fix.visible = true
+			check.visible = false
+			_bounce(card)
+		else:
+			Game.sfx("wrong")
+			feedback.add_theme_color_override("font_color", Color("#c2410c"))
+			feedback.text = "%d / %d correct - fix the red ones. %s" % [right, gaps.size(), reto.get("hint", "")]
+			_shake(card))
+	fix.pressed.connect(func(): _panel_done.emit("fixed"))
+	leave.pressed.connect(func(): _panel_done.emit("leave"))
+	_pop_in(card)
+	var res: String = await _panel_done
+	Game.sfx("click" if res == "fixed" else "close")
+	dim.queue_free()
+	Game.ui_open = false
+	return res == "fixed"
+
+
+## "El chat": texting with a character on a phone. Each turn they send a message or two and
+## you reply; the reply has to do what the turn asks (checked with simple patterns, see
+## `chat_match`). Their answer can depend on what you said. Returns true when the chat is finished.
+func ask_chat(reto: Dictionary) -> bool:
+	Game.ui_open = true
+	Game.sfx("card")
+	var who := str(reto.get("name", "Sofía"))
+	var accent := Color(str(reto.get("color", "#2e86de")))
+	var dim := _dim()
+	var phone := _panel(Color("#24213d"), Color("#24213d"), 34, 0)
+	(phone.get_theme_stylebox("panel") as StyleBoxFlat).set_content_margin_all(12)
+	phone.set_anchors_preset(Control.PRESET_CENTER)
+	phone.custom_minimum_size = Vector2(minf(620, root.size.x - 24), root.size.y - 24)
+	phone.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	phone.grow_vertical = Control.GROW_DIRECTION_BOTH
+	dim.add_child(phone)
+	var screen := _panel(Color("#f3f0fb"), Color(0, 0, 0, 0), 24, 0)
+	(screen.get_theme_stylebox("panel") as StyleBoxFlat).set_content_margin_all(0)
+	phone.add_child(screen)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 0)
+	screen.add_child(v)
+
+	# Contact bar: avatar, name and status.
+	var bar := _panel(accent, Color(0, 0, 0, 0), 24, 0)
+	var bsb := bar.get_theme_stylebox("panel") as StyleBoxFlat
+	bsb.corner_radius_bottom_left = 0
+	bsb.corner_radius_bottom_right = 0
+	bsb.content_margin_top = 10
+	bsb.content_margin_bottom = 10
+	v.add_child(bar)
+	var bh := HBoxContainer.new()
+	bh.add_theme_constant_override("separation", 12)
+	bar.add_child(bh)
+	var avatar := _panel(Color.WHITE, Color(0, 0, 0, 0), 26, 0)
+	(avatar.get_theme_stylebox("panel") as StyleBoxFlat).set_content_margin_all(0)
+	avatar.custom_minimum_size = Vector2(52, 52)
+	bh.add_child(avatar)
+	var initial := Label.new()
+	initial.text = who.substr(0, 1)
+	initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	initial.add_theme_font_override("font", _bold_font)
+	initial.add_theme_font_size_override("font_size", 30)
+	initial.add_theme_color_override("font_color", accent)
+	avatar.add_child(initial)
+	var names := VBoxContainer.new()
+	names.add_theme_constant_override("separation", -4)
+	bh.add_child(names)
+	var name_l := Label.new()
+	name_l.text = who
+	name_l.add_theme_font_override("font", _bold_font)
+	name_l.add_theme_font_size_override("font_size", 28)
+	name_l.add_theme_color_override("font_color", Color.WHITE)
+	names.add_child(name_l)
+	var status := Label.new()
+	status.text = "en línea"
+	status.add_theme_font_size_override("font_size", 18)
+	status.add_theme_color_override("font_color", Color(1, 1, 1, 0.85))
+	names.add_child(status)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bh.add_child(spacer)
+	var leave := _button("Salir", accent.darkened(0.25))
+	leave.add_theme_font_size_override("font_size", 22)
+	leave.custom_minimum_size.y = 46
+	bh.add_child(leave)
+
+	# The messages.
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	v.add_child(scroll)
+	var pad := MarginContainer.new()
+	pad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for side in ["left", "right", "top", "bottom"]:
+		pad.add_theme_constant_override("margin_" + side, 12)
+	scroll.add_child(pad)
+	var list := VBoxContainer.new()
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 8)
+	pad.add_child(list)
+	var max_w := phone.custom_minimum_size.x * 0.72
+
+	var add_bubble := func(text: String, kind: String) -> void:
+		# kind: "them", "me" or "tip" (a hint from the game, not part of the chat)
+		var row := HBoxContainer.new()
+		row.alignment = {"them": BoxContainer.ALIGNMENT_BEGIN, "me": BoxContainer.ALIGNMENT_END}.get(kind, BoxContainer.ALIGNMENT_CENTER)
+		var col: Color = {"them": Color.WHITE, "me": Color("#c9f2d9"), "tip": Color("#fff3c4")}[kind]
+		var b := _panel(col, Color(0, 0, 0, 0), 18, 0)
+		var sb := b.get_theme_stylebox("panel") as StyleBoxFlat
+		sb.shadow_size = 3
+		sb.shadow_offset = Vector2(0, 2)
+		sb.shadow_color = Color(0.2, 0.1, 0.4, 0.15)
+		if kind == "them":
+			sb.corner_radius_bottom_left = 4
+		elif kind == "me":
+			sb.corner_radius_bottom_right = 4
+		var l := Label.new()
+		l.text = text
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		var fs := 20 if kind == "tip" else 24
+		l.add_theme_font_size_override("font_size", fs)
+		l.add_theme_color_override("font_color", Color("#8a5a00") if kind == "tip" else INK)
+		var font := l.get_theme_font("font")
+		l.custom_minimum_size.x = minf(font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x + 4, max_w)
+		b.add_child(l)
+		row.add_child(b)
+		list.add_child(row)
+		_pop_in(b)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+
+	# What to do now (outside the chat, in English - it's the game talking).
+	var task := Label.new()
+	task.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	task.add_theme_font_size_override("font_size", 18)
+	task.add_theme_color_override("font_color", Color("#6a5fb0"))
+	var task_pad := MarginContainer.new()
+	for side in ["left", "right"]:
+		task_pad.add_theme_constant_override("margin_" + side, 14)
+	task_pad.add_child(task)
+	v.add_child(task_pad)
+	var input_box := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		input_box.add_theme_constant_override("margin_" + side, 10)
+	v.add_child(input_box)
+	var iv := VBoxContainer.new()
+	iv.add_theme_constant_override("separation", 6)
+	input_box.add_child(iv)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	iv.add_child(row)
+	var line := LineEdit.new()
+	line.placeholder_text = "Mensaje..."
+	line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	line.custom_minimum_size.y = 56
+	line.add_theme_font_size_override("font_size", 24)
+	row.add_child(line)
+	var send := _button("Enviar", accent)
+	send.add_theme_font_size_override("font_size", 24)
+	send.custom_minimum_size = Vector2(120, 56)
+	row.add_child(send)
+	var can_send := [false]
+	var submit := func(_t = null):
+		if can_send[0] and line.text.strip_edges() != "":
+			_panel_done.emit("send")
+	send.pressed.connect(submit)
+	line.text_submitted.connect(submit)
+	leave.pressed.connect(func(): _panel_done.emit("leave"))
+	if OS.has_feature("web") and Game.is_touch():
+		line.editable = false
+		line.placeholder_text = "Tap here to reply..."
+		line.gui_input.connect(func(e: InputEvent):
+			if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
+				var r = JavaScriptBridge.eval("window.prompt(%s, '') || ''" % JSON.stringify(task.text))
+				line.text = str(r)
+				submit.call())
+	else:
+		var keys := HBoxContainer.new()
+		keys.add_theme_constant_override("separation", 5)
+		iv.add_child(keys)
+		for chr in ACCENT_KEYS:
+			var kb := _button(chr, Color("#b3a8e8"))
+			kb.remove_theme_font_override("font")
+			kb.add_theme_font_size_override("font_size", 18)
+			kb.custom_minimum_size = Vector2(38, 34)
+			keys.add_child(kb)
+			kb.pressed.connect(func():
+				line.insert_text_at_caret(chr)
+				line.grab_focus())
+	_pop_in(phone)
+
+	# They type (with a little "escribiendo..." pause), one message at a time.
+	var closed := [false]
+	var say := func(msgs: Array) -> void:
+		for m in msgs:
+			if closed[0]:
+				return
+			status.text = "escribiendo..."
+			await get_tree().create_timer(clampf(0.35 + str(m).length() * 0.02, 0.5, 1.3)).timeout
+			if closed[0]:
+				return
+			status.text = "en línea"
+			Game.sfx("click", 1.4, -6)
+			await add_bubble.call(str(m), "them")
+	leave.pressed.connect(func(): closed[0] = true)
+
+	var finished := false
+	for turn in reto.get("turns", []):
+		var touch_prompt := OS.has_feature("web") and Game.is_touch()   # phones type in a native prompt
+		if not touch_prompt:
+			line.editable = false
+		can_send[0] = false
+		task.text = ""
+		await say.call(turn.get("them", []))
+		if closed[0]:
+			break
+		if not turn.has("need"):
+			continue
+		task.text = str(turn.get("task", "Reply in Spanish."))
+		can_send[0] = true
+		if not touch_prompt:
+			line.editable = true
+			line.grab_focus()
+		var tries := 0
+		while true:
+			var res: String = await _panel_done
+			if res != "send":
+				closed[0] = true
+				break
+			var text := line.text.strip_edges()
+			line.text = ""
+			can_send[0] = false
+			if not touch_prompt:
+				line.editable = false
+			await add_bubble.call(text, "me")
+			var opt := chat_match(text, turn.need)
+			if opt.is_empty():
+				tries += 1
+				Game.sfx("wrong", 1.1, -6)
+				await say.call([turn.get("confused", ["¿Cómo? No entiendo...", "¿Qué dices?", "Mmm... ¿perdona?"][tries % 3])])
+				await add_bubble.call("Hint: " + str(turn.get("hint", "Read the message again.")), "tip")
+				can_send[0] = true
+				if not touch_prompt:
+					line.editable = true
+					line.grab_focus()
+				continue
+			Game.sfx("correct", 1.2, -4)
+			await say.call(opt.get("reply", []))
+			break
+		if closed[0]:
+			break
+	if not closed[0]:
+		finished = true
+		task.text = ""
+		line.editable = false
+		can_send[0] = false
+		await add_bubble.call("¡Chat completado! You kept the conversation going in Spanish.", "tip")
+		send.text = "¡Genial!"
+		send.pressed.disconnect(submit)
+		send.pressed.connect(func(): _panel_done.emit("done"))
+		await _panel_done
+	Game.sfx("close")
+	dim.queue_free()
+	Game.ui_open = false
+	return finished
+
+
+## Which of a chat turn's accepted answers `text` matches: each option has "all" (every
+## pattern must match) and optionally "none" (no pattern may match). Patterns are regular
+## expressions tested on the lower-case reply with accents removed. {} when nothing fits.
+static func chat_match(text: String, options: Array) -> Dictionary:
+	var t := " " + Game.strip_accents(text.to_lower()) + " "
+	for opt in options:
+		var ok := true
+		for pat in opt.get("all", []):
+			var re := RegEx.create_from_string(str(pat))
+			if re == null or re.search(t) == null:
+				ok = false
+				break
+		for pat in opt.get("none", []):
+			var re := RegEx.create_from_string(str(pat))
+			if re and re.search(t) != null:
+				ok = false
+		if ok:
+			return opt
+	return {}
+
+
+## A text to read (e.g. a hotel review), in Markdown. Waits until closed.
+func show_reading(title: String, markdown: String) -> void:
+	Game.ui_open = true
+	Game.sfx("open")
+	var dim := _dim()
+	var card := _panel(Color.WHITE, Color("#2e86de"), 24, 8)
+	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.custom_minimum_size = Vector2(minf(900, root.size.x - 40), 0)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
+	dim.add_child(card)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 10)
+	card.add_child(v)
+	var head := Label.new()
+	head.text = title
+	head.add_theme_font_override("font", _bold_font)
+	head.add_theme_font_size_override("font_size", 26)
+	head.add_theme_color_override("font_color", Color("#2e86de"))
+	v.add_child(head)
+	var text := _lesson_label(Game.text_scale())
+	text.fit_content = true
+	text.text = Markdown.to_bbcode(markdown, Game.text_scale())
+	v.add_child(text)
+	var bottom := HBoxContainer.new()
+	bottom.alignment = BoxContainer.ALIGNMENT_END
+	v.add_child(bottom)
+	var ok := _button("Entendido", GREEN)
+	bottom.add_child(ok)
+	ok.pressed.connect(func(): _panel_done.emit("ok"))
+	_pop_in(card)
+	await _panel_done
+	Game.sfx("close")
+	dim.queue_free()
+	Game.ui_open = false
+
+
 # ------------------------------------------------------------------ results
 
 ## Shows the end-of-island results. Returns "again", "islands" or "stay".
@@ -897,6 +1585,8 @@ func show_results(prize: Dictionary, rating: int) -> String:
 	stats.text = "Stars collected:  %d / %d\nCoins:  %d\nRight first time:  %d / %d" % [Game.stars, Game.total_stars, Game.coins, Game.first_try, Game.total_cards + Game.total_chests]
 	if Game.total_sweets > 0:
 		stats.text += "\nSweets:  %d / %d" % [Game.sweets, Game.total_sweets]
+	if Game.total_retos > 0:
+		stats.text += "\nRetos:  %d / %d" % [Game.retos_done, Game.total_retos]
 	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stats.add_theme_font_override("font", _bold_font)
 	stats.add_theme_font_size_override("font_size", 26)
@@ -1023,6 +1713,14 @@ func _make_theme() -> Theme:
 	t.set_color("font_uneditable_color", "LineEdit", INK)
 	t.set_color("font_placeholder_color", "LineEdit", Color(0.6, 0.58, 0.7))
 	t.set_color("caret_color", "LineEdit", PINK)
+	# The sentence builder's writing box looks like the other answer boxes.
+	for s in ["normal", "focus", "read_only"]:
+		t.set_stylebox(s, "TextEdit", lef if s == "focus" else le)
+	t.set_color("font_color", "TextEdit", INK)
+	t.set_color("font_readonly_color", "TextEdit", INK)
+	t.set_color("font_placeholder_color", "TextEdit", Color(0.6, 0.58, 0.7))
+	t.set_color("caret_color", "TextEdit", PINK)
+	t.set_color("background_color", "TextEdit", Color.WHITE)
 	return t
 
 
@@ -1104,6 +1802,12 @@ class Icon extends Control:
 					draw_circle(c + d * r, r * 0.14, Color(0.85, 0.2, 0.2))
 				tri.append(tri[0])
 				draw_polyline(tri, outline, 2.0, true)
+			"letter":
+				# An envelope.
+				var env := Rect2(c - Vector2(r * 0.95, r * 0.62), Vector2(r * 1.9, r * 1.24))
+				draw_rect(env, color)
+				draw_polyline(PackedVector2Array([env.position, c + Vector2(0, r * 0.1), Vector2(env.end.x, env.position.y)]), outline, 2.0, true)
+				draw_rect(env, outline, false, 2.0)
 			"key":
 				draw_arc(c + Vector2(-r * 0.45, 0), r * 0.38, 0, TAU, 20, color, r * 0.22, true)
 				draw_rect(Rect2(c + Vector2(-r * 0.1, -r * 0.1), Vector2(r * 1.0, r * 0.2)), color)

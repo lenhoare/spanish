@@ -92,6 +92,14 @@ await send("Page.navigate", { url });
 for (let i = 0; i < 120 && !logs.some((l) => l.includes("Godot Engine")); i++) await sleep(500);
 await sleep(6000);
 await shot(`${mode || "desktop"}_1_title.png`);
+if (mode === "chooser") {
+  // Pick the first game on the chooser and look at its title screen.
+  await tap(640, 275);
+  await sleep(4000);
+  await shot("chooser_2_title.png");
+  ws.close();
+  process.exit(0);
+}
 // Play button sits at the bottom of the left-hand title panel.
 await tap(phone ? Math.round(W * 0.21) : 290, phone ? Math.round(H * 0.85) : 545);
 await sleep(5000);

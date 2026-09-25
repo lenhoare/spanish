@@ -10,17 +10,24 @@ extends Node3D
 signal card_touched(card: Node3D)
 signal chest_touched(chest: Node3D)
 signal sweet_touched(sweet: Node3D)
+signal reto_touched(reto: Node3D, part: int)
+signal read_panel(title: String, markdown: String)   # set-pieces that want a text panel
 signal whiteboard_touched
 signal prize_claimed
 
-const MAIN_R := 30.0
+const BASE_R := 30.0
 const SPAWN := Vector3(0, 0.2, 14)
-const PRIZE_CENTER := Vector3(0, 0, -(MAIN_R + 21))
-const EAST_ISLAND := Vector3(40, 0, 8)
-const WEST_ISLAND := Vector3(-40, 0, 14)
+## The island's size can grow ("world_scale" in config.json). Everything beyond the base
+## coastline (side islands, stepping stones, Star Island...) is pushed outwards by the same
+## amount, leaving a new outer ring of land; the middle of the island stays the same.
+var MAIN_R := BASE_R
+var D := 0.0                                   # how much bigger than the base radius
+var PRIZE_CENTER := Vector3(0, 0, -(BASE_R + 21))
+var EAST_ISLAND := Vector3(40, 0, 8)
+var WEST_ISLAND := Vector3(-40, 0, 14)
 const SWEET_SHOP := Vector3(16, 0, -20)
 const GHOST_GARDEN := Vector3(-18, 0, 16)
-const KEY_SPOT := Vector3(-42, 0, 11.5)
+var KEY_SPOT := Vector3(-42, 0, 11.5)
 const CAFE := Vector3(16, 0, -20)           # the chef's café uses the sweet shop's spot
 const SHIP := Vector3(17, -2.2, 44)         # pirate ship moored off the south coast (keel below the sea)
 const JETTY_X := 9.0
@@ -88,6 +95,55 @@ const QUESTS := {
 			["una figurita", "skate/character-skate-boy", 1.3, Vector3(17.2, 2.7, 16)],  # middle floating islet
 		],
 	},
+	"traveller": {
+		"sign": "Objetos perdidos", "character": "character-male-b", "hat": "",
+		"speaker": "El viajero", "greeting": "¡Hola! ¡Qué desastre!\n¡Perdí mi equipaje!",
+		"thanks": "¡Qué alivio!\n¡Toma un dulce!", "awning": Color(0.2, 0.7, 0.7),
+		"reward": "food/ice-cream", "reward_scale": 4.0, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"counter": [["city/detail-parasol-a", 2.0, -1.6]],
+		"items": [
+			["la maleta", "proc/suitcase", 3.0, Vector3(38.5, 0, 11.5)],      # east island
+			["la cartera", "proc/wallet", 4.0, Vector3(-41, 0, 11)],           # west island
+			["las llaves", "key", 3.5, Vector3(16.6, 5.0, -9.4)],             # top of the spring tower
+		],
+	},
+	"newstudent": {
+		"sign": "Secretaría", "character": "character-male-a", "hat": "",
+		"speaker": "El alumno nuevo", "greeting": "¡Hola! Soy nuevo aquí.\n¡Perdí mis cosas!",
+		"thanks": "¡Muchas gracias!\n¡Toma un dulce!", "awning": Color(0.45, 0.4, 0.9),
+		"reward": "food/cupcake", "reward_scale": 3.2, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"counter": [["furniture/books", 9.0, -1.6], ["food/apple", 3.0, 1.4]],
+		"items": [
+			["la mochila", "proc/backpack", 3.0, Vector3(38.5, 0, 11.5)],       # east island
+			["el estuche", "proc/pencilcase", 4.0, Vector3(-41, 0, 11)],        # west island
+			["la calculadora", "proc/calculator", 4.5, Vector3(16.6, 5.0, -9.4)],  # top of the spring tower
+		],
+	},
+	"grandma": {
+		"sign": "Casa de la abuela", "character": "character-female-d", "hat": "",
+		"speaker": "La abuela", "greeting": "¡Hola, cariño!\n¡No encuentro mis cosas!",
+		"thanks": "¡Eres un sol!\n¡Toma un dulce!", "awning": Color(0.95, 0.5, 0.65),
+		"reward": "food/cake", "reward_scale": 1.7, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"counter": [["proc/photo", 3.0, -1.5], ["food/cup-tea", 3.0, 1.4]],
+		"items": [
+			["el móvil", "proc/phone", 3.0, Vector3(38.5, 0, 11.5)],               # east island
+			["las gafas", "characters/aid-glasses", 6.0, Vector3(-41, 0, 11)],      # west island
+			["el cargador", "proc/charger", 3.0, Vector3(16.6, 5.0, -9.4)],        # top of the spring tower
+		],
+	},
+	"musician": {
+		"sign": "Escenario 2", "character": "character-male-d", "hat": "headband",
+		"speaker": "El músico", "greeting": "¡Hola! ¡Tengo un concierto!\n¡Busca mis cosas!",
+		"thanks": "¡Qué guay!\n¡Toma un dulce!", "awning": Color(0.95, 0.45, 0.2),
+		"reward": "food/donut-sprinkles", "reward_scale": 4.0, "reward_hidden": true, "reward_pos": Vector3(0.6, 0.75, 1.7),
+		"floor_props": [["skate/skateboard", 2.6, Vector3(4.0, 0.0, 3.0), 0.4]],
+		"counter": [["proc/speaker", 1.2, -1.5], ["proc/speaker", 1.2, 1.5]],
+		"items": [
+			["la guitarra", "proc/guitar", 2.6, Vector3(38.5, 0, 11.5)],          # east island
+			["el micrófono", "proc/microphone", 3.0, Vector3(-41, 0, 11)],        # west island
+			["las baquetas", "proc/drumsticks", 3.5, Vector3(16.6, 5.0, -9.4)],   # top of the spring tower
+		],
+	},
 	"teacher": {
 		"sign": "La Escuela", "character": "character-female-a", "hat": "",
 		"speaker": "La profesora", "greeting": "¡Hola! Soy profesora.\n¡Necesito mis cosas!",
@@ -130,6 +186,12 @@ const THEMES := {
 	"mint":     {"grass": Color(0.16, 0.55, 0.42), "dirt": Color(0.3, 0.5, 0.68),   "sand": Color(0.9, 0.93, 0.78), "sky": Color(0.25, 0.68, 0.9),  "horizon": Color(0.82, 1.0, 0.95), "deep": Color(0.05, 0.45, 0.65), "shallow": Color(0.2, 0.78, 0.82),  "trees": ["tree", "tree-pine", "tree-pine-small"]},
 	"lavender": {"grass": Color(0.56, 0.42, 0.86), "dirt": Color(0.5, 0.38, 0.75),  "sand": Color(0.96, 0.87, 1.0),  "sky": Color(0.45, 0.4, 0.92),  "horizon": Color(0.92, 0.84, 1.0), "deep": Color(0.25, 0.25, 0.75), "shallow": Color(0.45, 0.55, 0.95), "trees": ["tree", "tree", "tree-pine-small"]},
 	"candy":    {"grass": Color(0.82, 0.33, 0.55), "dirt": Color(0.9, 0.7, 0.45),   "sand": Color(1.0, 0.94, 0.82),  "sky": Color(0.5, 0.62, 1.0),   "horizon": Color(1.0, 0.86, 0.93), "deep": Color(0.3, 0.45, 0.9),  "shallow": Color(0.55, 0.78, 1.0),  "trees": ["tree", "tree", "tree-pine"]},
+	"tropical": {"grass": Color(0.32, 0.57, 0.22), "dirt": Color(0.85, 0.62, 0.38), "sand": Color(1.0, 0.9, 0.62), "sky": Color(0.15, 0.55, 0.98), "horizon": Color(0.75, 0.95, 1.0), "deep": Color(0.0, 0.45, 0.75), "shallow": Color(0.15, 0.85, 0.85), "trees": ["pirate/palm-straight", "pirate/palm-bend", "pirate/palm-detailed-bend", "tree"], "tree_scale": 0.75, "props": [["city/detail-parasol-a", 6.0, 14], ["city/detail-parasol-b", 6.0, 10]]},
+	"digital":  {"grass": Color(0.42, 0.42, 0.68), "dirt": Color(0.45, 0.33, 0.6),  "sand": Color(0.82, 0.78, 0.96), "sky": Color(0.16, 0.12, 0.42), "horizon": Color(0.98, 0.55, 0.78), "deep": Color(0.06, 0.18, 0.5), "shallow": Color(0.25, 0.55, 0.95), "sun": Color(1.0, 0.8, 0.9), "sun_energy": 0.9, "trees": ["tree-pine", "tree-pine-small", "tree"], "props": [["proc/lamp", 2.0, 16], ["proc/screen", 1.6, 8]]},
+	"festival": {"grass": Color(0.45, 0.72, 0.33), "dirt": Color(0.85, 0.55, 0.35), "sand": Color(1.0, 0.88, 0.62), "sky": Color(0.35, 0.55, 1.0), "horizon": Color(1.0, 0.85, 0.72), "deep": Color(0.07, 0.36, 0.8), "shallow": Color(0.2, 0.62, 0.95), "trees": ["fair/tree", "fair/tree-large"], "tree_scale": 2.2, "props": [["fair/stall-food", 2.6, 5], ["fair/stall-drinks", 2.6, 5], ["proc/speaker", 2.0, 8], ["arcade/claw-machine", 2.6, 4]]},
+	"fiesta":   {"grass": Color(0.5, 0.74, 0.32), "dirt": Color(0.86, 0.52, 0.32), "sand": Color(1.0, 0.86, 0.6), "sky": Color(0.32, 0.58, 1.0), "horizon": Color(1.0, 0.86, 0.66), "deep": Color(0.06, 0.36, 0.78), "shallow": Color(0.2, 0.64, 0.95), "trees": ["tree", "fair/tree-large", "tree"], "props": [["proc/bunting", 1.0, 12, ""], ["graveyard/lantern-candle", 2.6, 10], ["fair/stall-drinks", 2.6, 4]]},
+	"ciudad":   {"grass": Color(0.42, 0.7, 0.36), "dirt": Color(0.72, 0.52, 0.4), "sand": Color(0.98, 0.88, 0.66), "sky": Color(0.28, 0.55, 0.98), "horizon": Color(0.82, 0.92, 1.0), "deep": Color(0.05, 0.35, 0.75), "shallow": Color(0.18, 0.62, 0.92), "trees": ["tree", "tree", "fair/tree-large"], "tree_scale": 1.0, "props": [["holiday/bench", 2.4, 10], ["fair/trash", 2.6, 8], ["flag", 2.0, 6]]},
+	"campus":   {"grass": Color(0.38, 0.66, 0.3),  "dirt": Color(0.75, 0.5, 0.35),  "sand": Color(0.98, 0.86, 0.6),  "sky": Color(0.3, 0.58, 0.95),  "horizon": Color(0.85, 0.93, 1.0), "deep": Color(0.08, 0.38, 0.78), "shallow": Color(0.2, 0.65, 0.9),   "trees": ["tree", "tree", "tree-pine", "tree-pine-small"], "props": [["holiday/bench", 2.4, 14], ["flag", 2.0, 6]]},
 	"snow":     {"grass": Color(0.84, 0.89, 0.97), "dirt": Color(0.58, 0.68, 0.85), "sand": Color(0.85, 0.9, 0.98),  "sky": Color(0.42, 0.58, 0.85), "horizon": Color(0.9, 0.95, 1.0),  "deep": Color(0.1, 0.3, 0.55),   "shallow": Color(0.4, 0.65, 0.85),  "trees": ["tree-snow", "tree-pine-snow", "tree-pine-snow-small"]},
 }
 
@@ -146,9 +208,22 @@ var rowboat: Node3D
 var circuit: Node3D
 var routine: Node3D
 var speedboat: Node3D
+var timetable: Node3D
+var headteacher: Node3D
+var towers: Node3D
+var stage: Node3D
+var ferry: Node3D
+var town: Node3D
+var restaurant: Node3D
+var fishing: Node3D
+var tomatina: Node3D
+var pinata: Node3D
+var market: Node3D
+var noria: Node3D
 var cards: Array[Node3D] = []
 var chests: Array[Node3D] = []
 var sweets: Array[Node3D] = []
+var retos: Array[Node3D] = []
 
 var _grass: StandardMaterial3D
 var _dirt: StandardMaterial3D
@@ -158,11 +233,30 @@ var _rng := RandomNumberGenerator.new()
 var _keepout: Array = []   # [Vector2 center, radius]
 var _mover: AnimatableBody3D
 var _mover_t := 0.0
+var _mover_a := Vector3(-28.2, -0.4, 14)
+var _mover_b := Vector3(-33.4, -0.4, 14)
 var _clouds: Array[Node3D] = []
+
+
+## Pushes a point that lies beyond the base coastline outwards to match a bigger island.
+func ex(p: Vector3) -> Vector3:
+	var f := Vector2(p.x, p.z)
+	if D <= 0.0 or f.length() < 29.0:
+		return p
+	var n := f.normalized() * D
+	return p + Vector3(n.x, 0, n.y)
 
 
 func build(lesson: Dictionary, theme_name := "meadow") -> void:
 	_rng.seed = 12345
+	MAIN_R = BASE_R * float(Game.config.get("world_scale", 1.0))
+	D = MAIN_R - BASE_R
+	PRIZE_CENTER = Vector3(0, 0, -(MAIN_R + 21))
+	EAST_ISLAND = ex(Vector3(40, 0, 8))
+	WEST_ISLAND = ex(Vector3(-40, 0, 14))
+	KEY_SPOT = ex(Vector3(-42, 0, 11.5))
+	_mover_a = ex(Vector3(-28.2, -0.4, 14))
+	_mover_b = ex(Vector3(-33.4, -0.4, 14))
 	var t = lesson.get("theme", "")
 	if t is String and THEMES.has(t):
 		theme_name = t
@@ -209,7 +303,7 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 
 	# Stepping stones to the east island
 	for x in [30.8, 32.9]:
-		_pillar(Vector3(x, 0, EAST_ISLAND.z), 0.8, 0.2, 5.0)
+		_pillar(ex(Vector3(x, 0, 8)), 0.8, 0.2, 5.0)
 	# Moving platform to the west island
 	_mover = AnimatableBody3D.new()
 	_mover.add_to_group("moving")
@@ -223,7 +317,7 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 	mcs.position.y = 0.21
 	_mover.add_child(mcs)
 	add_child(_mover)
-	_mover.position = Vector3(-28.2, -0.4, WEST_ISLAND.z)
+	_mover.position = _mover_a
 
 	# Whiteboard
 	whiteboard = Node3D.new()
@@ -278,24 +372,24 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 		var c := Node3D.new()
 		c.set_script(preload("res://scripts/question_card.gd"))
 		add_child(c)
-		c.position = CARD_SLOTS[i]
+		c.position = ex(CARD_SLOTS[i])
 		c.setup(lesson.cards[i], i, tex)
 		c.touched.connect(func(card): card_touched.emit(card))
 		cards.append(c)
-		_keep(CARD_SLOTS[i], 2.0)
+		_keep(c.position, 2.0)
 
 	# Quiz chests
 	for i in mini(lesson.chests.size(), CHEST_SLOTS.size()):
 		var ch := Node3D.new()
 		ch.set_script(preload("res://scripts/quiz_chest.gd"))
 		add_child(ch)
-		ch.position = CHEST_SLOTS[i]
-		ch.rotation.y = atan2(-CHEST_SLOTS[i].x, -CHEST_SLOTS[i].z)
+		ch.position = ex(CHEST_SLOTS[i])
+		ch.rotation.y = atan2(-ch.position.x, -ch.position.z)
 		ch.setup(lesson.chests[i], int(lesson.chests[i].get("level", i / 2 + 1)))
 		ch.set_level_locked(ch.level > 1)
 		ch.touched.connect(func(chest): chest_touched.emit(chest))
 		chests.append(ch)
-		_keep(CHEST_SLOTS[i], 2.5)
+		_keep(ch.position, 2.5)
 
 	# Sweets: bonus challenges in special places. Each island's lesson picks which ones.
 	var ship_qs := {}
@@ -325,7 +419,42 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 			"tower":
 				if speedboat == null:
 					_build_tower_trip(q)
-			"chef", "trainer", "recycler", "tourist", "teacher":
+			"timetable":
+				if timetable == null:
+					_build_timetable(q)
+			"headteacher":
+				if headteacher == null:
+					_build_headteacher(q)
+			"towers":
+				if towers == null:
+					_build_towers(q)
+			"hidden":
+				_build_hidden(q)
+			"ferry":
+				if ferry == null:
+					_build_ferry(q)
+			"restaurant":
+				if restaurant == null:
+					_build_restaurant(q)
+			"tomatina":
+				if tomatina == null:
+					_build_tomatina(q)
+			"pinata":
+				if pinata == null:
+					_build_pinata(q)
+			"directions":
+				if town == null:
+					_build_town(q)
+			"market":
+				if market == null:
+					_build_market(q)
+			"rhythm":
+				if stage == null:
+					_build_stage(q)
+			"ferris":
+				if noria == null:
+					_build_noria(q)
+			"chef", "trainer", "recycler", "tourist", "teacher", "traveller", "newstudent", "grandma", "musician":
 				if not _has_sweet_at(CAFE):
 					_build_quest(q, QUESTS[str(q.kind)])
 			"healthy_field":
@@ -334,6 +463,7 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 	if not ship_qs.is_empty():
 		_build_ship(ship_qs)
 
+	_build_retos(lesson.get("retos", []))
 	_stars()
 	_decorate()
 	_make_clouds()
@@ -358,7 +488,7 @@ func spawn_player(character_name: String) -> CharacterBody3D:
 func _physics_process(delta: float) -> void:
 	if _mover:
 		_mover_t += delta
-		_mover.position.x = -28.2 - (sin(_mover_t * 0.9) * 0.5 + 0.5) * 5.2
+		_mover.position = _mover_a.lerp(_mover_b, sin(_mover_t * 0.9) * 0.5 + 0.5)
 
 
 func _process(delta: float) -> void:
@@ -509,7 +639,7 @@ func _build_boat_trip(q: Dictionary) -> void:
 	_island(SECRET_ISLAND, SECRET_R)
 	_add_sweet(q, "food/ice-cream", SECRET_ISLAND + Vector3(-0.5, 0.1, -0.5), SECRET_ISLAND, 4.0)
 	for p in [Vector3(-2.8, 0, 1.8), Vector3(2.4, 0, -2.6), Vector3(-1.5, 0, -3.3)]:
-		Props.place(self, "pirate/palm-detailed-bend", SECRET_ISLAND + p, _rng.randf() * TAU, 1.3, "cyl")
+		Props.place(self, "pirate/palm-detailed-bend", SECRET_ISLAND + p, _rng.randf() * TAU, 1.3, "trunk")
 	var flag := Props.model("pirate/flag-pirate-high")
 	flag.scale = Vector3.ONE * 1.6
 	flag.position = SECRET_ISLAND + Vector3(3.2, 0, 2.6)
@@ -693,7 +823,7 @@ func _build_tower_trip(q: Dictionary) -> void:
 	add_child(lbl)
 	for j in 3:
 		var a2 := 1.4 + j * 1.9
-		Props.place(self, "pirate/palm-detailed-bend", TOWER_ISLE + Vector3(cos(a2), 0, sin(a2)) * 5.2, _rng.randf() * TAU, 1.2, "cyl")
+		Props.place(self, "pirate/palm-detailed-bend", TOWER_ISLE + Vector3(cos(a2), 0, sin(a2)) * 5.2, _rng.randf() * TAU, 1.2, "trunk")
 
 	# The speedboat: fast, with spray.
 	speedboat = Node3D.new()
@@ -720,6 +850,359 @@ func _build_tower_trip(q: Dictionary) -> void:
 		var at := start + path * t + across * (5.5 if i % 2 == 0 else -3.5) * (1.0 if i % 3 != 2 else -1.0)
 		Props.place(self, "pirate/rocks-a" if i % 2 == 0 else "pirate/rocks-b", Vector3(at.x, -1.6, at.y), _rng.randf() * TAU, 1.2, "")
 		speedboat.blockers.append([at, 2.8])
+
+
+## Retos (IGCSE challenges) sit around the outer ring of the island: [angle in degrees,
+## fraction of the island radius]. Postcards use the P slots in order; one notice board
+## and one detective set-piece get their own spots.
+const RETO_SLOTS := {
+	"postcard": [[37.0, 0.84], [124.0, 0.86], [-45.0, 0.85], [160.0, 0.55], [-135.0, 0.55]],
+	"notice": [[195.0, 0.85]],
+	"detective": [[75.0, 0.84]],
+	"chat": [[240.0, 0.6]],
+}
+
+
+func _slot(kind: String, i: int) -> Vector3:
+	var list: Array = RETO_SLOTS[kind]
+	var s: Array = list[mini(i, list.size() - 1)]
+	var a := deg_to_rad(s[0])
+	return Vector3(cos(a), 0, sin(a)) * MAIN_R * float(s[1])
+
+
+## [angle in degrees, fraction of the island radius] -> a spot on the island.
+func _at(a: Array) -> Vector3:
+	var ang := deg_to_rad(float(a[0]))
+	return Vector3(cos(ang), 0, sin(ang)) * MAIN_R * float(a[1])
+
+
+func _build_retos(list: Array) -> void:
+	var used := {"postcard": 0, "notice": 0, "detective": 0, "chat": 0}
+	for r in list:
+		var kind := str(r.get("kind", "postcard"))
+		if not used.has(kind):
+			continue
+		var pos := _slot(kind, used[kind])
+		used[kind] += 1
+		if r.has("at"):      # a lesson can place a reto itself: [angle in degrees, fraction of radius]
+			pos = _at(r.at)
+		var face := atan2(-pos.x, -pos.z)        # face the middle of the island
+		var node: Node3D
+		if kind == "detective":
+			node = Node3D.new()
+			node.set_script(preload("res://scripts/detective.gd"))
+			add_child(node)
+			node.position = pos
+			node.rotation.y = face
+			node.setup(r)
+			node.reviewer_touched.connect(func(i): reto_touched.emit(node, i))
+			node.desk_touched.connect(func(): reto_touched.emit(node, -1))
+			_keep(pos, 8.0)
+		else:
+			node = Node3D.new()
+			node.set_script(preload("res://scripts/reto_spot.gd"))
+			add_child(node)
+			node.position = pos
+			node.rotation.y = face
+			node.setup(r)
+			node.touched.connect(func(spot): reto_touched.emit(spot, 0))
+			_keep(pos, 3.0)
+		retos.append(node)
+	Game.total_retos = retos.size()
+
+
+## El horario: ring the bell, read the timetable, run to the right classroom in time.
+## [angle, fraction] can be set in the lesson with "at"; faces the middle of the island.
+func _build_timetable(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [240.0, 0.72]))
+	timetable = Node3D.new()
+	timetable.set_script(preload("res://scripts/timetable.gd"))
+	add_child(timetable)
+	timetable.position = pos
+	timetable.rotation.y = atan2(-pos.x, -pos.z)
+	timetable.setup(q)
+	for x in range(-12, 13, 3):
+		for z in [-5.0, -1.0, 3.0, 7.0, 11.0]:
+			_keep(timetable.to_global(Vector3(x, 0, z)), 2.6)
+	var s := _add_sweet(q, "food/cupcake", timetable.sweet_spot(), pos, 3.2)
+	s.visible = false
+	s.gate = func() -> bool: return timetable.done
+	timetable.sweet = s
+
+
+## La directora: a hedge corridor running along the coast, with the sweet in her office
+## at the far end. Its middle sits at [angle, fraction] ("at" in the lesson).
+func _build_headteacher(q: Dictionary) -> void:
+	var mid := _at(q.get("at", [85.0, 0.8]))
+	var along := Vector3(-mid.z, 0, mid.x).normalized() * -1.0     # along the coast
+	headteacher = Node3D.new()
+	headteacher.set_script(preload("res://scripts/headteacher.gd"))
+	add_child(headteacher)
+	headteacher.rotation.y = atan2(-along.x, -along.z)          # local -Z runs along the coast
+	headteacher.position = mid - along * 11.0
+	headteacher.setup()
+	for z in range(3, -26, -2):
+		for x in [-3.5, 0.0, 3.5]:
+			_keep(headteacher.to_global(Vector3(x, 0, z)), 2.4)
+	var s := _add_sweet(q, "food/donut-chocolate", headteacher.sweet_spot(), mid, 4.0)
+	headteacher.sweet = s
+
+
+## Sin señal: three antenna towers to climb; the sweet appears by the big phone in the plaza.
+const TOWER_SPOTS := [Vector3(-24, 0, -16), Vector3(26, 0, 20), Vector3(8, 0, -34)]
+const TOWER_HUB := Vector3(-18, 0, 16)
+
+
+func _build_towers(q: Dictionary) -> void:
+	towers = Node3D.new()
+	towers.set_script(preload("res://scripts/signal_towers.gd"))
+	add_child(towers)
+	towers.setup(TOWER_SPOTS, TOWER_HUB)
+	for p in TOWER_SPOTS:
+		_keep(p, 4.2)
+	_keep(TOWER_HUB, 4.0)
+	_keep(TOWER_HUB + (-TOWER_HUB.normalized()) * 3.5, 2.5)
+	var s := _add_sweet(q, "food/candy-bar", towers.sweet_spot(TOWER_HUB), TOWER_HUB, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return towers.done
+	towers.sweet = s
+
+
+## El ferry: a big ferry moored alongside a jetty that runs out from the shore at "at" degrees.
+func _build_ferry(q: Dictionary) -> void:
+	var ang := deg_to_rad(float(q.get("at", [80.0])[0]))
+	var d := Vector3(cos(ang), 0, sin(ang))
+	var side := Vector3(-d.z, 0, d.x)
+	_jetty(d * (MAIN_R - 2.0), d * (MAIN_R + 26.0))
+	for k in range(int(MAIN_R) - 8, int(MAIN_R) + 1, 2):
+		_keep(d * k, 2.6)
+	ferry = Node3D.new()
+	ferry.set_script(preload("res://scripts/ferry.gd"))
+	ferry.position = d * (MAIN_R + 17.0) + side * 7.4
+	ferry.rotation.y = atan2(d.x, d.z)          # bow (-Z) towards the island, bridge out to sea
+	add_child(ferry)
+	ferry.setup(str(q.get("model", "water/ship-cargo-a")))
+	# The gangway: a ramp from the jetty up onto the deck.
+	var land: Vector3 = ferry.to_global(ferry.gangway_spot())
+	var from := Vector3(land.x, 0, land.z) - side * 1.9
+	var to := land + Vector3(0, 0.6, 0) + side * 0.1       # just over the deck rail
+	var ramp := StaticBody3D.new()
+	ramp.add_to_group("solid_ground")
+	add_child(ramp)
+	var len := from.distance_to(to)
+	ramp.position = (from + to) / 2.0
+	ramp.look_at_from_position(ramp.position, to, Vector3.UP)
+	var rm := BoxMesh.new()
+	rm.size = Vector3(1.6, 0.15, len)
+	rm.material = Props.mat(Color(0.3, 0.35, 0.45))
+	var rmi := MeshInstance3D.new()
+	rmi.mesh = rm
+	ramp.add_child(rmi)
+	var rcs := CollisionShape3D.new()
+	var rsh := BoxShape3D.new()
+	rsh.size = rm.size
+	rcs.shape = rsh
+	ramp.add_child(rcs)
+	_add_sweet(q, "food/candy-bar", ferry.sweet_spot(), ferry.position, 4.0)
+	for p in ferry.container_tops():
+		_star(p)
+	# Its blue sister ship, anchored further along the coast (just for looks).
+	var blue := Props.model("water/ship-cargo-b")
+	blue.scale = Vector3.ONE * 2.4
+	add_child(blue)
+	blue.position = d.rotated(Vector3.UP, 0.5) * (MAIN_R + 30.0) + Vector3(0, -2.0, 0)
+	blue.rotation.y = atan2(d.x, d.z) + 1.2
+
+
+## ¿Dónde está?: a little town in the outer ring. Its main street runs along the coast;
+## "a la derecha" (local +X) is towards the sea.
+func _build_town(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [125.0, 0.8]))
+	var u := pos.normalized()
+	town = Node3D.new()
+	town.set_script(preload("res://scripts/town.gd"))
+	town.position = pos
+	town.rotation.y = atan2(-u.z, u.x)
+	add_child(town)
+	town.setup(q)
+	town.read = func(t: String, m: String): read_panel.emit(t, m)
+	for x in range(-7, 8, 2):
+		for z in range(-15, 17, 2):
+			_keep(town.to_global(Vector3(x, 0, z)), 1.6)
+	var s := _add_sweet(q, "food/cookie", town.sweet_spot(), pos, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return town.done
+	town.sweet = s
+
+
+## El mercado: stalls, a shopping list and a till. Faces the middle of the island.
+func _build_market(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [45.0, 0.8]))
+	market = Node3D.new()
+	market.set_script(preload("res://scripts/market.gd"))
+	market.position = pos
+	market.rotation.y = atan2(-pos.x, -pos.z)
+	add_child(market)
+	market.setup(q)
+	for x in range(-9, 10, 2):
+		for z in range(-6, 8, 2):
+			_keep(market.to_global(Vector3(x, 0, z)), 1.6)
+	var s := _add_sweet(q, "food/cupcake", market.sweet_spot(), pos, 3.2)
+	s.visible = false
+	s.gate = func() -> bool: return market.done
+	market.sweet = s
+
+
+## El restaurante: customers order in Spanish; one wants fish, which you catch from a rowboat
+## at a fishing spot out at sea ("fishing_at": [angle of the jetty]).
+func _build_restaurant(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [60.0, 0.76]))
+	restaurant = Node3D.new()
+	restaurant.set_script(preload("res://scripts/restaurant.gd"))
+	restaurant.position = pos
+	restaurant.rotation.y = atan2(-pos.x, -pos.z)
+	add_child(restaurant)
+	restaurant.setup(q)
+	for x in range(-9, 10, 2):
+		for z in range(-7, 8, 2):
+			_keep(restaurant.to_global(Vector3(x, 0, z)), 1.6)
+	var s := _add_sweet(q, "food/cake", restaurant.sweet_spot(), pos, 2.0)
+	s.visible = false
+	s.gate = func() -> bool: return restaurant.done
+	restaurant.sweet = s
+	if restaurant.needs_fish():
+		_build_fishing(float(q.get("fishing_at", [100.0])[0]))
+
+
+func _build_fishing(angle_deg: float) -> void:
+	var a := deg_to_rad(angle_deg)
+	var d := Vector3(cos(a), 0, sin(a))
+	var side := Vector3(-d.z, 0, d.x)
+	_jetty(d * (MAIN_R - 2.0), d * (MAIN_R + 7.0))
+	for k in range(int(MAIN_R) - 6, int(MAIN_R) + 1, 2):
+		_keep(d * k, 2.6)
+	var sign := Props.place(self, "sign", d * (MAIN_R - 3.5) + side * 2.4, atan2(d.x, d.z) + PI, 2.5, "box")
+	var sl := Label3D.new()
+	sl.text = "¡A pescar!"
+	sl.font_size = 40
+	sl.pixel_size = 0.005
+	sl.modulate = Color(0.2, 0.3, 0.6)
+	sl.position = Vector3(0, 1.1, 0.22)
+	sign.add_child(sl)
+	rowboat = Node3D.new()
+	rowboat.set_script(preload("res://scripts/rowboat.gd"))
+	add_child(rowboat)
+	rowboat.global_position = d * (MAIN_R + 9.0) + side * 0.5
+	rowboat.rotation.y = atan2(-d.x, -d.z)
+	rowboat.setup()
+	rowboat.shores = [[Vector3.ZERO, MAIN_R], [EAST_ISLAND, 5.0], [WEST_ISLAND, 5.0], [PRIZE_CENTER, 6.0]]
+	for sh in rowboat.shores:
+		rowboat.blockers.append([Vector2(sh[0].x, sh[0].z), sh[1] + 2.2])
+	fishing = Node3D.new()
+	fishing.set_script(preload("res://scripts/fishing_spot.gd"))
+	add_child(fishing)
+	fishing.position = d.rotated(Vector3.UP, -0.25) * (MAIN_R + 32.0)
+	fishing.setup()
+	fishing.rowboat = rowboat
+	fishing.on_catch = func(): restaurant.carry("fish", "food/fish", 2.6)
+	# A few rocks on the way, and stars to row through.
+	for i in 3:
+		var t := (i + 1) / 4.0
+		var mid: Vector3 = rowboat.global_position.lerp(fishing.position, t)
+		var off := side * (8.5 if i % 2 == 0 else -8.5)
+		Props.place(self, "pirate/rocks-a" if i % 2 == 0 else "pirate/rocks-b", mid + off + Vector3(0, -1.6, 0), _rng.randf() * TAU, 1.3, "")
+		rowboat.blockers.append([Vector2(mid.x + off.x, mid.z + off.z), 2.6])
+		_star(mid - off * 0.3 + Vector3(0, 0.6, 0))
+
+
+## La Tomatina: a walled street running along the coast; the sweet is in the plaza at the end.
+func _build_tomatina(q: Dictionary) -> void:
+	var mid := _at(q.get("at", [215.0, 0.8]))
+	var along := Vector3(-mid.z, 0, mid.x).normalized() * -1.0
+	tomatina = Node3D.new()
+	tomatina.set_script(preload("res://scripts/tomatina.gd"))
+	tomatina.rotation.y = atan2(-along.x, -along.z)          # local -Z runs along the coast
+	tomatina.position = mid - along * 16.0
+	add_child(tomatina)
+	tomatina.setup()
+	for z in range(3, -36, -2):
+		for x in [-5.5, -2.5, 0.0, 2.5, 5.5]:
+			_keep(tomatina.to_global(Vector3(x, 0, z)), 1.8)
+	var s := _add_sweet(q, "food/watermelon", tomatina.sweet_spot(), mid, 2.2)
+	tomatina.sweet = s
+
+
+## La piñata: jump on it three times.
+func _build_pinata(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [300.0, 0.66]))
+	pinata = Node3D.new()
+	pinata.set_script(preload("res://scripts/pinata.gd"))
+	pinata.position = pos
+	pinata.rotation.y = atan2(-pos.x, -pos.z)
+	add_child(pinata)
+	pinata.setup()
+	_keep(pos, 8.0)
+	var s := _add_sweet(q, "food/lollypop", pinata.sweet_spot(), pos, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return pinata.done
+	pinata.sweet = s
+
+
+## A sweet tucked away somewhere quiet ("at": [angle, fraction]) - e.g. a message in a bottle
+## on a far beach, under a parasol. No mechanics: the fun is in finding it.
+func _build_hidden(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [250.0, 0.92]))
+	var face := atan2(-pos.x, -pos.z)
+	var towel := MeshInstance3D.new()
+	var tm := BoxMesh.new()
+	tm.size = Vector3(1.2, 0.04, 2.0)
+	tm.material = Props.mat(Color(1.0, 0.55, 0.3))
+	towel.mesh = tm
+	add_child(towel)
+	towel.position = pos + Vector3(0, 0.02, 0)
+	towel.rotation.y = face
+	Props.place(self, "city/detail-parasol-a", pos + Vector3(0.9, 0, -0.6).rotated(Vector3.UP, face), face, 6.0, "cyl")
+	var bottle := Props.model("survival/bottle")
+	bottle.scale = Vector3.ONE * 5.0
+	add_child(bottle)
+	bottle.position = pos + Vector3(-0.8, 0.12, 0.6).rotated(Vector3.UP, face)
+	bottle.rotation = Vector3(0, face, PI / 2)
+	_keep(pos, 3.0)
+	_add_sweet(q, str(q.get("model", "food/popsicle")), pos + Vector3(0, 0.9, 0), pos, float(q.get("scale", 4.5)))
+
+
+## El escenario: the festival stage with dance pads. Faces the middle of the island.
+func _build_stage(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [90.0, 0.8]))
+	stage = Node3D.new()
+	stage.set_script(preload("res://scripts/rhythm_stage.gd"))
+	add_child(stage)
+	stage.position = pos
+	stage.rotation.y = atan2(-pos.x, -pos.z)
+	stage.setup(q)
+	for x in range(-8, 9, 2):
+		for z in [-6.0, -3.0, 0.0, 3.0, 6.0, 9.0, 12.0]:
+			_keep(stage.to_global(Vector3(x, 0, z)), 1.8)
+	var s := _add_sweet(q, "food/lollypop", stage.sweet_spot(), pos, 4.0)
+	s.visible = false
+	s.gate = func() -> bool: return stage.done
+	stage.sweet = s
+
+
+## La noria: a Ferris wheel side-on to the middle of the island; the sweet is on the lookout.
+func _build_noria(q: Dictionary) -> void:
+	var pos := _at(q.get("at", [225.0, 0.73]))
+	noria = Node3D.new()
+	noria.set_script(preload("res://scripts/ferris_wheel.gd"))
+	add_child(noria)
+	noria.position = pos
+	# The wheel turns in its local XY plane; local +Z (the side you get on) faces the middle.
+	noria.rotation.y = atan2(-pos.x, -pos.z)
+	noria.setup()
+	for x in range(-10, 11, 2):
+		for z in [-5.0, -2.5, 0.0, 2.5]:
+			_keep(noria.to_global(Vector3(x, 0, z)), 1.8)
+	_add_sweet(q, "food/cupcake", noria.sweet_spot(), pos, 3.2)
 
 
 ## El circuito: a timed obstacle course running out over the sea from the far shore.
@@ -795,10 +1278,14 @@ func _build_quest(q: Dictionary, quest: Dictionary) -> void:
 			if fp[0] == "skate/skateboard":
 				skateboard = AnimatableBody3D.new()
 				skateboard.set_script(preload("res://scripts/skateboard.gd"))
-				add_child(skateboard)
-				skateboard.global_position = cafe.to_global(fp[2])
+				# Place it before it enters the tree: an AnimatableBody3D (sync_to_physics) ignores
+				# a global_position set straight after add_child, and would sit at the origin.
+				skateboard.position = to_local(cafe.to_global(fp[2]))
 				skateboard.rotation.y = cafe.rotation.y + fp[3]
+				add_child(skateboard)
 				skateboard.setup(fp[1])
+				skateboard.park_here()
+				skateboard.island_r = MAIN_R - 1.5
 				continue
 			var d := Props.model(fp[0])
 			d.scale = Vector3.ONE * fp[1]
@@ -811,9 +1298,9 @@ func _build_quest(q: Dictionary, quest: Dictionary) -> void:
 		var ing := Area3D.new()
 		ing.set_script(preload("res://scripts/ingredient.gd"))
 		add_child(ing)
-		ing.position = item[3]
+		ing.position = ex(item[3])
 		ing.setup(item[0], item[1], item[2])
-		_keep(item[3], 1.2)
+		_keep(ing.position, 1.2)
 	Game.ingredients_total = quest.items.size()
 
 
@@ -859,8 +1346,8 @@ func _environment() -> void:
 
 	var sun := DirectionalLight3D.new()
 	sun.rotation = Vector3(deg_to_rad(-52), deg_to_rad(35), 0)
-	sun.light_color = Color(1.0, 0.96, 0.88)
-	sun.light_energy = 1.0
+	sun.light_color = theme.get("sun", Color(1.0, 0.96, 0.88))     # a theme can have an evening glow
+	sun.light_energy = float(theme.get("sun_energy", 1.0))
 	sun.shadow_enabled = true
 	sun.shadow_opacity = 0.55
 	sun.directional_shadow_max_distance = 45.0
@@ -1023,16 +1510,30 @@ func _stars() -> void:
 		# Around the island
 		Vector3(0, 0.5, 26), Vector3(14, 0.5, 22), Vector3(26, 0.5, 12), Vector3(27, 0.5, -10),
 		Vector3(-27, 0.5, 8), Vector3(-26, 0.5, -14), Vector3(-4, 0.5, -26), Vector3(4, 0.5, -26),
-		# Star Island bonus
-		Vector3(-3.2, 0.5, PRIZE_CENTER.z + 2), Vector3(3.2, 0.5, PRIZE_CENTER.z + 2),
 	]
 	for p in pts:
-		_star(p)
+		_star(ex(p))
+	# Star Island bonus
+	_star(Vector3(-3.2, 0.5, PRIZE_CENTER.z + 2))
+	_star(Vector3(3.2, 0.5, PRIZE_CENTER.z + 2))
+	# A bigger island gets a ring of extra stars in the new outer land.
+	if D > 0:
+		for i in 12:
+			var a := TAU * (i + 0.5) / 12.0
+			var sp := Vector3(cos(a), 0, sin(a)) * (MAIN_R - D * 0.45)
+			if _is_free(Vector2(sp.x, sp.z), 0.6):
+				_star(sp + Vector3(0, 0.5, 0))
 
 
 func _decorate() -> void:
+	# More land = more trees and flowers (area grows with the square of the size).
+	var dens := clampf(pow(MAIN_R / BASE_R, 2.0) * 0.7, 1.0, 1.8)
+	var tscale := float(theme.get("tree_scale", 1.0))
+	# Keep the camera's view clear at the start (it sits behind the player, towards +Z) -
+	# a big tree there fills the screen with green and looks like the game is broken.
+	_keep(SPAWN + Vector3(0, 0, 4.5), 3.0 + 1.5 * tscale)
 	# Trees, thickest towards the edge of the island
-	for i in 120:
+	for i in int(120 * dens):
 		var a := _rng.randf() * TAU
 		var d := _rng.randf_range(8.0, MAIN_R - 1.2) if i % 3 == 0 else _rng.randf_range(20.0, MAIN_R - 1.2)
 		var p := Vector2(cos(a), sin(a)) * d
@@ -1040,7 +1541,7 @@ func _decorate() -> void:
 			continue
 		_keep(Vector3(p.x, 0, p.y), 1.3)
 		var kind: String = theme.trees[_rng.randi() % theme.trees.size()]
-		Props.place(self, kind, Vector3(p.x, 0, p.y), _rng.randf() * TAU, _rng.randf_range(1.8, 2.6), "cyl")
+		Props.place(self, kind, Vector3(p.x, 0, p.y), _rng.randf() * TAU, _rng.randf_range(1.8, 2.6) * tscale, "trunk")
 	# Small islands get a few trees each
 	for c in [EAST_ISLAND, WEST_ISLAND, PRIZE_CENTER]:
 		for j in 4:
@@ -1048,10 +1549,10 @@ func _decorate() -> void:
 			var p := Vector3(c.x + cos(a) * 3.8, 0, c.z + sin(a) * 3.8)
 			if _is_free(Vector2(p.x, p.z), 1.2):
 				_keep(p, 1.2)
-				Props.place(self, theme.trees[0], p, _rng.randf() * TAU, 1.8, "cyl")
+				Props.place(self, theme.trees[0], p, _rng.randf() * TAU, 1.8 * tscale, "trunk")
 	# Flowers, mushrooms, rocks, grass tufts everywhere
 	var smalls := ["flowers", "flowers-tall", "flowers", "mushrooms", "grass", "grass", "plant", "rocks", "stones"]
-	for i in 320:
+	for i in int(320 * dens):
 		var a := _rng.randf() * TAU
 		var d := sqrt(_rng.randf()) * (MAIN_R - 0.8)
 		var p := Vector2(cos(a), sin(a)) * d
@@ -1060,6 +1561,16 @@ func _decorate() -> void:
 		var kind: String = smalls[_rng.randi() % smalls.size()]
 		var col := "cyl" if kind == "rocks" else ""
 		Props.place(self, kind, Vector3(p.x, 0, p.y), _rng.randf() * TAU, _rng.randf_range(1.6, 2.2), col)
+	# Theme extras, e.g. beach parasols on a holiday island: [model, scale, how many, (collision)]
+	for ex_prop in theme.get("props", []):
+		for i in int(ex_prop[2]):
+			var a := _rng.randf() * TAU
+			var d := _rng.randf_range(MAIN_R * 0.35, MAIN_R - 2.0)
+			var p := Vector2(cos(a), sin(a)) * d
+			if not _is_free(p, 1.5):
+				continue
+			_keep(Vector3(p.x, 0, p.y), 1.5)
+			Props.place(self, ex_prop[0], Vector3(p.x, 0, p.y), _rng.randf() * TAU, ex_prop[1], str(ex_prop[3]) if ex_prop.size() > 3 else "cyl")
 	# A few props near the start to bump into
 	Props.place(self, "barrel", Vector3(3.5, 0, 13), 0.3, 2.0, "cyl")
 	Props.place(self, "crate", Vector3(4.6, 0, 12.2), 0.2, 2.0, "box")

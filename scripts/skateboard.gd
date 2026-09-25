@@ -5,11 +5,15 @@ extends AnimatableBody3D
 const MIN_SPEED := 6.0
 const MAX_SPEED := 11.0
 const FRICTION := 2.2        # m/s lost per second
-const ISLAND_R := 28.5       # stay on the main island
+var island_r := 28.5          # stay on the main island (set by the world)
 
 var vel := Vector3.ZERO
+var home := Vector3.ZERO     # where it's parked (by the gym); it goes back there when abandoned
+var home_yaw := 0.0
 var _was_on := false
 var _model: Node3D
+var _idle := 0.0
+var _warp := false         # move home on the next physics step (it must be moved there)
 
 
 func setup(scale_factor: float) -> void:
@@ -23,9 +27,20 @@ func setup(scale_factor: float) -> void:
 	cs.shape = sh
 	cs.position.y = 0.07 * scale_factor + 0.04   # hover a hair above the ground
 	add_child(cs)
+	home = global_position if is_inside_tree() else position
+	home_yaw = rotation.y
+
+
+## Call after placing it: remembers the spot it returns to.
+func park_here() -> void:
+	home = global_position
+	home_yaw = rotation.y
 
 
 func _physics_process(delta: float) -> void:
+	if _warp:
+		_warp = false
+		_teleport(home, home_yaw)
 	var player := get_tree().get_first_node_in_group("player") as CharacterBody3D
 	var on := player != null and _player_on(player)
 	# Jump on (or run on) a still board: it shoots off the way the rider is moving.
@@ -37,7 +52,9 @@ func _physics_process(delta: float) -> void:
 	_was_on = on
 	if vel.length() < 0.05:
 		vel = Vector3.ZERO
+		_maybe_go_home(player, delta)
 		return
+	_idle = 0.0
 	# Face the direction of travel, bump off obstacles, keep to the island.
 	rotation.y = lerp_angle(rotation.y, atan2(vel.x, vel.z), 1.0 - exp(-10.0 * delta))
 	var hit := move_and_collide(vel * delta, true)
@@ -51,11 +68,41 @@ func _physics_process(delta: float) -> void:
 	else:
 		global_position += vel * delta
 	var flat := Vector2(global_position.x, global_position.z)
-	if flat.length() > ISLAND_R:
+	if flat.length() > island_r:
 		var inward := Vector3(-flat.x, 0, -flat.y).normalized()
 		vel = vel.bounce(inward) * 0.5
 		global_position -= Vector3(flat.x, 0, flat.y).normalized() * 0.1
 	vel = vel.move_toward(Vector3.ZERO, FRICTION * delta)
+
+
+## Left lying around somewhere else with nobody nearby: it pops back to its spot by the gym,
+## so it's always there to be found (and never left blocking the whiteboard).
+func _maybe_go_home(player: CharacterBody3D, delta: float) -> void:
+	if global_position.distance_to(home) < 1.0:
+		_idle = 0.0
+		return
+	if player and player.global_position.distance_to(global_position) < 8.0:
+		_idle = 0.0
+		return
+	_idle += delta
+	if _idle < 6.0:
+		return
+	_idle = 0.0
+	var t := create_tween()
+	t.tween_property(_model, "scale", Vector3.ONE * 0.01, 0.25)
+	t.tween_callback(func(): _warp = true)
+	t.tween_interval(0.05)
+	t.tween_property(_model, "scale", _model.scale, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## Moves the board instantly. With sync_to_physics the physics server owns the transform,
+## so a plain position change gets undone; tell the server too.
+func _teleport(pos: Vector3, yaw: float) -> void:
+	var xf := Transform3D(Basis(Vector3.UP, yaw), pos)
+	sync_to_physics = false
+	global_transform = xf
+	PhysicsServer3D.body_set_state(get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM, xf)
+	sync_to_physics = true
 
 
 func _player_on(p: CharacterBody3D) -> bool:

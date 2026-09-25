@@ -1,6 +1,6 @@
 {
   "format": "lesson-island/1",
-  "title": "Una aventura en Madrid",
+  "title": "Una visita a la ciudad",
   "subject": "Español - Unit 5",
   "theme": "candy",
   "intro": "A trip to Madrid! Superlatives, tú vs. usted, and the irregular preterite.",
@@ -199,6 +199,6 @@
   ],
   "prize": {
     "name": "Estrella de Oro",
-    "message": "¡Qué aventura! You survived Madrid!"
+    "message": "¡Qué aventura! What a trip to the city!"
   }
 }

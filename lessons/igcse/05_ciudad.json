@@ -1,0 +1,811 @@
+{
+  "format": "lesson-island/1",
+  "title": "La ciudad",
+  "subject": "IGCSE - Módulo 5",
+  "intro": "Towns, directions and shopping - how to describe where you live, find your way, and spend your money.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Mi ciudad",
+        "markdown": "# ¿Dónde vives?\n**Vivo en** una ciudad / un pueblo / una aldea / un barrio tranquilo.\n**Está situado/a en** el norte / el sur / el este / el oeste de Inglaterra.\n**Está cerca de** la costa / **al lado de** las montañas / **a orillas del** río.\n\n**Es** histórico/a, turístico/a, industrial, pintoresco/a, ruidoso/a, tranquilo/a.\n> **estar** for location (está en el sur), **ser** for description (es bonito)."
+      },
+      {
+        "title": "¿Qué hay?",
+        "markdown": "# ¿Qué hay en tu ciudad?\n**Hay** un museo, un polideportivo, un centro comercial, un castillo,\nuna iglesia, una plaza, un mercado, muchas tiendas...\n**No hay** cine. **No hay nada para los jóvenes.** ¡Qué rollo!\n\n# ¿Qué se puede hacer?\n**Se puede** + infinitive: se puede **visitar** el castillo, **ir** de compras,\n**pasear** por el parque. **Se pueden** ver monumentos."
+      },
+      {
+        "title": "¿Por dónde se va?",
+        "markdown": "# Directions\n**Sigue todo recto.** - Go straight on.\n**Toma la primera / segunda / tercera calle a la derecha / a la izquierda.**\n**Gira** a la derecha. **Cruza** la plaza. **Está al final de la calle.**\n\n# Where is it?\n**al lado de** (next to) - **enfrente de** (opposite) - **delante de** (in front of)\n**detrás de** (behind) - **entre** la farmacia **y** el banco (between)\n> de + el = **del**: al lado **del** banco."
+      },
+      {
+        "title": "De compras",
+        "markdown": "# En el mercado\n**Quisiera / ¿Me pone...?** un kilo de naranjas, una barra de pan,\nun cartón de leche, media docena de huevos, doscientos gramos de queso.\n**¿Cuánto cuesta?** (one thing) - **¿Cuánto cuestan?** (more than one)\n**Cuesta** 1,80 €. **Cuestan** 2,50 €. (*un euro con ochenta*)\n**¿Algo más?** - **Nada más, gracias.** - **Es demasiado caro.**\n\n# En la tienda de ropa\n¿Me lo puedo probar? - Es demasiado grande / pequeño. - Quisiera devolverlo."
+      },
+      {
+        "title": "Antes y después",
+        "markdown": "# Antes (imperfect)\n**Antes había** una fábrica. **No había** mucho turismo. **Era** más tranquilo.\n\n# Ahora (present)\nAhora **vienen** muchos visitantes cada año.\n\n# En el futuro (future)\nEl ayuntamiento **construirá** un centro comercial. **Habrá** un nuevo parque.\n**Será** más moderno. Este fin de semana **iré** al mercado."
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\n1. A **verb in the right tense** - *vivo, hay, se puede*\n2. A **time phrase** - *los sábados, antes, en el futuro*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *me encanta, lo mejor es, creo que*\n5. A **second tense** - *antes había..., el fin de semana iré...*\n\n> **Vivo en** un pueblo pintoresco **porque** mis padres trabajan aquí.\n> **Lo mejor es** la playa. **Sin embargo, antes había** más tiendas."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r5-recto",
+      "question": "Translate into Spanish:\n\"Go straight on.\"",
+      "answers": [
+        "sigue todo recto",
+        "siga todo recto",
+        "sigue recto",
+        "todo recto"
+      ],
+      "hint": "Page 3 - directions.",
+      "explanation": "Sigue todo recto."
+    },
+    {
+      "id": "r5-segunda",
+      "question": "Translate into Spanish:\n\"Take the second street on the left.\"",
+      "answers": [
+        "toma la segunda calle a la izquierda",
+        "tome la segunda calle a la izquierda",
+        "coge la segunda calle a la izquierda"
+      ],
+      "hint": "Page 3.",
+      "explanation": "Toma la segunda calle a la izquierda."
+    },
+    {
+      "id": "r5-entre",
+      "question": "El banco está ____ la farmacia y el cine.",
+      "choices": [
+        "entre",
+        "delante",
+        "al lado",
+        "enfrente"
+      ],
+      "correct": 0,
+      "hint": "Between X and Y - page 3.",
+      "explanation": "Entre la farmacia y el cine."
+    },
+    {
+      "id": "r5-cuestan",
+      "question": "¿Cuánto ____ las manzanas?\n(costar - \"do they cost\")",
+      "answers": [
+        "cuestan"
+      ],
+      "hint": "More than one thing - page 4.",
+      "explanation": "¿Cuánto cuestan las manzanas?"
+    },
+    {
+      "id": "r5-habia",
+      "question": "En el pasado no ____ mucho turismo en mi pueblo.",
+      "choices": [
+        "había",
+        "hay",
+        "habrá",
+        "haya"
+      ],
+      "correct": 0,
+      "hint": "Describing the past = imperfect - page 5.",
+      "explanation": "No había mucho turismo."
+    },
+    {
+      "id": "r5-sepuede",
+      "question": "Translate into Spanish:\n\"In my town you can visit the museum.\"",
+      "answers": [
+        "en mi ciudad se puede visitar el museo",
+        "en mi pueblo se puede visitar el museo",
+        "se puede visitar el museo en mi ciudad",
+        "se puede visitar el museo en mi pueblo"
+      ],
+      "hint": "se puede + infinitive - page 2.",
+      "explanation": "En mi ciudad se puede visitar el museo."
+    }
+  ],
+  "chests": [
+    {
+      "id": "r5-ayuntamiento",
+      "question": "\"el ayuntamiento\" is...",
+      "choices": [
+        "the town hall",
+        "the shopping centre",
+        "the sports centre",
+        "the town square"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "El ayuntamiento = the town hall.",
+      "level": 1
+    },
+    {
+      "id": "r5-aldea",
+      "question": "\"una aldea\" is...",
+      "choices": [
+        "a small village",
+        "a city",
+        "a street",
+        "a district"
+      ],
+      "correct": 0,
+      "hint": "Page 1.",
+      "explanation": "Una aldea = a small village.",
+      "level": 1
+    },
+    {
+      "id": "r5-mepone",
+      "question": "\"¿Me pone un kilo de tomates?\" means...",
+      "choices": [
+        "Can I have a kilo of tomatoes?",
+        "Where are the tomatoes?",
+        "How much are the tomatoes?",
+        "Put the tomatoes down"
+      ],
+      "correct": 0,
+      "hint": "Page 4.",
+      "explanation": "¿Me pone...? = Can I have...?",
+      "level": 2
+    },
+    {
+      "id": "r5-caro",
+      "question": "\"Es demasiado caro\" means...",
+      "choices": [
+        "It's too expensive",
+        "It's very cheap",
+        "It's too big",
+        "It's not for sale"
+      ],
+      "correct": 0,
+      "hint": "Page 4.",
+      "explanation": "Demasiado caro = too expensive.",
+      "level": 2
+    },
+    {
+      "id": "r5-construira",
+      "question": "En el futuro, el ayuntamiento ____ un centro comercial.",
+      "choices": [
+        "construirá",
+        "construyó",
+        "construía",
+        "construye"
+      ],
+      "correct": 0,
+      "hint": "En el futuro = future tense - page 5.",
+      "explanation": "Construirá - it will build.",
+      "level": 3
+    },
+    {
+      "id": "r5-esta",
+      "question": "Mi pueblo ____ situado en el sur de España.",
+      "choices": [
+        "está",
+        "es",
+        "hay",
+        "tiene"
+      ],
+      "correct": 0,
+      "hint": "Location = estar - page 1.",
+      "explanation": "Está situado en el sur.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "at": [
+        20.0,
+        0.84
+      ],
+      "question": "Describe tu ciudad o tu pueblo.",
+      "tense": "present",
+      "topic_words": [
+        "ciudad",
+        "pueblo",
+        "aldea",
+        "barrio",
+        "región",
+        "region",
+        "hay",
+        "se puede",
+        "museo",
+        "parque",
+        "plaza",
+        "iglesia",
+        "tienda",
+        "centro comercial",
+        "cine",
+        "playa",
+        "montaña",
+        "montana",
+        "río",
+        "rio",
+        "puerto",
+        "estación",
+        "estacion",
+        "turist",
+        "histór",
+        "histor",
+        "tranquil",
+        "ruidos",
+        "bonit",
+        "industrial",
+        "calle",
+        "castillo",
+        "mercado",
+        "restaurante",
+        "polideportivo",
+        "biblioteca",
+        "ayuntamiento",
+        "vivo",
+        "compras",
+        "costa"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "vivo en",
+        "está situado en",
+        "hay",
+        "se puede",
+        "porque",
+        "sin embargo",
+        "antes había"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        170.0,
+        0.8
+      ],
+      "question": "¿Cómo era tu ciudad o tu pueblo en el pasado?",
+      "tense": "imperfect",
+      "topic_words": [
+        "ciudad",
+        "pueblo",
+        "aldea",
+        "barrio",
+        "región",
+        "region",
+        "hay",
+        "se puede",
+        "museo",
+        "parque",
+        "plaza",
+        "iglesia",
+        "tienda",
+        "centro comercial",
+        "cine",
+        "playa",
+        "montaña",
+        "montana",
+        "río",
+        "rio",
+        "puerto",
+        "estación",
+        "estacion",
+        "turist",
+        "histór",
+        "histor",
+        "tranquil",
+        "ruidos",
+        "bonit",
+        "industrial",
+        "calle",
+        "castillo",
+        "mercado",
+        "restaurante",
+        "polideportivo",
+        "biblioteca",
+        "ayuntamiento",
+        "vivo",
+        "compras",
+        "costa",
+        "antes",
+        "había",
+        "habia",
+        "era",
+        "pasado"
+      ],
+      "stars_needed": 3
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        300.0,
+        0.84
+      ],
+      "question": "¿Qué harás este fin de semana en tu ciudad?",
+      "tense": "future",
+      "topic_words": [
+        "ciudad",
+        "pueblo",
+        "aldea",
+        "barrio",
+        "región",
+        "region",
+        "hay",
+        "se puede",
+        "museo",
+        "parque",
+        "plaza",
+        "iglesia",
+        "tienda",
+        "centro comercial",
+        "cine",
+        "playa",
+        "montaña",
+        "montana",
+        "río",
+        "rio",
+        "puerto",
+        "estación",
+        "estacion",
+        "turist",
+        "histór",
+        "histor",
+        "tranquil",
+        "ruidos",
+        "bonit",
+        "industrial",
+        "calle",
+        "castillo",
+        "mercado",
+        "restaurante",
+        "polideportivo",
+        "biblioteca",
+        "ayuntamiento",
+        "vivo",
+        "compras",
+        "costa",
+        "fin de semana",
+        "iré",
+        "ire",
+        "visitaré",
+        "visitare",
+        "compraré",
+        "comprare"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "notice",
+      "at": [
+        200.0,
+        0.85
+      ],
+      "intro": "The tourist sign has been vandalised! Write each verb in the right form to fix it.",
+      "text": "Mi pueblo {1} situado en el sur de España. {2} un lugar histórico y muy pintoresco. En el pasado, no {3} mucho turismo, pero ahora muchos visitantes {4} cada año. En el futuro, el ayuntamiento {5} un nuevo centro comercial.",
+      "hint": "Location = estar. Description = ser. En el pasado = imperfect. Ahora = present. En el futuro = future.",
+      "gaps": [
+        {
+          "verb": "estar",
+          "answers": [
+            "está"
+          ]
+        },
+        {
+          "verb": "ser",
+          "answers": [
+            "Es",
+            "es"
+          ]
+        },
+        {
+          "verb": "haber",
+          "answers": [
+            "había"
+          ]
+        },
+        {
+          "verb": "venir",
+          "answers": [
+            "vienen"
+          ]
+        },
+        {
+          "verb": "construir",
+          "answers": [
+            "construirá",
+            "va a construir"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "at": [
+        240.0,
+        0.8
+      ],
+      "sign": "¿Campo o ciudad?",
+      "greeting": "¿Quién lo dice?",
+      "speakers": [
+        {
+          "name": "Elena",
+          "bubble": "Vivo en el campo.",
+          "character": "character-female-c",
+          "review": "# Elena (Asturias)\n\nVivo en una aldea pequeña en las montañas de Asturias. Es muy tranquila y el aire es limpio, pero no hay mucho que hacer para los jóvenes: no hay cine ni centro comercial. El autobús a la ciudad solo pasa dos veces al día. Antes había una escuela, pero la cerraron. En el futuro me gustaría vivir en la costa."
+        },
+        {
+          "name": "Javier",
+          "bubble": "¡Me encanta Madrid!",
+          "character": "character-male-f",
+          "review": "# Javier (Madrid)\n\nVivo en el centro de Madrid. Me encanta porque hay muchísimas cosas que hacer: museos, parques, tiendas y restaurantes. El transporte público es excelente - el metro es rápido y barato. Sin embargo, hay mucha contaminación y mucho ruido, sobre todo por la noche. El sábado pasado fui de compras a la Gran Vía y gasté demasiado dinero."
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién menciona el transporte?",
+          "choices": [
+            "Elena",
+            "Javier",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "A bus... and the metro...",
+          "explanation": "Los dos - el autobús (Elena) y el metro (Javier)."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién vive en el campo?",
+          "choices": [
+            "Elena",
+            "Javier",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Mountains, a small village...",
+          "explanation": "Elena - una aldea en las montañas."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién menciona el aire o la contaminación?",
+          "choices": [
+            "Elena",
+            "Javier",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Clean air... pollution...",
+          "explanation": "Los dos - el aire limpio (Elena), la contaminación (Javier)."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién habla de ir de compras?",
+          "choices": [
+            "Elena",
+            "Javier",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who spent too much money?",
+          "explanation": "Javier - fue de compras a la Gran Vía."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién menciona un colegio?",
+          "choices": [
+            "Elena",
+            "Javier",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Una escuela...",
+          "explanation": "Elena - antes había una escuela."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién habla del futuro?",
+          "choices": [
+            "Elena",
+            "Javier",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Look for 'me gustaría'...",
+          "explanation": "Elena - en el futuro me gustaría vivir en la costa."
+        },
+        {
+          "id": "d7",
+          "question": "¿Quién se queja del ruido?",
+          "choices": [
+            "Elena",
+            "Javier",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Especially at night...",
+          "explanation": "Javier - mucho ruido, sobre todo por la noche."
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "at": [
+        345.0,
+        0.8
+      ],
+      "name": "Lucas",
+      "character": "character-male-c",
+      "color": "#2e86de",
+      "turns": [
+        {
+          "them": [
+            "¡Hola! Voy a visitar tu ciudad el mes que viene.",
+            "¿Qué hay allí?"
+          ],
+          "task": "Tell Lucas what there is in your town: hay..., se puede...",
+          "hint": "Use 'hay' + places (hay un museo, hay muchas tiendas) or 'se puede' + infinitive.",
+          "need": [
+            {
+              "all": [
+                "\\b(hay|se puede|se pueden|tiene|tenemos)\\b"
+              ],
+              "reply": [
+                "¡Qué guay!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Y cómo llego a tu casa desde la estación?"
+          ],
+          "task": "Give him directions: sigue todo recto, toma la primera calle a la derecha...",
+          "hint": "Use a direction verb (sigue, toma, gira, cruza) and a direction (recto, a la derecha, a la izquierda).",
+          "need": [
+            {
+              "all": [
+                "\\b(sigue|siga|toma|tome|coge|gira|gire|cruza|cruce|ve|baja|sube|pasa)\\b",
+                "\\b(recto|derecha|izquierda|final)\\b"
+              ],
+              "reply": [
+                "Vale, ¡lo apunto!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Qué tiempo hace allí en verano?"
+          ],
+          "task": "Describe the weather: hace calor, llueve, hace sol...",
+          "hint": "Use 'hace' (hace calor, hace sol, hace buen tiempo) or 'llueve' / 'nieva'.",
+          "need": [
+            {
+              "all": [
+                "\\b(hace|llueve|nieva|esta nublado|hay niebla|hay sol|hay tormentas?|hay viento)\\b"
+              ],
+              "reply": [
+                "¡Perfecto! Llevo mi gorra."
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "Oye, ¿vamos de compras juntos el sábado?"
+          ],
+          "task": "Say yes - or say you can't and give a reason.",
+          "hint": "Say 'sí, vale' / '¡claro!' - or 'no puedo porque tengo que...'.",
+          "need": [
+            {
+              "all": [
+                "\\bno puedo\\b",
+                "\\b(porque|ya que|tengo que)\\b"
+              ],
+              "reply": [
+                "¡Qué pena! Vamos otro día."
+              ]
+            },
+            {
+              "all": [
+                "\\b(si|vale|claro|genial|de acuerdo|por supuesto|me encantaria|me gustaria|guay|venga|perfecto)\\b"
+              ],
+              "none": [
+                "\\bno\\b"
+              ],
+              "reply": [
+                "¡Genial! Quiero comprar recuerdos."
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¡Hasta pronto!"
+          ]
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r5-sweet-ferry",
+      "kind": "ferry",
+      "at": [
+        80.0
+      ],
+      "question": "Translate into Spanish:\n\"The ferry leaves at ten o'clock.\"",
+      "answers": [
+        "el ferry sale a las diez",
+        "el ferry sale a las 10",
+        "el barco sale a las diez",
+        "el ferry sale a las diez en punto"
+      ],
+      "hint": "salir (to leave) - sale; a las + time.",
+      "explanation": "El ferry sale a las diez."
+    },
+    {
+      "id": "r5-sweet-guia",
+      "kind": "directions",
+      "at": [
+        120.0,
+        0.8
+      ],
+      "question": "¿Qué hay para los turistas en tu barrio?",
+      "character": "character-female-b",
+      "greeting": "¡Hola! ¡Habla conmigo!",
+      "rounds": [
+        {
+          "say": "Sigue todo recto y toma la primera calle a la derecha. El regalo está al final de la calle, al lado del banco.",
+          "box": "A"
+        },
+        {
+          "say": "Sigue todo recto y toma la segunda calle a la izquierda. El regalo está al final de la calle, entre la panadería y la iglesia.",
+          "box": "D"
+        },
+        {
+          "say": "Toma la segunda calle a la derecha. El regalo está al final de la calle, entre el cine y el museo.",
+          "box": "C"
+        }
+      ],
+      "sentence": {
+        "question": "La guía asks: ¿Qué hay para los turistas en tu barrio?",
+        "tense": "present",
+        "topic_words": [
+          "ciudad",
+          "pueblo",
+          "aldea",
+          "barrio",
+          "región",
+          "region",
+          "hay",
+          "se puede",
+          "museo",
+          "parque",
+          "plaza",
+          "iglesia",
+          "tienda",
+          "centro comercial",
+          "cine",
+          "playa",
+          "montaña",
+          "montana",
+          "río",
+          "rio",
+          "puerto",
+          "estación",
+          "estacion",
+          "turist",
+          "histór",
+          "histor",
+          "tranquil",
+          "ruidos",
+          "bonit",
+          "industrial",
+          "calle",
+          "castillo",
+          "mercado",
+          "restaurante",
+          "polideportivo",
+          "biblioteca",
+          "ayuntamiento",
+          "vivo",
+          "compras",
+          "costa",
+          "turistas",
+          "visitar",
+          "monumento"
+        ],
+        "stars_needed": 3
+      }
+    },
+    {
+      "id": "r5-sweet-mercado",
+      "kind": "market",
+      "at": [
+        45.0,
+        0.8
+      ],
+      "question": "Translate into Spanish:\n\"How much are the oranges?\"",
+      "answers": [
+        "¿cuánto cuestan las naranjas?",
+        "cuánto cuestan las naranjas",
+        "cuanto cuestan las naranjas"
+      ],
+      "hint": "Page 4 - more than one thing: cuestan.",
+      "explanation": "¿Cuánto cuestan las naranjas?",
+      "budget": 6.0,
+      "stalls": [
+        {
+          "name": "Frutería",
+          "need": "un kilo de naranjas",
+          "items": [
+            {
+              "name": "naranjas",
+              "price": 1.8,
+              "model": "food/orange",
+              "scale": 5.0
+            },
+            {
+              "name": "naranjas de Valencia",
+              "price": 2.9,
+              "model": "food/orange",
+              "scale": 6.5
+            }
+          ]
+        },
+        {
+          "name": "Panadería",
+          "need": "una barra de pan",
+          "items": [
+            {
+              "name": "pan de pueblo",
+              "price": 2.2,
+              "model": "food/loaf-round",
+              "scale": 2.2
+            },
+            {
+              "name": "barra de pan",
+              "price": 0.9,
+              "model": "food/loaf-baguette",
+              "scale": 2.4
+            }
+          ]
+        },
+        {
+          "name": "Lechería",
+          "need": "un cartón de leche",
+          "items": [
+            {
+              "name": "leche",
+              "price": 1.1,
+              "model": "food/carton",
+              "scale": 2.6
+            },
+            {
+              "name": "leche ecológica",
+              "price": 1.9,
+              "model": "food/carton-small",
+              "scale": 3.4
+            }
+          ]
+        },
+        {
+          "name": "Huevos",
+          "need": "media docena de huevos",
+          "items": [
+            {
+              "name": "huevos camperos",
+              "price": 2.7,
+              "model": "food/egg",
+              "scale": 6.0
+            },
+            {
+              "name": "huevos",
+              "price": 1.6,
+              "model": "food/egg",
+              "scale": 5.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Bienvenido a la ciudad! You conquered Isla 5."
+  }
+}

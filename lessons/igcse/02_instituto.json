@@ -1,0 +1,717 @@
+{
+  "format": "lesson-island/1",
+  "title": "El instituto",
+  "subject": "IGCSE - Módulo 2",
+  "intro": "Subjects, teachers, rules and school trips - and how your school used to be.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Mis asignaturas",
+        "markdown": "# Mis asignaturas\n**Estudio / Aprendo**... las matemáticas, las ciencias, la química, la historia, el dibujo,\nla informática, la educación física, el inglés...\n\n- **Me encanta** la química **porque** el profesor explica bien.\n- **Me interesa** la historia, **pero** es difícil.\n- **No me gusta nada** el dibujo **ya que** es aburrido.\n- **Mi asignatura preferida es** la informática.\n\n> **Tengo** química **los martes** a las once. - *I have chemistry on Tuesdays at eleven.*\n> Days: lunes, martes, miércoles, jueves, viernes. Time: **es la una, son las once**."
+      },
+      {
+        "title": "Comparaciones",
+        "markdown": "# Comparatives\n**más** + adjective + **que** - more ... than\n**menos** + adjective + **que** - less ... than\n**tan** + adjective + **como** - as ... as\n\n- La química es **más** interesante **que** la historia.\n- El dibujo es **menos** útil **que** la informática.\n- Mi profesor de inglés es **tan** simpático **como** mi profesora de ciencias.\n- **mejor** que (better than) / **peor** que (worse than)\n\n> The adjective agrees: las ciencias son más divertid**as**."
+      },
+      {
+        "title": "Las normas",
+        "markdown": "# Las normas del insti\n**Está prohibido** + infinitive: está prohibido **usar** el móvil en clase\n**No se permite** + infinitive: no se permite **llevar** maquillaje\n**Hay que / Tenemos que / Se debe** + infinitive: hay que **ser** puntual\n\n**Tenemos que llevar** uniforme: una chaqueta, una corbata, una falda, unos pantalones grises...\n\n# ¿Qué opinas?\nCreo que las normas son **justas / injustas / necesarias / tontas**.\n**Estoy a favor del** uniforme **porque**... - **Estoy en contra del** uniforme **ya que**..."
+      },
+      {
+        "title": "La escuela primaria",
+        "markdown": "# ¿Cómo era tu escuela primaria?\nThe **imperfect** describes how things *were* and what you *used to do*:\n\n- Mi escuela primaria **era** pequeña y **estaba** en el centro del pueblo.\n- **No había** laboratorios, pero **había** un patio grande.\n- Los profesores **eran** muy amables.\n- **Tenía** muchos amigos y **jugábamos** al fútbol en el recreo.\n- **No teníamos** que llevar uniforme.\n\n> **era, estaba, había, tenía, jugaba, llevaba** - use them to add a second tense!"
+      },
+      {
+        "title": "Extraescolares",
+        "markdown": "# Las actividades extraescolares\n**Soy miembro del** club de ajedrez / del coro / del equipo de baloncesto.\n**Toco la trompeta desde hace dos años.** - *I've been playing the trumpet for two years.*\n*desde hace* + time + **present tense** = have been doing for...\n\n# Éxitos\n**El año pasado gané** un premio / un concurso. **Saqué** buenas notas.\n**Participamos** en un concurso de bandas. ¡Fue genial!\n\n# Problemas\nel acoso escolar (bullying) - hacer novillos (to skive) - la presión de los exámenes"
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\n1. A **verb in the right tense** - *estudio, me gusta*\n2. A **time phrase** - *los lunes, el año pasado, en el futuro*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *me encanta, creo que, a mi parecer*\n5. A **second tense** - *en la primaria era..., el año que viene voy a...*\n\n> **A mi parecer** mi insti es genial **porque** los profesores son simpáticos.\n> **Sin embargo**, **en la primaria había** más tiempo libre."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r2-quimica",
+      "question": "Translate into Spanish:\n\"chemistry\"",
+      "answers": [
+        "la química",
+        "química"
+      ],
+      "hint": "Page 1 - subjects.",
+      "explanation": "La química."
+    },
+    {
+      "id": "r2-masque",
+      "question": "La informática es ____ interesante ____ el dibujo.\n(more ... than)",
+      "answers": [
+        "más que",
+        "más ... que",
+        "más...que"
+      ],
+      "hint": "Page 2 - comparatives.",
+      "explanation": "Más interesante que."
+    },
+    {
+      "id": "r2-movil",
+      "question": "Translate into Spanish:\n\"It is forbidden to use your mobile.\"",
+      "answers": [
+        "está prohibido usar el móvil",
+        "está prohibido usar el teléfono móvil",
+        "está prohibido usar tu móvil"
+      ],
+      "hint": "Page 3 - está prohibido + infinitive.",
+      "explanation": "Está prohibido usar el móvil."
+    },
+    {
+      "id": "r2-habia",
+      "question": "En mi escuela primaria no ____ laboratorios.",
+      "choices": [
+        "había",
+        "hay",
+        "hubo",
+        "habrá"
+      ],
+      "correct": 0,
+      "hint": "Describing the past = imperfect - page 4.",
+      "explanation": "No había laboratorios - 'there were no labs'."
+    },
+    {
+      "id": "r2-trompeta",
+      "question": "Translate into Spanish:\n\"I have been playing the trumpet for two years.\"",
+      "answers": [
+        "toco la trompeta desde hace dos años",
+        "toco la trompeta desde hace 2 años",
+        "desde hace dos años toco la trompeta"
+      ],
+      "hint": "desde hace + present tense - page 5.",
+      "explanation": "Toco la trompeta desde hace dos años."
+    },
+    {
+      "id": "r2-llevar",
+      "question": "Translate into Spanish:\n\"We have to wear a uniform.\"",
+      "answers": [
+        "tenemos que llevar uniforme",
+        "tenemos que llevar un uniforme",
+        "hay que llevar uniforme",
+        "hay que llevar un uniforme"
+      ],
+      "hint": "Page 3 - tener que + infinitive.",
+      "explanation": "Tenemos que llevar uniforme."
+    }
+  ],
+  "chests": [
+    {
+      "id": "r2-informatica",
+      "question": "\"la informática\" is...",
+      "choices": [
+        "ICT / computing",
+        "information",
+        "PE",
+        "careers advice"
+      ],
+      "correct": 0,
+      "hint": "Page 1.",
+      "explanation": "La informática = ICT.",
+      "level": 1
+    },
+    {
+      "id": "r2-acoso",
+      "question": "\"el acoso escolar\" means...",
+      "choices": [
+        "bullying",
+        "a school policy",
+        "detention",
+        "truancy"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "El acoso escolar = bullying.",
+      "level": 1
+    },
+    {
+      "id": "r2-novillos",
+      "question": "\"Mi amigo hace novillos\" means...",
+      "choices": [
+        "My friend skives off school",
+        "My friend does his homework",
+        "My friend makes friends",
+        "My friend is new"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "Hacer novillos = to skive.",
+      "level": 2
+    },
+    {
+      "id": "r2-tancomo",
+      "question": "El inglés es ____ fácil ____ el francés.\n(as ... as)",
+      "choices": [
+        "tan / como",
+        "más / como",
+        "tan / que",
+        "tanto / que"
+      ],
+      "correct": 0,
+      "hint": "Page 2.",
+      "explanation": "Tan fácil como - as easy as.",
+      "level": 2
+    },
+    {
+      "id": "r2-son",
+      "question": "Las ciencias ____ más difíciles que el dibujo.",
+      "choices": [
+        "son",
+        "es",
+        "están",
+        "eran"
+      ],
+      "correct": 0,
+      "hint": "Plural subject, general truth.",
+      "explanation": "Las ciencias son más difíciles.",
+      "level": 3
+    },
+    {
+      "id": "r2-gane",
+      "question": "El año pasado ____ un premio de música.",
+      "choices": [
+        "gané",
+        "ganaba",
+        "gano",
+        "ganaré"
+      ],
+      "correct": 0,
+      "hint": "El año pasado + one finished event = preterite.",
+      "explanation": "Gané un premio.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "at": [
+        30.0,
+        0.84
+      ],
+      "question": "Describe tu instituto.",
+      "tense": "present",
+      "topic_words": [
+        "instituto",
+        "insti",
+        "colegio",
+        "escuela",
+        "clase",
+        "asignatura",
+        "profesor",
+        "alumn",
+        "estudi",
+        "aprend",
+        "uniforme",
+        "norma",
+        "regla",
+        "deberes",
+        "examen",
+        "nota",
+        "recreo",
+        "biblioteca",
+        "laboratorio",
+        "patio",
+        "matemáticas",
+        "matematicas",
+        "ciencias",
+        "historia",
+        "inglés",
+        "ingles",
+        "química",
+        "quimica",
+        "dibujo",
+        "informática",
+        "informatica",
+        "música",
+        "musica",
+        "idioma",
+        "educación",
+        "educacion",
+        "gimnasio",
+        "polideportivo",
+        "excursi",
+        "visita",
+        "viaje",
+        "director",
+        "universidad",
+        "bachillerato"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "mi instituto es",
+        "hay",
+        "me encanta",
+        "porque",
+        "sin embargo",
+        "el año pasado",
+        "era"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        135.0,
+        0.84
+      ],
+      "question": "¿Cómo era tu escuela primaria?",
+      "tense": "imperfect",
+      "topic_words": [
+        "instituto",
+        "insti",
+        "colegio",
+        "escuela",
+        "clase",
+        "asignatura",
+        "profesor",
+        "alumn",
+        "estudi",
+        "aprend",
+        "uniforme",
+        "norma",
+        "regla",
+        "deberes",
+        "examen",
+        "nota",
+        "recreo",
+        "biblioteca",
+        "laboratorio",
+        "patio",
+        "matemáticas",
+        "matematicas",
+        "ciencias",
+        "historia",
+        "inglés",
+        "ingles",
+        "química",
+        "quimica",
+        "dibujo",
+        "informática",
+        "informatica",
+        "música",
+        "musica",
+        "idioma",
+        "educación",
+        "educacion",
+        "gimnasio",
+        "polideportivo",
+        "excursi",
+        "visita",
+        "viaje",
+        "director",
+        "universidad",
+        "bachillerato",
+        "primaria",
+        "había",
+        "habia",
+        "jugaba",
+        "jugábamos",
+        "jugabamos"
+      ],
+      "stars_needed": 3
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        310.0,
+        0.84
+      ],
+      "question": "Describe una visita escolar reciente.",
+      "tense": "preterite",
+      "topic_words": [
+        "instituto",
+        "insti",
+        "colegio",
+        "escuela",
+        "clase",
+        "asignatura",
+        "profesor",
+        "alumn",
+        "estudi",
+        "aprend",
+        "uniforme",
+        "norma",
+        "regla",
+        "deberes",
+        "examen",
+        "nota",
+        "recreo",
+        "biblioteca",
+        "laboratorio",
+        "patio",
+        "matemáticas",
+        "matematicas",
+        "ciencias",
+        "historia",
+        "inglés",
+        "ingles",
+        "química",
+        "quimica",
+        "dibujo",
+        "informática",
+        "informatica",
+        "música",
+        "musica",
+        "idioma",
+        "educación",
+        "educacion",
+        "gimnasio",
+        "polideportivo",
+        "excursi",
+        "visita",
+        "viaje",
+        "director",
+        "universidad",
+        "bachillerato",
+        "fuimos",
+        "fui",
+        "museo",
+        "autocar",
+        "visitamos"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "notice",
+      "at": [
+        195.0,
+        0.85
+      ],
+      "intro": "Someone scribbled on the school notice! Write each word in the right form to fix it.",
+      "text": "Mi amiga es {1} a su móvil. En el instituto {2} fotos de todo el mundo y {3} música durante el recreo. Nunca quiere hablar con nosotros y no tiene tiempo para {4} o hacer otras cosas. La semana pasada lo {5} en el autobús y nosotros {6} que ir a la comisaría.",
+      "hint": "Does the adjective agree with 'mi amiga'? Which verbs are about last week?",
+      "gaps": [
+        {
+          "verb": "adicto",
+          "answers": [
+            "adicta"
+          ]
+        },
+        {
+          "verb": "sacar",
+          "answers": [
+            "saca"
+          ]
+        },
+        {
+          "verb": "descargar",
+          "answers": [
+            "descarga"
+          ]
+        },
+        {
+          "verb": "leer",
+          "answers": [
+            "leer"
+          ]
+        },
+        {
+          "verb": "perder",
+          "answers": [
+            "perdió"
+          ]
+        },
+        {
+          "verb": "tener",
+          "answers": [
+            "tuvimos"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "at": [
+        345.0,
+        0.8
+      ],
+      "sign": "Foro de institutos",
+      "greeting": "¿Quién lo dice?",
+      "speakers": [
+        {
+          "name": "Lina",
+          "bubble": "¡Mi insti es genial!",
+          "character": "character-female-e",
+          "review": "# Lina (Madrid)\n\nMi instituto es grande, mixto y tiene muy buena fama, dado que los alumnos siempre sacan buenas notas. No hay mucho acoso escolar. En junio mis amigos y yo participamos en un concurso de bandas, y los profesores de música nos ayudaron. ¡Fue genial! No tenemos que llevar uniforme porque es más cómodo llevar ropa de calle. Sin embargo, el nuevo director va a introducir normas más estrictas: ahora está prohibido llevar maquillaje. ¡Qué pesado! Pero vamos a tener un polideportivo y un gimnasio con un muro de escalada."
+        },
+        {
+          "name": "Marcos",
+          "bubble": "Mi insti es... regular.",
+          "character": "character-male-c",
+          "review": "# Marcos (Sevilla)\n\nMi instituto es pequeño y bastante antiguo. Tenemos que llevar uniforme - una chaqueta azul y una corbata - y lo odio porque es muy incómodo. Las normas son estrictas: está prohibido usar el móvil y hay que ser puntual. Mi profesora de ciencias es excelente porque explica bien, pero el profesor de dibujo es muy serio. El mes pasado fuimos de excursión a un museo en autocar. ¡Qué aburrido! En la primaria había más tiempo libre y jugábamos en el patio todo el día."
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién menciona el uniforme?",
+          "choices": [
+            "Lina",
+            "Marcos",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Who talks about what they wear?",
+          "explanation": "Los dos - Lina no lleva uniforme; Marcos lleva chaqueta y corbata."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién menciona la música?",
+          "choices": [
+            "Lina",
+            "Marcos",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who was in a band?",
+          "explanation": "Lina - un concurso de bandas."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién menciona una excursión?",
+          "choices": [
+            "Lina",
+            "Marcos",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who went to a museum?",
+          "explanation": "Marcos - fuimos de excursión a un museo."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién menciona las normas?",
+          "choices": [
+            "Lina",
+            "Marcos",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Look for 'prohibido'...",
+          "explanation": "Los dos - maquillaje (Lina), móvil (Marcos)."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién menciona las instalaciones deportivas?",
+          "choices": [
+            "Lina",
+            "Marcos",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who mentions a gym?",
+          "explanation": "Lina - un polideportivo y un gimnasio."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién menciona la escuela primaria?",
+          "choices": [
+            "Lina",
+            "Marcos",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who talks about the past with the imperfect?",
+          "explanation": "Marcos - en la primaria había más tiempo libre."
+        },
+        {
+          "id": "d7",
+          "question": "¿Quién menciona a un buen profesor?",
+          "choices": [
+            "Lina",
+            "Marcos",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Who says teachers helped or explained well?",
+          "explanation": "Los dos - los profesores de música (Lina) y la profesora de ciencias (Marcos)."
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r2-sweet-horario",
+      "kind": "timetable",
+      "question": "Translate into Spanish:\n\"I have chemistry on Tuesdays.\"",
+      "answers": [
+        "tengo química los martes",
+        "los martes tengo química",
+        "yo tengo química los martes",
+        "tengo la química los martes"
+      ],
+      "hint": "tener + subject + los martes",
+      "explanation": "Tengo química los martes.",
+      "timetable": [
+        [
+          "lunes",
+          "9:00 historia",
+          "11:00 dibujo",
+          "13:00 química"
+        ],
+        [
+          "martes",
+          "9:00 informática",
+          "11:00 química",
+          "13:00 historia"
+        ],
+        [
+          "miércoles",
+          "9:00 dibujo",
+          "11:00 historia",
+          "13:00 informática"
+        ]
+      ],
+      "rounds": [
+        {
+          "say": "Es martes. Son las once.",
+          "answer": "química"
+        },
+        {
+          "say": "Es lunes. Son las nueve.",
+          "answer": "historia"
+        },
+        {
+          "say": "Es miércoles. Es la una.",
+          "answer": "informática"
+        }
+      ]
+    },
+    {
+      "id": "r2-sweet-uniforme",
+      "kind": "headteacher",
+      "question": "¿Estás a favor o en contra del uniforme escolar?",
+      "sentence": {
+        "question": "La directora asks: ¿Estás a favor o en contra del uniforme escolar?",
+        "tense": "present",
+        "topic_words": [
+          "instituto",
+          "insti",
+          "colegio",
+          "escuela",
+          "clase",
+          "asignatura",
+          "profesor",
+          "alumn",
+          "estudi",
+          "aprend",
+          "uniforme",
+          "norma",
+          "regla",
+          "deberes",
+          "examen",
+          "nota",
+          "recreo",
+          "biblioteca",
+          "laboratorio",
+          "patio",
+          "matemáticas",
+          "matematicas",
+          "ciencias",
+          "historia",
+          "inglés",
+          "ingles",
+          "química",
+          "quimica",
+          "dibujo",
+          "informática",
+          "informatica",
+          "música",
+          "musica",
+          "idioma",
+          "educación",
+          "educacion",
+          "gimnasio",
+          "polideportivo",
+          "excursi",
+          "visita",
+          "viaje",
+          "director",
+          "universidad",
+          "bachillerato",
+          "favor",
+          "contra",
+          "llevar",
+          "ropa",
+          "chaqueta",
+          "corbata",
+          "falda",
+          "cómodo",
+          "comodo"
+        ],
+        "stars_needed": 3
+      }
+    },
+    {
+      "id": "r2-sweet-estudiar",
+      "kind": "newstudent",
+      "question": "¿Qué te gustaría estudiar el año próximo?",
+      "sentence": {
+        "question": "El alumno nuevo asks: ¿Qué te gustaría estudiar el año próximo?",
+        "tense": "conditional",
+        "topic_words": [
+          "instituto",
+          "insti",
+          "colegio",
+          "escuela",
+          "clase",
+          "asignatura",
+          "profesor",
+          "alumn",
+          "estudi",
+          "aprend",
+          "uniforme",
+          "norma",
+          "regla",
+          "deberes",
+          "examen",
+          "nota",
+          "recreo",
+          "biblioteca",
+          "laboratorio",
+          "patio",
+          "matemáticas",
+          "matematicas",
+          "ciencias",
+          "historia",
+          "inglés",
+          "ingles",
+          "química",
+          "quimica",
+          "dibujo",
+          "informática",
+          "informatica",
+          "música",
+          "musica",
+          "idioma",
+          "educación",
+          "educacion",
+          "gimnasio",
+          "polideportivo",
+          "excursi",
+          "visita",
+          "viaje",
+          "director",
+          "universidad",
+          "bachillerato",
+          "me gustaría",
+          "me gustaria",
+          "estudiaría",
+          "estudiaria",
+          "año próximo",
+          "futuro"
+        ],
+        "stars_needed": 3
+      }
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Sobresaliente! You conquered Isla 2."
+  }
+}

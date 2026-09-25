@@ -1,0 +1,17 @@
+{
+  "teacher_games": "",
+  "games": [
+    {
+      "id": "saber",
+      "title": "La Isla del Saber",
+      "config": "config.json",
+      "color": "#f0508c"
+    },
+    {
+      "id": "retos",
+      "title": "La Isla de los Retos",
+      "config": "config_retos.json",
+      "color": "#2e86de"
+    }
+  ]
+}

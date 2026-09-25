@@ -7,6 +7,7 @@ signal cards_changed
 signal sweets_changed
 signal key_changed
 signal ingredients_changed
+signal retos_changed
 signal toast(text: String)
 
 ## Answer check results
@@ -34,6 +35,16 @@ var character := "character-female-f"
 var hero_name := "Ester"
 var hero_index := 0
 var outfit_index := 0
+
+## Which game (La Isla del Saber / La Isla de los Retos): chosen on the game chooser or by ?game=...
+var games: Array = []          # from games.json
+var game_id := ""
+var game_locked := false        # true when a direct link picked the game (no way back to the chooser)
+var teacher_games_url := ""     # "teacher_games" in games.json: the page the Teacher Games button opens
+
+## Retos (IGCSE challenges): postcards, notice boards, detective...
+var retos_done := 0
+var total_retos := 0
 
 ## Scene-reload handoff: which island to jump straight into (index into config.course, -1 = title).
 var pending_island := -1
@@ -120,6 +131,8 @@ func reset_progress() -> void:
 	total_sweets = 0
 	has_key = false
 	ingredients.clear()
+	retos_done = 0
+	total_retos = 0
 	ingredients_total = 0
 	first_try = 0
 	attempts.clear()

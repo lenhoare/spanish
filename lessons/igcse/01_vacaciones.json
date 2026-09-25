@@ -1,0 +1,607 @@
+{
+  "format": "lesson-island/1",
+  "title": "Las vacaciones",
+  "subject": "IGCSE - Módulo 1",
+  "intro": "Holidays, hotels and disasters! The preterite, the imperfect and how to write answers worth five stars.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "¿Qué hiciste?",
+        "markdown": "# ¿Qué hiciste? - the preterite\nFor **completed actions** in the past: *ayer, el año pasado, hace dos años...*\n\n| | ir / ser | hacer | tener | ver |\n|---|---|---|---|---|\n| yo | **fui** | **hice** | **tuve** | **vi** |\n| nosotros | **fuimos** | **hicimos** | **tuvimos** | **vimos** |\n\nRegular: visit**é**, com**í**, sal**í** - and nosotros: visit**amos**, com**imos**\n\n- Hace dos años **fui** de vacaciones a Benidorm con mi familia.\n- **Viajamos** en avión y en autocar.\n- **Hice** turismo, **saqué** fotos y **compré** recuerdos.\n- **Aprendí** a bucear y **tomé** el sol."
+      },
+      {
+        "title": "Pretérito o imperfecto",
+        "markdown": "# Preterite or imperfect?\n**Preterite** - a single, finished action: *fui, me quedé, pasé*\n**Imperfect** - description (what it *was like*) or what you *used to* do:\n*era, estaba, tenía, había, hacía, íbamos*\n\n- Saqué fotos cuando **estaba** en las montañas.\n- Me quedé en una pensión, pero no **tenía** piscina.\n- De joven, **íbamos** a la playa y **hacíamos** barbacoa.\n- El hotel **tenía** vistas al mar y **era** muy cómodo.\n- Ayer lo **pasé** muy bien porque **hice** el vago.\n\n> Using BOTH tenses in one answer shows the examiner real range."
+      },
+      {
+        "title": "El alojamiento",
+        "markdown": "# ¿Dónde te alojaste?\n**Me alojé / Me quedé** en... - **Nos alojamos / Nos quedamos** en...\nun albergue juvenil, un apartamento, un camping, un hotel de cinco estrellas,\nun parador, una casa rural, una pensión\n\n**Estaba** cerca de la playa / en el centro / en las afueras.\n**Era** acogedor, antiguo, lujoso, moderno, ruidoso, tranquilo...\n**Tenía / Había** piscina cubierta, gimnasio, restaurante, aparcamiento...\n**No tenía ni** wifi **ni** aire acondicionado. **Tampoco tenía** ascensor."
+      },
+      {
+        "title": "¡Qué desastre!",
+        "markdown": "# Problemas en las vacaciones\n- **Perdí** el equipaje / la cartera / la maleta / las llaves\n- **Tuve** un accidente / un pinchazo / un retraso\n- **Tuve que** esperar mucho tiempo / ir a la comisaría\n- **Cuando llegamos**, era muy tarde y la recepción ya estaba cerrada\n\n# Quiero quejarme\nLa ducha **no funciona**. La habitación **está sucia**.\n**No hay** toallas. **Necesito** papel higiénico.\n**Quiero** hablar con el director. **Es inaceptable.**"
+      },
+      {
+        "title": "Opiniones",
+        "markdown": "# ¿Qué tal lo pasaste?\n**Lo pasé** bomba / fenomenal / bien / mal / fatal\n**Fue** inolvidable / increíble / impresionante / un desastre\n**Lo mejor fue** cuando aprendí a bucear. **Lo peor fue** cuando perdí mi móvil.\n¡Qué horror! ¡Qué guay! ¡Qué desastre!\n\n# Time phrases\n**hace** una semana / dos años - **el verano pasado** - **el primer día** -\n**al día siguiente** - **el último día** - **el año que viene**"
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\nThe postboxes mark your writing like an examiner. One star for each:\n\n1. A **verb in the right tense** - *fui, visité*\n2. A **time phrase** - *el verano pasado, hace dos años*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *lo mejor fue, me encantó*\n5. A **second tense** - *era muy bonito, el año que viene voy a volver*\n\n> **El verano pasado fui** a Italia con mi familia. **Lo mejor fue** la comida,\n> **sin embargo** el hotel **era** muy ruidoso."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r1-fui",
+      "question": "How do you say \"I went\" in Spanish?",
+      "answers": [
+        "fui",
+        "yo fui"
+      ],
+      "hint": "Preterite of ir - page 1.",
+      "explanation": "Fui - the same as 'I was' (ser)!"
+    },
+    {
+      "id": "r1-alojamos",
+      "question": "El año pasado ____ en un camping.\n(alojarse - \"we stayed\")",
+      "answers": [
+        "nos alojamos"
+      ],
+      "hint": "Reflexive verb: nos + nosotros form - page 3.",
+      "explanation": "Nos alojamos en un camping."
+    },
+    {
+      "id": "r1-ibamos",
+      "question": "De joven, ____ a la playa todos los veranos.",
+      "choices": [
+        "íbamos",
+        "fuimos",
+        "vamos",
+        "iremos"
+      ],
+      "correct": 0,
+      "hint": "'Used to' = imperfect - page 2.",
+      "explanation": "Íbamos - imperfect of ir for things you used to do."
+    },
+    {
+      "id": "r1-inolvidable",
+      "question": "Translate into Spanish:\n\"It was unforgettable.\"",
+      "answers": [
+        "fue inolvidable",
+        "era inolvidable"
+      ],
+      "hint": "Page 5 - opinions.",
+      "explanation": "Fue inolvidable."
+    },
+    {
+      "id": "r1-tenia",
+      "question": "El hotel ____ vistas al mar y ____ muy cómodo.",
+      "choices": [
+        "tenía / era",
+        "tuvo / fue",
+        "tiene / fue",
+        "tenía / fue"
+      ],
+      "correct": 0,
+      "hint": "Describing the hotel = imperfect - page 2.",
+      "explanation": "Tenía / era - description uses the imperfect."
+    },
+    {
+      "id": "r1-maleta",
+      "question": "Translate into Spanish:\n\"I lost my suitcase.\"",
+      "answers": [
+        "perdí mi maleta",
+        "perdí la maleta",
+        "yo perdí mi maleta"
+      ],
+      "hint": "Page 4 - problems.",
+      "explanation": "Perdí mi maleta. ¡Qué desastre!"
+    }
+  ],
+  "chests": [
+    {
+      "id": "r1-pension",
+      "question": "\"una pensión\" is...",
+      "choices": [
+        "a guest house",
+        "a pension fund",
+        "a campsite",
+        "a youth hostel"
+      ],
+      "correct": 0,
+      "hint": "Page 3.",
+      "explanation": "Una pensión = a guest house.",
+      "level": 1
+    },
+    {
+      "id": "r1-bomba",
+      "question": "\"Lo pasé bomba\" means...",
+      "choices": [
+        "I had a great time",
+        "I had an accident",
+        "It was a disaster",
+        "I was bored"
+      ],
+      "correct": 0,
+      "hint": "Page 5.",
+      "explanation": "Lo pasé bomba = I had a great time.",
+      "level": 1
+    },
+    {
+      "id": "r1-tormenta",
+      "question": "\"Hubo tormenta\" means...",
+      "choices": [
+        "It was stormy",
+        "It was foggy",
+        "It was windy",
+        "It rained a little"
+      ],
+      "correct": 0,
+      "hint": "Weather in the past.",
+      "explanation": "Hubo tormenta = there was a storm.",
+      "level": 2
+    },
+    {
+      "id": "r1-ni",
+      "question": "\"No tenía ni piscina ni gimnasio\" means...",
+      "choices": [
+        "It had neither a pool nor a gym",
+        "It had a pool but no gym",
+        "It had a pool and a gym",
+        "It didn't have a pool, just a gym"
+      ],
+      "correct": 0,
+      "hint": "Page 3.",
+      "explanation": "Ni... ni... = neither... nor...",
+      "level": 2
+    },
+    {
+      "id": "r1-estaba",
+      "question": "Saqué fotos cuando ____ en las montañas.",
+      "choices": [
+        "estaba",
+        "estuve",
+        "estoy",
+        "estaré"
+      ],
+      "correct": 0,
+      "hint": "Background description = imperfect - page 2.",
+      "explanation": "Estaba - 'when I was (there)' is background.",
+      "level": 3
+    },
+    {
+      "id": "r1-pase",
+      "question": "Ayer lo ____ muy bien porque hice el vago.",
+      "choices": [
+        "pasé",
+        "pasaba",
+        "paso",
+        "pasaré"
+      ],
+      "correct": 0,
+      "hint": "Ayer + one finished event = preterite - page 2.",
+      "explanation": "Lo pasé muy bien.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "question": "¿Adónde fuiste de vacaciones el año pasado?",
+      "tense": "preterite",
+      "topic_words": [
+        "vacacion",
+        "viaj",
+        "fui",
+        "fuimos",
+        "visit",
+        "playa",
+        "hotel",
+        "camping",
+        "españa",
+        "francia",
+        "italia",
+        "costa",
+        "montaña",
+        "ciudad",
+        "mar",
+        "aloj",
+        "qued",
+        "turismo",
+        "excursi",
+        "avión",
+        "avion",
+        "familia",
+        "verano",
+        "extranjero",
+        "piscina",
+        "sol",
+        "pueblo",
+        "parque",
+        "museo"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "el año pasado",
+        "fui a",
+        "con mi familia",
+        "porque",
+        "lo mejor fue",
+        "sin embargo",
+        "era"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "question": "Cuando eras más joven, ¿qué hacías durante las vacaciones?",
+      "tense": "imperfect",
+      "topic_words": [
+        "vacacion",
+        "viaj",
+        "fui",
+        "fuimos",
+        "visit",
+        "playa",
+        "hotel",
+        "camping",
+        "españa",
+        "francia",
+        "italia",
+        "costa",
+        "montaña",
+        "ciudad",
+        "mar",
+        "aloj",
+        "qued",
+        "turismo",
+        "excursi",
+        "avión",
+        "avion",
+        "familia",
+        "verano",
+        "extranjero",
+        "piscina",
+        "sol",
+        "pueblo",
+        "parque",
+        "museo",
+        "íbamos",
+        "ibamos",
+        "jugaba",
+        "hacía",
+        "hacia"
+      ],
+      "stars_needed": 3
+    },
+    {
+      "kind": "postcard",
+      "question": "¿Qué te gusta hacer de vacaciones? ¿Por qué?",
+      "tense": "present",
+      "topic_words": [
+        "vacacion",
+        "viaj",
+        "fui",
+        "fuimos",
+        "visit",
+        "playa",
+        "hotel",
+        "camping",
+        "españa",
+        "francia",
+        "italia",
+        "costa",
+        "montaña",
+        "ciudad",
+        "mar",
+        "aloj",
+        "qued",
+        "turismo",
+        "excursi",
+        "avión",
+        "avion",
+        "familia",
+        "verano",
+        "extranjero",
+        "piscina",
+        "sol",
+        "pueblo",
+        "parque",
+        "museo",
+        "me gusta",
+        "nadar",
+        "tomar",
+        "descansar",
+        "prefiero"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "notice",
+      "intro": "The storm broke the notice! Write each verb in the right form to fix it.",
+      "text": "A menudo, la gente {1} las vacaciones en la montaña y, si hace buen tiempo, es divertido {2} al aire libre. Según una encuesta, el invierno pasado muchas familias {3} en apartamentos en vez de en hoteles {4}, porque un apartamento {5} más barato y más {6}. El año que viene yo {7} la costa del norte de España y tengo la intención de {8} excursiones a {9} lugares de interés.",
+      "hint": "Think: what time frame? Who is doing it? Does the adjective agree?",
+      "gaps": [
+        {
+          "verb": "pasar",
+          "answers": [
+            "pasa"
+          ]
+        },
+        {
+          "verb": "estar",
+          "answers": [
+            "estar"
+          ]
+        },
+        {
+          "verb": "quedarse",
+          "answers": [
+            "se quedaron"
+          ]
+        },
+        {
+          "verb": "lujoso",
+          "answers": [
+            "lujosos"
+          ]
+        },
+        {
+          "verb": "ser",
+          "answers": [
+            "es",
+            "era"
+          ]
+        },
+        {
+          "verb": "cómodo",
+          "answers": [
+            "cómodo"
+          ]
+        },
+        {
+          "verb": "visitar",
+          "answers": [
+            "visitaré",
+            "voy a visitar"
+          ]
+        },
+        {
+          "verb": "hacer",
+          "answers": [
+            "hacer"
+          ]
+        },
+        {
+          "verb": "mucho",
+          "answers": [
+            "muchos"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "sign": "Hotel Paraíso",
+      "greeting": "¿Quién lo dice?",
+      "speakers": [
+        {
+          "name": "Isabel",
+          "bubble": "¡Hotel horroroso!",
+          "character": "character-female-b",
+          "review": "# Isabel-98 (La Palma)\n\n¡Hotel horroroso! Pasé un finde en este hotel y no era nada barato - 150 € por noche. ¡Qué timo! Las habitaciones estaban muy sucias, la ducha estaba estropeada y no había toallas. También había basura en la piscina. Cuando fuimos a cenar, la comida estaba fría y había un insecto en mi sopa. Pero lo peor fue que el recepcionista tenía muy mala actitud."
+        },
+        {
+          "name": "Tomás",
+          "bubble": "¡Experiencia malísima!",
+          "character": "character-male-d",
+          "review": "# TomásFG (Bilbao)\n\nExperiencia malísima. No recomiendo este hotel. No tenía wifi ni aire acondicionado en las habitaciones. Tampoco tenía aparcamiento. El gimnasio no estaba abierto y el ascensor estaba estropeado. Había una discoteca que tenía la música muy alta, y por eso era imposible dormir. Además, el camarero en el restaurante era muy maleducado. Pero lo peor fue que había una serpiente en el balcón. ¡Qué miedo!"
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién menciona la falta de limpieza?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who says things were dirty (sucias)?",
+          "explanation": "Isabel - las habitaciones estaban muy sucias."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién menciona a los empleados del hotel?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Look for the receptionist and the waiter.",
+          "explanation": "Los dos - el recepcionista (Isabel) y el camarero (Tomás)."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién menciona la comida?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who had dinner?",
+          "explanation": "Isabel - la comida estaba fría."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién menciona el ruido?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who couldn't sleep?",
+          "explanation": "Tomás - la discoteca tenía la música muy alta."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién menciona las instalaciones deportivas?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who mentions the gym?",
+          "explanation": "Tomás - el gimnasio no estaba abierto."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién menciona el precio?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who mentions euros?",
+          "explanation": "Isabel - 150 € por noche. ¡Qué timo!"
+        },
+        {
+          "id": "d7",
+          "question": "¿Quién menciona el cuarto de baño?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who mentions the shower and towels?",
+          "explanation": "Isabel - la ducha estaba estropeada y no había toallas."
+        },
+        {
+          "id": "d8",
+          "question": "¿Quién menciona un reptil?",
+          "choices": [
+            "Isabel",
+            "Tomás",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Una serpiente is a reptile...",
+          "explanation": "Tomás - ¡una serpiente en el balcón!"
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r1-sweet-ideal",
+      "kind": "hidden",
+      "at": [
+        250.0,
+        0.92
+      ],
+      "question": "¿Cómo serían tus vacaciones ideales?",
+      "sentence": {
+        "question": "A message in a bottle: ¿Cómo serían tus vacaciones ideales?",
+        "tense": "conditional",
+        "topic_words": [
+          "vacacion",
+          "viaj",
+          "fui",
+          "fuimos",
+          "visit",
+          "playa",
+          "hotel",
+          "camping",
+          "españa",
+          "francia",
+          "italia",
+          "costa",
+          "montaña",
+          "ciudad",
+          "mar",
+          "aloj",
+          "qued",
+          "turismo",
+          "excursi",
+          "avión",
+          "avion",
+          "familia",
+          "verano",
+          "extranjero",
+          "piscina",
+          "sol",
+          "pueblo",
+          "parque",
+          "museo",
+          "ideal",
+          "iría",
+          "iria",
+          "me gustaría",
+          "me gustaria"
+        ],
+        "stars_needed": 3
+      }
+    },
+    {
+      "id": "r1-sweet-problema",
+      "kind": "traveller",
+      "question": "Háblame de un problema que tuviste durante las vacaciones.",
+      "sentence": {
+        "question": "El viajero asks: Háblame de un problema que tuviste durante las vacaciones.",
+        "tense": "preterite",
+        "topic_words": [
+          "vacacion",
+          "viaj",
+          "fui",
+          "fuimos",
+          "visit",
+          "playa",
+          "hotel",
+          "camping",
+          "españa",
+          "francia",
+          "italia",
+          "costa",
+          "montaña",
+          "ciudad",
+          "mar",
+          "aloj",
+          "qued",
+          "turismo",
+          "excursi",
+          "avión",
+          "avion",
+          "familia",
+          "verano",
+          "extranjero",
+          "piscina",
+          "sol",
+          "pueblo",
+          "parque",
+          "museo",
+          "perdí",
+          "perdi",
+          "tuve",
+          "problema",
+          "accidente",
+          "maleta",
+          "cartera",
+          "llaves",
+          "retraso"
+        ],
+        "stars_needed": 3
+      }
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Unas vacaciones inolvidables! You conquered Isla 1."
+  }
+}

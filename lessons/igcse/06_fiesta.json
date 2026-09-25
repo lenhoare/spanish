@@ -1,0 +1,905 @@
+{
+  "format": "lesson-island/1",
+  "title": "La fiesta",
+  "subject": "IGCSE - Módulo 6",
+  "intro": "Food, restaurants, feeling ill, and Spain's famous festivals - ¡a comer y a celebrar!",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "La comida",
+        "markdown": "# ¿Qué comes?\n**el desayuno** (breakfast) - **el almuerzo / la comida** (lunch) - **la merienda** (snack) - **la cena** (dinner)\n**Desayuno** tostadas con mermelada. **Bebo** un zumo de naranja.\n**Me encanta** el pescado. **No aguanto** las verduras. **Soy vegetariano/a.**\n\nla carne, el pollo, el pescado, las patatas fritas, la ensalada, la fruta,\nel queso, los huevos, el pan, el helado, la tarta, los churros con chocolate"
+      },
+      {
+        "title": "En el restaurante",
+        "markdown": "# ¿Qué va a tomar?\n**De primero**, la sopa. **De segundo**, el pescado. **De postre**, un helado.\n**Para mí**, la hamburguesa, por favor. **Quisiera** un café con leche.\n**¿Me trae** la cuenta, por favor?\n\n# ¡Hay un problema!\nLa sopa **está fría**. El tenedor **está sucio**. **Falta** un cuchillo.\n**Pedí** pescado, no pollo."
+      },
+      {
+        "title": "¿Qué te pasa?",
+        "markdown": "# Estoy enfermo/a\n**Me duele** la cabeza / el estómago / la garganta. (one thing)\n**Me duelen** los ojos / los pies. (more than one)\n**Tengo** fiebre / tos / gripe / catarro. **Estoy** cansado/a.\n\n# Consejos\n**Hay que** beber mucha agua. **Debes** descansar.\n**Para llevar una vida sana**, como cinco raciones de fruta y verdura al día."
+      },
+      {
+        "title": "Las fiestas",
+        "markdown": "# Las fiestas de España\n**La Tomatina** se celebra en Buñol en agosto: la gente **se tira** tomates.\n**La Aste Nagusia** es la Semana Grande de Bilbao: fuegos artificiales y conciertos.\n**San Fermín** en Pamplona. **Las Fallas** en Valencia.\n**En Nochevieja** comemos doce uvas. **El Día de los Muertos** se celebra en México.\n\n**Se celebra** en... - **Dura** una semana. - **Hay** desfiles, música y baile."
+      },
+      {
+        "title": "Mi cumpleaños",
+        "markdown": "# ¿Cómo celebraste tu cumpleaños?\n**Celebré** mi cumpleaños con mi familia. **Comimos** tarta. **Soplé** las velas.\n**Recibí** muchos regalos. **Fue** un día inolvidable.\n\n# ¿Cómo vas a celebrar tu próximo cumpleaños?\n**Voy a** hacer una fiesta. **Invitaré** a mis amigos. **Iremos** a un restaurante."
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\n1. A **verb in the right tense** - *como, bebo, me gusta*\n2. A **time phrase** - *normalmente, ayer, el año que viene*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *me chifla, está riquísimo, creo que*\n5. A **second tense** - *ayer comí..., mañana cenaré...*\n\n> **Normalmente desayuno** cereales **porque** es rápido. **Sin embargo**,\n> **ayer comí** churros con chocolate. **¡Qué rico!**"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r6-cabeza",
+      "question": "Translate into Spanish:\n\"I have a headache.\"",
+      "answers": [
+        "me duele la cabeza",
+        "tengo dolor de cabeza"
+      ],
+      "hint": "Page 3 - me duele...",
+      "explanation": "Me duele la cabeza."
+    },
+    {
+      "id": "r6-duelen",
+      "question": "Me ____ los ojos.",
+      "choices": [
+        "duelen",
+        "duele",
+        "duelo",
+        "dolemos"
+      ],
+      "correct": 0,
+      "hint": "Plural thing that hurts - page 3.",
+      "explanation": "Me duelen los ojos."
+    },
+    {
+      "id": "r6-pescado",
+      "question": "Translate into Spanish:\n\"For me, the fish, please.\"",
+      "answers": [
+        "para mí el pescado por favor",
+        "para mí, el pescado, por favor",
+        "el pescado para mí por favor"
+      ],
+      "hint": "Page 2 - para mí...",
+      "explanation": "Para mí, el pescado, por favor."
+    },
+    {
+      "id": "r6-comi",
+      "question": "Ayer ____ churros con chocolate.",
+      "choices": [
+        "comí",
+        "como",
+        "comía",
+        "comeré"
+      ],
+      "correct": 0,
+      "hint": "Ayer = preterite.",
+      "explanation": "Comí churros con chocolate."
+    },
+    {
+      "id": "r6-cuenta",
+      "question": "Translate into Spanish:\n\"Can you bring me the bill, please?\"",
+      "answers": [
+        "¿me trae la cuenta, por favor?",
+        "me trae la cuenta por favor",
+        "la cuenta por favor",
+        "¿me puede traer la cuenta?"
+      ],
+      "hint": "Page 2.",
+      "explanation": "¿Me trae la cuenta, por favor?"
+    },
+    {
+      "id": "r6-celebrar",
+      "question": "Translate into Spanish:\n\"I am going to celebrate my birthday.\"",
+      "answers": [
+        "voy a celebrar mi cumpleaños"
+      ],
+      "hint": "ir a + infinitive - page 5.",
+      "explanation": "Voy a celebrar mi cumpleaños."
+    }
+  ],
+  "chests": [
+    {
+      "id": "r6-cena",
+      "question": "\"la cena\" is...",
+      "choices": [
+        "dinner",
+        "lunch",
+        "breakfast",
+        "a snack"
+      ],
+      "correct": 0,
+      "hint": "Page 1.",
+      "explanation": "La cena = dinner.",
+      "level": 1
+    },
+    {
+      "id": "r6-postre",
+      "question": "\"de postre\" means...",
+      "choices": [
+        "for dessert",
+        "for the starter",
+        "to drink",
+        "to take away"
+      ],
+      "correct": 0,
+      "hint": "Page 2.",
+      "explanation": "De postre = for dessert.",
+      "level": 1
+    },
+    {
+      "id": "r6-fiebre",
+      "question": "\"Tengo fiebre\" means...",
+      "choices": [
+        "I have a temperature",
+        "I have a cough",
+        "I'm hungry",
+        "I'm tired"
+      ],
+      "correct": 0,
+      "hint": "Page 3.",
+      "explanation": "Fiebre = a temperature / fever.",
+      "level": 2
+    },
+    {
+      "id": "r6-fuegos",
+      "question": "\"los fuegos artificiales\" are...",
+      "choices": [
+        "fireworks",
+        "bonfires",
+        "artificial flowers",
+        "firefighters"
+      ],
+      "correct": 0,
+      "hint": "Page 4.",
+      "explanation": "Los fuegos artificiales = fireworks.",
+      "level": 2
+    },
+    {
+      "id": "r6-cenare",
+      "question": "Mañana ____ en un restaurante mexicano.",
+      "choices": [
+        "cenaré",
+        "cené",
+        "cenaba",
+        "ceno"
+      ],
+      "correct": 0,
+      "hint": "Mañana = future.",
+      "explanation": "Cenaré - I will have dinner.",
+      "level": 3
+    },
+    {
+      "id": "r6-secelebra",
+      "question": "La Tomatina ____ en Buñol cada año.",
+      "choices": [
+        "se celebra",
+        "se celebran",
+        "celebramos",
+        "celebran"
+      ],
+      "correct": 0,
+      "hint": "One festival: se celebra - page 4.",
+      "explanation": "La Tomatina se celebra en Buñol.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "at": [
+        20.0,
+        0.84
+      ],
+      "question": "¿Qué te gusta comer y beber? ¿Por qué?",
+      "tense": "present",
+      "topic_words": [
+        "comer",
+        "como",
+        "comí",
+        "comi",
+        "comemos",
+        "beber",
+        "bebo",
+        "bebí",
+        "bebi",
+        "desayun",
+        "almuerz",
+        "almorz",
+        "ceno",
+        "cena",
+        "merienda",
+        "comida",
+        "fruta",
+        "verdura",
+        "carne",
+        "pescado",
+        "pollo",
+        "pizza",
+        "hamburguesa",
+        "patatas",
+        "ensalada",
+        "tortilla",
+        "paella",
+        "chocolate",
+        "churros",
+        "tarta",
+        "pastel",
+        "helado",
+        "zumo",
+        "agua",
+        "leche",
+        "café",
+        "cafe",
+        "té",
+        "queso",
+        "pan",
+        "restaurante",
+        "sano",
+        "sana",
+        "dieta",
+        "vegetarian",
+        "fiesta",
+        "festival",
+        "cumpleaños",
+        "cumpleanos",
+        "celebr",
+        "navidad",
+        "tomatina",
+        "fuegos",
+        "rico",
+        "delicios"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "me encanta",
+        "normalmente",
+        "desayuno",
+        "porque",
+        "sin embargo",
+        "ayer comí",
+        "es muy sano"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        150.0,
+        0.75
+      ],
+      "question": "Describe una fiesta o un festival al que fuiste.",
+      "tense": "preterite",
+      "topic_words": [
+        "comer",
+        "como",
+        "comí",
+        "comi",
+        "comemos",
+        "beber",
+        "bebo",
+        "bebí",
+        "bebi",
+        "desayun",
+        "almuerz",
+        "almorz",
+        "ceno",
+        "cena",
+        "merienda",
+        "comida",
+        "fruta",
+        "verdura",
+        "carne",
+        "pescado",
+        "pollo",
+        "pizza",
+        "hamburguesa",
+        "patatas",
+        "ensalada",
+        "tortilla",
+        "paella",
+        "chocolate",
+        "churros",
+        "tarta",
+        "pastel",
+        "helado",
+        "zumo",
+        "agua",
+        "leche",
+        "café",
+        "cafe",
+        "té",
+        "queso",
+        "pan",
+        "restaurante",
+        "sano",
+        "sana",
+        "dieta",
+        "vegetarian",
+        "fiesta",
+        "festival",
+        "cumpleaños",
+        "cumpleanos",
+        "celebr",
+        "navidad",
+        "tomatina",
+        "fuegos",
+        "rico",
+        "delicios",
+        "fui",
+        "fuimos",
+        "vi",
+        "bailé",
+        "baile",
+        "desfile",
+        "música",
+        "musica"
+      ],
+      "stars_needed": 3
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        340.0,
+        0.84
+      ],
+      "question": "¿Qué harás para llevar una vida más sana en el futuro?",
+      "tense": "future",
+      "topic_words": [
+        "comer",
+        "como",
+        "comí",
+        "comi",
+        "comemos",
+        "beber",
+        "bebo",
+        "bebí",
+        "bebi",
+        "desayun",
+        "almuerz",
+        "almorz",
+        "ceno",
+        "cena",
+        "merienda",
+        "comida",
+        "fruta",
+        "verdura",
+        "carne",
+        "pescado",
+        "pollo",
+        "pizza",
+        "hamburguesa",
+        "patatas",
+        "ensalada",
+        "tortilla",
+        "paella",
+        "chocolate",
+        "churros",
+        "tarta",
+        "pastel",
+        "helado",
+        "zumo",
+        "agua",
+        "leche",
+        "café",
+        "cafe",
+        "té",
+        "queso",
+        "pan",
+        "restaurante",
+        "sano",
+        "sana",
+        "dieta",
+        "vegetarian",
+        "fiesta",
+        "festival",
+        "cumpleaños",
+        "cumpleanos",
+        "celebr",
+        "navidad",
+        "tomatina",
+        "fuegos",
+        "rico",
+        "delicios",
+        "ejercicio",
+        "deporte",
+        "dormir",
+        "beberé",
+        "bebere",
+        "comeré",
+        "comere",
+        "haré",
+        "hare"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "notice",
+      "at": [
+        175.0,
+        0.85
+      ],
+      "intro": "Someone spilt chocolate on the menu board! Write each verb in the right form to fix it.",
+      "text": "Normalmente {1} tostadas con mermelada y {2} un vaso de zumo de naranja. Sin embargo, ayer {3} churros con chocolate porque {4} el cumpleaños de mi madre. Mañana {5} en un restaurante mexicano.",
+      "hint": "Normalmente = present. Ayer = preterite (but 'it was her birthday' is background). Mañana = future.",
+      "gaps": [
+        {
+          "verb": "desayunar",
+          "answers": [
+            "desayuno"
+          ]
+        },
+        {
+          "verb": "beber",
+          "answers": [
+            "bebo"
+          ]
+        },
+        {
+          "verb": "comer",
+          "answers": [
+            "comí"
+          ]
+        },
+        {
+          "verb": "ser",
+          "answers": [
+            "era",
+            "fue"
+          ]
+        },
+        {
+          "verb": "cenar",
+          "answers": [
+            "cenaré",
+            "voy a cenar"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "at": [
+        130.0,
+        0.8
+      ],
+      "sign": "Las fiestas",
+      "greeting": "¿Quién lo dice?",
+      "speakers": [
+        {
+          "name": "Ane",
+          "bubble": "¡Aupa Bilbao!",
+          "character": "character-female-b",
+          "review": "# Ane (Bilbao)\n\nTodos los años en agosto voy a la Aste Nagusia, la Semana Grande de Bilbao. Las fiestas duran nueve días. El primer día, una mujer sale al balcón y empieza la fiesta. Por la noche hay fuegos artificiales y conciertos gratis en la calle. Lo mejor es la comida: hay pintxos por todas partes. ¡Qué rico!"
+        },
+        {
+          "name": "Pablo",
+          "bubble": "¡Qué locura!",
+          "character": "character-male-d",
+          "review": "# Pablo (Valencia)\n\nEl año pasado fui a la Tomatina en Buñol, cerca de Valencia. Es una fiesta muy corta - dura solo una hora - pero ¡qué locura! Miles de personas se tiran tomates en la calle. Llevé gafas de natación y una camiseta vieja. Después, los vecinos nos limpiaron con mangueras. El año que viene quiero ir otra vez con mis primos."
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién menciona la música?",
+          "choices": [
+            "Ane",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Concerts...",
+          "explanation": "Ane - conciertos gratis en la calle."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién habla de una fiesta muy corta?",
+          "choices": [
+            "Ane",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Only one hour...",
+          "explanation": "Pablo - dura solo una hora."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién menciona algo que se puede comer?",
+          "choices": [
+            "Ane",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "Pintxos... tomatoes...",
+          "explanation": "Los dos - pintxos (Ane) y tomates (Pablo)."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién habla del futuro?",
+          "choices": [
+            "Ane",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Look for 'el año que viene'.",
+          "explanation": "Pablo - quiere ir otra vez."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién menciona la ropa?",
+          "choices": [
+            "Ane",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Goggles and an old T-shirt...",
+          "explanation": "Pablo - gafas de natación y una camiseta vieja."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién menciona los fuegos artificiales?",
+          "choices": [
+            "Ane",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "At night...",
+          "explanation": "Ane - por la noche hay fuegos artificiales."
+        },
+        {
+          "id": "d7",
+          "question": "¿Quién habla de una fiesta de nueve días?",
+          "choices": [
+            "Ane",
+            "Pablo",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "La Semana Grande...",
+          "explanation": "Ane - las fiestas duran nueve días."
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "at": [
+        280.0,
+        0.7
+      ],
+      "name": "Carla",
+      "character": "character-female-a",
+      "color": "#ff5e7e",
+      "turns": [
+        {
+          "them": [
+            "¡Hola! Te vi en la Tomatina. ¡Qué divertido!",
+            "¿Qué comiste en la fiesta?"
+          ],
+          "task": "Say what you ate or drank - use the preterite (comí, bebí, probé...).",
+          "hint": "Use the preterite: comí paella, bebí un zumo, probé los churros.",
+          "need": [
+            {
+              "all": [
+                "\\b(comi|bebi|probe|tome|comimos|bebimos|probamos|tomamos|cene|desayune|almorce)\\b"
+              ],
+              "reply": [
+                "¡Mmm, qué rico!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "Oye, el sábado es mi cumpleaños. ¿Vienes a mi fiesta?"
+          ],
+          "task": "Say yes - or say you can't and give a reason (maybe you're ill: me duele...).",
+          "hint": "Say 'sí, vale' / '¡claro!' - or 'no puedo porque me duele la cabeza / tengo que...'.",
+          "need": [
+            {
+              "all": [
+                "\\bno puedo\\b",
+                "\\b(porque|ya que|tengo que|me duele|me duelen|estoy)\\b"
+              ],
+              "reply": [
+                "¡Qué pena! ¡Que te mejores!"
+              ]
+            },
+            {
+              "all": [
+                "\\b(si|vale|claro|genial|de acuerdo|por supuesto|me encantaria|me gustaria|guay|venga|perfecto)\\b"
+              ],
+              "none": [
+                "\\bno\\b"
+              ],
+              "reply": [
+                "¡Genial! ¡Qué ilusión!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Qué te gusta comer en una fiesta?"
+          ],
+          "task": "Give an opinion about some food: me encanta la pizza, no me gusta...",
+          "hint": "An opinion (me gusta, me encanta, prefiero...) + a food (la tarta, la pizza, los churros...).",
+          "need": [
+            {
+              "all": [
+                "\\b(me gusta|me gustan|me encanta|me encantan|prefiero|me chifla|me chiflan|odio|no me gusta|no me gustan|no aguanto)\\b",
+                "\\b(pizza|tarta|pastel|chocolate|patatas|helado|helados|fruta|churros|tortilla|paella|hamburguesas?|bocadillos?|caramelos|dulces|pollo|pescado|queso|jamon|galletas|sandwich|nachos|palomitas|comida)\\b"
+              ],
+              "reply": [
+                "¡A mí también!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Y cómo celebras tu cumpleaños normalmente?"
+          ],
+          "task": "Say what you normally do on your birthday - use the present.",
+          "hint": "Use the present: normalmente hago una fiesta, salgo con mis amigos, como tarta...",
+          "need": [
+            {
+              "all": [
+                "\\b(celebro|hago|salgo|como|invito|voy|vamos|comemos|celebramos|suelo|abro|recibo|tengo|juego|bailo|ceno|cenamos)\\b"
+              ],
+              "reply": [
+                "¡Qué bien!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¡Hasta el sábado!"
+          ]
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r6-sweet-restaurante",
+      "kind": "restaurant",
+      "at": [
+        60.0,
+        0.76
+      ],
+      "fishing_at": [
+        100.0
+      ],
+      "question": "Describe la última vez que comiste en un restaurante.",
+      "chef_says": "¡Hoy no hay pescado!\n¡Pesca uno en el mar!",
+      "dishes": [
+        {
+          "id": "burger",
+          "model": "food/burger",
+          "scale": 2.6
+        },
+        {
+          "id": "pizza",
+          "model": "food/pizza",
+          "scale": 1.8
+        },
+        {
+          "id": "icecream",
+          "model": "food/ice-cream",
+          "scale": 2.6
+        },
+        {
+          "id": "fries",
+          "model": "food/fries",
+          "scale": 2.6
+        },
+        {
+          "id": "coffee",
+          "model": "food/cup-coffee",
+          "scale": 2.6
+        },
+        {
+          "id": "cake",
+          "model": "food/cake",
+          "scale": 1.3
+        },
+        {
+          "id": "hotdog",
+          "model": "food/hot-dog",
+          "scale": 2.4
+        }
+      ],
+      "orders": [
+        {
+          "say": "Para mí, el pescado, por favor.",
+          "want": "fish",
+          "character": "character-female-a"
+        },
+        {
+          "say": "Tengo mucha hambre. Quisiera una hamburguesa.",
+          "want": "burger",
+          "character": "character-male-b"
+        },
+        {
+          "say": "De postre, un helado, por favor.",
+          "want": "icecream",
+          "character": "character-female-d"
+        }
+      ],
+      "sentence": {
+        "question": "El cocinero asks: Describe la última vez que comiste en un restaurante.",
+        "tense": "preterite",
+        "topic_words": [
+          "comer",
+          "como",
+          "comí",
+          "comi",
+          "comemos",
+          "beber",
+          "bebo",
+          "bebí",
+          "bebi",
+          "desayun",
+          "almuerz",
+          "almorz",
+          "ceno",
+          "cena",
+          "merienda",
+          "comida",
+          "fruta",
+          "verdura",
+          "carne",
+          "pescado",
+          "pollo",
+          "pizza",
+          "hamburguesa",
+          "patatas",
+          "ensalada",
+          "tortilla",
+          "paella",
+          "chocolate",
+          "churros",
+          "tarta",
+          "pastel",
+          "helado",
+          "zumo",
+          "agua",
+          "leche",
+          "café",
+          "cafe",
+          "té",
+          "queso",
+          "pan",
+          "restaurante",
+          "sano",
+          "sana",
+          "dieta",
+          "vegetarian",
+          "fiesta",
+          "festival",
+          "cumpleaños",
+          "cumpleanos",
+          "celebr",
+          "navidad",
+          "tomatina",
+          "fuegos",
+          "rico",
+          "delicios",
+          "pedí",
+          "pedi",
+          "camarero",
+          "cuenta",
+          "menú",
+          "menu"
+        ],
+        "stars_needed": 3
+      }
+    },
+    {
+      "id": "r6-sweet-tomatina",
+      "kind": "tomatina",
+      "at": [
+        215.0,
+        0.8
+      ],
+      "question": "Translate into Spanish:\n\"Last year I went to a festival.\"",
+      "answers": [
+        "el año pasado fui a un festival",
+        "fui a un festival el año pasado",
+        "el año pasado fui a una fiesta"
+      ],
+      "hint": "el año pasado + preterite of ir.",
+      "explanation": "El año pasado fui a un festival."
+    },
+    {
+      "id": "r6-sweet-pinata",
+      "kind": "pinata",
+      "at": [
+        300.0,
+        0.66
+      ],
+      "question": "¿Cómo vas a celebrar tu próximo cumpleaños?",
+      "sentence": {
+        "question": "La piñata asks: ¿Cómo vas a celebrar tu próximo cumpleaños?",
+        "tense": "future",
+        "topic_words": [
+          "comer",
+          "como",
+          "comí",
+          "comi",
+          "comemos",
+          "beber",
+          "bebo",
+          "bebí",
+          "bebi",
+          "desayun",
+          "almuerz",
+          "almorz",
+          "ceno",
+          "cena",
+          "merienda",
+          "comida",
+          "fruta",
+          "verdura",
+          "carne",
+          "pescado",
+          "pollo",
+          "pizza",
+          "hamburguesa",
+          "patatas",
+          "ensalada",
+          "tortilla",
+          "paella",
+          "chocolate",
+          "churros",
+          "tarta",
+          "pastel",
+          "helado",
+          "zumo",
+          "agua",
+          "leche",
+          "café",
+          "cafe",
+          "té",
+          "queso",
+          "pan",
+          "restaurante",
+          "sano",
+          "sana",
+          "dieta",
+          "vegetarian",
+          "fiesta",
+          "festival",
+          "cumpleaños",
+          "cumpleanos",
+          "celebr",
+          "navidad",
+          "tomatina",
+          "fuegos",
+          "rico",
+          "delicios",
+          "regalos",
+          "amigos",
+          "familia",
+          "invitaré",
+          "invitare",
+          "fiesta"
+        ],
+        "stars_needed": 3
+      }
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Qué fiesta! You conquered Isla 6."
+  }
+}

@@ -97,7 +97,8 @@ func setup(config: Dictionary) -> void:
 	_bubble.position = Vector3(0, 4.3, 0.3)
 	add_child(_bubble)
 	_update_bubble()
-	Game.ingredients_changed.connect(_update_bubble)
+	if not cfg.get("passive", false):
+		Game.ingredients_changed.connect(_update_bubble)
 
 	# Talk to them by walking up to the counter.
 	var area := Area3D.new()
@@ -132,7 +133,7 @@ func _update_bubble() -> void:
 
 
 func _on_body(body: Node) -> void:
-	if not body.is_in_group("player"):
+	if not body.is_in_group("player") or cfg.get("passive", false):
 		return
 	if has_everything():
 		if not _thanked:

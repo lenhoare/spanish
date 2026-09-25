@@ -1,0 +1,27 @@
+{
+  "game_title": "La Isla de los Retos",
+  "tagline": "Español",
+  "intro": "Explora las islas, resuelve los retos y reconstruye cada puente. Write postcards, fix broken notices, solve mysteries - and aim for five stars!",
+
+  "heroes": [
+    { "name": "Ester", "color": "#f0508c", "models": ["character-female-f", "character-female-b", "character-female-c", "character-female-a", "character-female-e", "character-female-d"] },
+    { "name": "Raúl",  "color": "#4fa3ff", "models": ["character-male-f", "character-male-a", "character-male-d", "character-male-e", "character-male-c", "character-male-b"] },
+    { "name": "Coco",  "color": "#ff9a3c", "models": ["character-oobi", "character-oodi", "character-ooli", "character-oopi", "character-oozi"] }
+  ],
+
+  "accents": "lenient",
+  "beacons": false,
+  "text_scale": 0.7,
+  "text_scale_touch": 0.9,
+  "world_scale": 1.5,
+  "marking": "lessons/igcse/marking_es.json",
+
+  "course": [
+    { "file": "lessons/igcse/01_vacaciones.json", "title": "Las vacaciones", "theme": "tropical" },
+    { "file": "lessons/igcse/02_instituto.json", "title": "El instituto", "theme": "campus" },
+    { "file": "lessons/igcse/03_familia.json", "title": "Familia y tecnología", "theme": "digital" },
+    { "file": "lessons/igcse/04_festival.json", "title": "El tiempo libre", "theme": "festival" },
+    { "file": "lessons/igcse/05_ciudad.json", "title": "La ciudad", "theme": "ciudad" },
+    { "file": "lessons/igcse/06_fiesta.json", "title": "La fiesta", "theme": "fiesta" }
+  ]
+}

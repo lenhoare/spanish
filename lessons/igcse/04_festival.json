@@ -1,0 +1,862 @@
+{
+  "format": "lesson-island/1",
+  "title": "El tiempo libre",
+  "subject": "IGCSE - Módulo 4",
+  "intro": "Hobbies, music, films and sport - what you do now, what you used to do, and what you're going to do.",
+  "whiteboard": {
+    "pages": [
+      {
+        "title": "Pasatiempos",
+        "markdown": "# ¿Qué haces en tu tiempo libre?\n**Juego al** fútbol / al baloncesto / a los videojuegos (games and sports)\n**Toco** la guitarra / el piano / la batería (instruments)\n**Hago** natación / equitación / deporte. **Monto** en bici. **Leo** novelas.\n\n- **Me gusta** + infinitive: me gusta **bailar**.\n- **Me chifla / me mola / me flipa** la música en directo.\n- **Soy aficionado/a al** baloncesto. **Soy miembro de** un club de teatro.\n- **Suelo** ir al cine los domingos. (*I usually...*)"
+      },
+      {
+        "title": "Antes y ahora",
+        "markdown": "# ¿Qué hacías cuando eras más joven?\nThe **imperfect** for what you *used to* do:\n**Cuando era pequeño/a, jugaba** al fútbol todos los sábados.\n**Solía** ver dibujos animados. **Leía** tebeos.\n\n**Ahora prefiero** hacer natación **porque** es más relajante.\n**Antes** era aficionado al rugby, **pero ahora** me interesa más el tenis.\n\n> *solía* + infinitive = I used to... - an easy second tense!"
+      },
+      {
+        "title": "Acabo de...",
+        "markdown": "# Acabar de + infinitive = to have just...\n**Acabo de** ver una película. - *I have just seen a film.*\n**Acabamos de** volver del festival. - *We've just come back.*\n\n# ¿Qué acabas de hacer?\nAcabo de... jugar un partido / escuchar el nuevo disco / leer un libro\n**Llevo** dos años tocando la guitarra. - *I've been playing for two years.*"
+      },
+      {
+        "title": "Cine y música",
+        "markdown": "# ¿Qué tipo de películas te gustan?\nlas comedias, las películas de acción / de terror / de ciencia ficción / de aventuras,\nlos dibujos animados, las películas románticas\n\n# ¿Qué tipo de música te gusta?\nel pop, el rock, el rap, el reggaeton, el jazz, la música clásica, la música electrónica\n\n**Me encanta** el rock **porque** es emocionante. **No aguanto** el reggaeton.\n**Mi cantante favorito/a es**... **porque** su voz es increíble."
+      },
+      {
+        "title": "El fin de semana",
+        "markdown": "# El fin de semana pasado (preterite)\n**Fui** a un concierto. **Vi** una película. **Jugué** un partido. **Me divertí** mucho.\nEl mes pasado **fui** a un concierto de música clásica y **fue** increíble.\n\n# El fin de semana que viene (future)\n**Voy a** comprar entradas para el teatro. **Iré** a un festival.\n**Mañana compraré** las entradas."
+      },
+      {
+        "title": "5 estrellas",
+        "markdown": "# How to write a 5-star answer\n1. A **verb in the right tense** - *juego, toco, me gusta*\n2. A **time phrase** - *los fines de semana, a menudo, el sábado pasado*\n3. A **connective** - *porque, sin embargo, además*\n4. An **opinion** - *me chifla, lo mejor es, creo que*\n5. A **second tense** - *de pequeño jugaba..., el sábado que viene voy a...*\n\n> **Los fines de semana toco** la guitarra **porque me chifla** la música.\n> **Sin embargo**, **de pequeño jugaba** al fútbol."
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "r4-guitarra",
+      "question": "Translate into Spanish:\n\"I play the guitar.\"",
+      "answers": [
+        "toco la guitarra",
+        "yo toco la guitarra"
+      ],
+      "hint": "Instruments use tocar - page 1.",
+      "explanation": "Toco la guitarra."
+    },
+    {
+      "id": "r4-futbol",
+      "question": "Translate into Spanish:\n\"I play football.\"",
+      "answers": [
+        "juego al fútbol",
+        "yo juego al fútbol",
+        "juego fútbol"
+      ],
+      "hint": "Sports use jugar a - page 1.",
+      "explanation": "Juego al fútbol."
+    },
+    {
+      "id": "r4-jugaba",
+      "question": "Cuando era pequeño, ____ al baloncesto.",
+      "choices": [
+        "jugaba",
+        "jugué",
+        "juego",
+        "jugaré"
+      ],
+      "correct": 0,
+      "hint": "'Used to' = imperfect - page 2.",
+      "explanation": "Jugaba - I used to play."
+    },
+    {
+      "id": "r4-acabo",
+      "question": "Translate into Spanish:\n\"I have just seen a film.\"",
+      "answers": [
+        "acabo de ver una película",
+        "acabo de ver una peli"
+      ],
+      "hint": "acabar de + infinitive - page 3.",
+      "explanation": "Acabo de ver una película."
+    },
+    {
+      "id": "r4-chiflan",
+      "question": "Me ____ las películas de terror.",
+      "choices": [
+        "chiflan",
+        "chifla",
+        "chiflo",
+        "chiflamos"
+      ],
+      "correct": 0,
+      "hint": "Like gustar: plural thing = -an.",
+      "explanation": "Me chiflan las películas de terror."
+    },
+    {
+      "id": "r4-voyair",
+      "question": "El sábado que viene ____ al cine.\n(\"I'm going to go\")",
+      "answers": [
+        "voy a ir"
+      ],
+      "hint": "ir a + infinitive - page 5.",
+      "explanation": "Voy a ir al cine."
+    }
+  ],
+  "chests": [
+    {
+      "id": "r4-dibujos",
+      "question": "\"los dibujos animados\" are...",
+      "choices": [
+        "cartoons",
+        "drawings",
+        "animals",
+        "comics"
+      ],
+      "correct": 0,
+      "hint": "Page 4.",
+      "explanation": "Los dibujos animados = cartoons.",
+      "level": 1
+    },
+    {
+      "id": "r4-ocio",
+      "question": "\"el ocio\" means...",
+      "choices": [
+        "leisure",
+        "laziness",
+        "a hobby club",
+        "boredom"
+      ],
+      "correct": 0,
+      "hint": "The topic of this island!",
+      "explanation": "El ocio = leisure / free time.",
+      "level": 1
+    },
+    {
+      "id": "r4-suelo",
+      "question": "\"Suelo ir al cine los domingos\" means...",
+      "choices": [
+        "I usually go to the cinema on Sundays",
+        "I went to the cinema on Sunday",
+        "I'm going to the cinema on Sunday",
+        "I never go to the cinema"
+      ],
+      "correct": 0,
+      "hint": "Page 1 - soler.",
+      "explanation": "Suelo = I usually.",
+      "level": 2
+    },
+    {
+      "id": "r4-aficionado",
+      "question": "\"Soy aficionado al baloncesto\" means...",
+      "choices": [
+        "I'm a basketball fan",
+        "I'm a basketball player",
+        "I'm bad at basketball",
+        "I'm a basketball coach"
+      ],
+      "correct": 0,
+      "hint": "Page 1.",
+      "explanation": "Aficionado = fan.",
+      "level": 2
+    },
+    {
+      "id": "r4-fui",
+      "question": "El mes pasado ____ a un concierto de música clásica.",
+      "choices": [
+        "fui",
+        "iba",
+        "voy",
+        "iré"
+      ],
+      "correct": 0,
+      "hint": "El mes pasado + one event = preterite.",
+      "explanation": "Fui a un concierto.",
+      "level": 3
+    },
+    {
+      "id": "r4-hacer",
+      "question": "Ahora prefiero ____ natación porque es más relajante.",
+      "choices": [
+        "hacer",
+        "hago",
+        "hice",
+        "haciendo"
+      ],
+      "correct": 0,
+      "hint": "prefiero + infinitive.",
+      "explanation": "Prefiero hacer natación.",
+      "level": 3
+    }
+  ],
+  "retos": [
+    {
+      "kind": "postcard",
+      "at": [
+        30.0,
+        0.84
+      ],
+      "question": "¿Qué haces normalmente en tu tiempo libre?",
+      "tense": "present",
+      "topic_words": [
+        "tiempo libre",
+        "pasatiempo",
+        "juego",
+        "jugu",
+        "jugar",
+        "jugaba",
+        "toco",
+        "toqu",
+        "tocar",
+        "leo",
+        "leer",
+        "leí",
+        "novela",
+        "música",
+        "musica",
+        "concierto",
+        "festival",
+        "cine",
+        "película",
+        "pelicula",
+        "peli",
+        "serie",
+        "deporte",
+        "fútbol",
+        "futbol",
+        "baloncesto",
+        "natación",
+        "natacion",
+        "nadar",
+        "bailar",
+        "cantar",
+        "guitarra",
+        "piano",
+        "batería",
+        "bateria",
+        "videojuego",
+        "salir",
+        "amig",
+        "teatro",
+        "entrada",
+        "grupo",
+        "cantante",
+        "escucho",
+        "escuchar",
+        "equipo",
+        "partido",
+        "gimnasio",
+        "montar",
+        "patinar",
+        "dibujar",
+        "pintar",
+        "ocio",
+        "descansar",
+        "relajar",
+        "fui",
+        "vi",
+        "suelo",
+        "solía",
+        "solia"
+      ],
+      "stars_needed": 3,
+      "chips": [
+        "en mi tiempo libre",
+        "juego al",
+        "toco",
+        "me chifla",
+        "porque",
+        "sin embargo",
+        "de pequeño jugaba"
+      ]
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        135.0,
+        0.84
+      ],
+      "question": "¿Qué te gustaba hacer cuando eras más joven?",
+      "tense": "imperfect",
+      "topic_words": [
+        "tiempo libre",
+        "pasatiempo",
+        "juego",
+        "jugu",
+        "jugar",
+        "jugaba",
+        "toco",
+        "toqu",
+        "tocar",
+        "leo",
+        "leer",
+        "leí",
+        "novela",
+        "música",
+        "musica",
+        "concierto",
+        "festival",
+        "cine",
+        "película",
+        "pelicula",
+        "peli",
+        "serie",
+        "deporte",
+        "fútbol",
+        "futbol",
+        "baloncesto",
+        "natación",
+        "natacion",
+        "nadar",
+        "bailar",
+        "cantar",
+        "guitarra",
+        "piano",
+        "batería",
+        "bateria",
+        "videojuego",
+        "salir",
+        "amig",
+        "teatro",
+        "entrada",
+        "grupo",
+        "cantante",
+        "escucho",
+        "escuchar",
+        "equipo",
+        "partido",
+        "gimnasio",
+        "montar",
+        "patinar",
+        "dibujar",
+        "pintar",
+        "ocio",
+        "descansar",
+        "relajar",
+        "fui",
+        "vi",
+        "suelo",
+        "solía",
+        "solia",
+        "pequeño",
+        "pequeña",
+        "joven",
+        "dibujos"
+      ],
+      "stars_needed": 3
+    },
+    {
+      "kind": "postcard",
+      "at": [
+        310.0,
+        0.84
+      ],
+      "question": "Describe una visita reciente al cine o a un concierto.",
+      "tense": "preterite",
+      "topic_words": [
+        "tiempo libre",
+        "pasatiempo",
+        "juego",
+        "jugu",
+        "jugar",
+        "jugaba",
+        "toco",
+        "toqu",
+        "tocar",
+        "leo",
+        "leer",
+        "leí",
+        "novela",
+        "música",
+        "musica",
+        "concierto",
+        "festival",
+        "cine",
+        "película",
+        "pelicula",
+        "peli",
+        "serie",
+        "deporte",
+        "fútbol",
+        "futbol",
+        "baloncesto",
+        "natación",
+        "natacion",
+        "nadar",
+        "bailar",
+        "cantar",
+        "guitarra",
+        "piano",
+        "batería",
+        "bateria",
+        "videojuego",
+        "salir",
+        "amig",
+        "teatro",
+        "entrada",
+        "grupo",
+        "cantante",
+        "escucho",
+        "escuchar",
+        "equipo",
+        "partido",
+        "gimnasio",
+        "montar",
+        "patinar",
+        "dibujar",
+        "pintar",
+        "ocio",
+        "descansar",
+        "relajar",
+        "fui",
+        "vi",
+        "suelo",
+        "solía",
+        "solia",
+        "fuimos",
+        "vimos",
+        "tocaron",
+        "cantó",
+        "canto"
+      ],
+      "stars_needed": 4
+    },
+    {
+      "kind": "notice",
+      "at": [
+        195.0,
+        0.85
+      ],
+      "intro": "The festival poster got rained on! Write each verb in the right form to fix it.",
+      "text": "Cuando era joven, {1} al fútbol todos los sábados. Ahora prefiero {2} natación porque es más relajante. El mes pasado {3} a un concierto de música clásica y {4} increíble. Mañana {5} entradas para el teatro.",
+      "hint": "Cuando era joven = imperfect. prefiero + infinitive. El mes pasado = preterite. Mañana = future.",
+      "gaps": [
+        {
+          "verb": "jugar",
+          "answers": [
+            "jugaba"
+          ]
+        },
+        {
+          "verb": "hacer",
+          "answers": [
+            "hacer"
+          ]
+        },
+        {
+          "verb": "ir",
+          "answers": [
+            "fui"
+          ]
+        },
+        {
+          "verb": "ser",
+          "answers": [
+            "fue"
+          ]
+        },
+        {
+          "verb": "comprar",
+          "answers": [
+            "compraré",
+            "voy a comprar"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "detective",
+      "at": [
+        345.0,
+        0.8
+      ],
+      "sign": "Críticas",
+      "greeting": "¿Quién lo dice?",
+      "speakers": [
+        {
+          "name": "Lucía",
+          "bubble": "¡Me chifla la música en directo!",
+          "character": "character-female-a",
+          "review": "# Lucía (Burgos)\n\n¡Me chifla la música en directo! El verano pasado fui al festival Sonorama con mis amigas. Acampamos allí durante tres días. Aunque llovió mucho, el ambiente era fabuloso y los grupos tocaron genial. Lo mejor fue bailar delante del escenario. Lo peor: ¡las colas para los baños! El año que viene voy a volver."
+        },
+        {
+          "name": "Andrés",
+          "bubble": "Prefiero quedarme en casa.",
+          "character": "character-male-e",
+          "review": "# Andrés (Valencia)\n\nNormalmente no me gustan los festivales porque hay demasiada gente. Prefiero quedarme en casa y jugar a los videojuegos o leer novelas de misterio. Sin embargo, el mes pasado fui a un concierto de música clásica con mi abuelo y me encantó. Las entradas eran caras - cincuenta euros - pero valió la pena. Suelo ir al cine los domingos con mi hermana."
+        }
+      ],
+      "questions": [
+        {
+          "id": "d1",
+          "question": "¿Quién menciona el tiempo?",
+          "choices": [
+            "Lucía",
+            "Andrés",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Who mentions the rain?",
+          "explanation": "Lucía - llovió mucho."
+        },
+        {
+          "id": "d2",
+          "question": "¿Quién menciona el precio?",
+          "choices": [
+            "Lucía",
+            "Andrés",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who mentions euros?",
+          "explanation": "Andrés - las entradas eran caras."
+        },
+        {
+          "id": "d3",
+          "question": "¿Quién escuchó música en directo?",
+          "choices": [
+            "Lucía",
+            "Andrés",
+            "Los dos"
+          ],
+          "correct": 2,
+          "hint": "A festival... and a concert...",
+          "explanation": "Los dos - el festival (Lucía) y el concierto (Andrés)."
+        },
+        {
+          "id": "d4",
+          "question": "¿Quién menciona a un miembro de su familia?",
+          "choices": [
+            "Lucía",
+            "Andrés",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "A grandfather and a sister...",
+          "explanation": "Andrés - su abuelo y su hermana."
+        },
+        {
+          "id": "d5",
+          "question": "¿Quién habla del futuro?",
+          "choices": [
+            "Lucía",
+            "Andrés",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Look for 'voy a...'",
+          "explanation": "Lucía - el año que viene voy a volver."
+        },
+        {
+          "id": "d6",
+          "question": "¿Quién menciona la lectura?",
+          "choices": [
+            "Lucía",
+            "Andrés",
+            "Los dos"
+          ],
+          "correct": 1,
+          "hint": "Who reads mystery novels?",
+          "explanation": "Andrés - leer novelas de misterio."
+        },
+        {
+          "id": "d7",
+          "question": "¿Quién durmió fuera de casa?",
+          "choices": [
+            "Lucía",
+            "Andrés",
+            "Los dos"
+          ],
+          "correct": 0,
+          "hint": "Acampar = to camp...",
+          "explanation": "Lucía - acamparon durante tres días."
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "at": [
+        262.0,
+        0.72
+      ],
+      "name": "Marcos",
+      "character": "character-male-b",
+      "color": "#ff8a3c",
+      "turns": [
+        {
+          "them": [
+            "¡Hola! ¿Qué tal?",
+            "Oye, ¿qué haces normalmente en tu tiempo libre?"
+          ],
+          "task": "Tell Marcos what you usually do: juego al..., toco..., me gusta...",
+          "hint": "Use the present: juego al fútbol, toco la guitarra, me gusta leer, veo series...",
+          "need": [
+            {
+              "all": [
+                "\\b(juego|toco|leo|veo|hago|salgo|escucho|practico|voy|monto|nado|bailo|canto|dibujo|me gusta|me encanta|me chifla|me mola|suelo)\\b"
+              ],
+              "reply": [
+                "¡Qué guay! Yo toco la batería en un grupo."
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Y qué hiciste el fin de semana pasado?"
+          ],
+          "task": "Say what you did last weekend - use the preterite (fui, jugué, vi...).",
+          "hint": "Use the preterite: fui al cine, jugué al fútbol, vi una peli, salí con mis amigos.",
+          "need": [
+            {
+              "all": [
+                "\\b(fui|fuimos|jugue|jugamos|vi|vimos|hice|hicimos|sali|salimos|toque|lei|escuche|compre|visite|comi|practique|monte|nade|baile|cante|gane|perdi|pase|estuve|me diverti|me quede|descanse|juge)\\b"
+              ],
+              "reply": [
+                "¡Qué bien!",
+                "Yo fui a un concierto de rock. ¡Fue increíble!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "Por cierto, ¿qué tipo de música te gusta?"
+          ],
+          "task": "Give your opinion of a kind of music: me gusta el pop, no aguanto el rap...",
+          "hint": "Say 'me encanta el rock' or 'no me gusta el reggaeton' - an opinion + a type of music.",
+          "need": [
+            {
+              "all": [
+                "\\b(me gusta|me gustan|me encanta|me encantan|me chifla|me mola|prefiero|odio|no aguanto|no me gusta|me flipa)\\b",
+                "\\b(pop|rock|rap|reggaeton|jazz|clasica|electronica|hip hop|hip-hop|flamenco|musica|trap|indie|metal|k-pop|kpop|salsa|cancion|canciones)\\b"
+              ],
+              "reply": [
+                "¡A mí también me gusta!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "¿Quieres venir al festival el sábado? ¡Toca mi grupo!"
+          ],
+          "task": "Say yes - or say you can't and give a reason.",
+          "hint": "Say 'sí, vale' / '¡claro!' - or 'no puedo porque tengo que...'.",
+          "need": [
+            {
+              "all": [
+                "\\bno puedo\\b",
+                "\\b(porque|ya que|tengo que)\\b"
+              ],
+              "reply": [
+                "¡Qué pena! Te mando un vídeo."
+              ]
+            },
+            {
+              "all": [
+                "\\b(si|vale|claro|genial|de acuerdo|por supuesto|me encantaria|me gustaria|guay|venga|perfecto)\\b"
+              ],
+              "none": [
+                "\\bno\\b"
+              ],
+              "reply": [
+                "¡Genial! ¡Nos vemos allí!"
+              ]
+            }
+          ]
+        },
+        {
+          "them": [
+            "Bueno, me voy a ensayar.",
+            "¡Chao!"
+          ]
+        }
+      ]
+    }
+  ],
+  "sweets": [
+    {
+      "id": "r4-sweet-musica",
+      "kind": "rhythm",
+      "question": "¿Qué tipo de música te gusta? ¿Por qué?",
+      "at": [
+        90.0,
+        0.8
+      ],
+      "sign": "¡Festival!",
+      "sentence": {
+        "question": "El DJ asks: ¿Qué tipo de música te gusta? ¿Por qué?",
+        "tense": "present",
+        "topic_words": [
+          "tiempo libre",
+          "pasatiempo",
+          "juego",
+          "jugu",
+          "jugar",
+          "jugaba",
+          "toco",
+          "toqu",
+          "tocar",
+          "leo",
+          "leer",
+          "leí",
+          "novela",
+          "música",
+          "musica",
+          "concierto",
+          "festival",
+          "cine",
+          "película",
+          "pelicula",
+          "peli",
+          "serie",
+          "deporte",
+          "fútbol",
+          "futbol",
+          "baloncesto",
+          "natación",
+          "natacion",
+          "nadar",
+          "bailar",
+          "cantar",
+          "guitarra",
+          "piano",
+          "batería",
+          "bateria",
+          "videojuego",
+          "salir",
+          "amig",
+          "teatro",
+          "entrada",
+          "grupo",
+          "cantante",
+          "escucho",
+          "escuchar",
+          "equipo",
+          "partido",
+          "gimnasio",
+          "montar",
+          "patinar",
+          "dibujar",
+          "pintar",
+          "ocio",
+          "descansar",
+          "relajar",
+          "fui",
+          "vi",
+          "suelo",
+          "solía",
+          "solia",
+          "pop",
+          "rock",
+          "rap",
+          "reggaeton",
+          "jazz",
+          "clásica",
+          "clasica",
+          "electrónica",
+          "electronica",
+          "canción",
+          "cancion",
+          "voz",
+          "ritmo"
+        ],
+        "stars_needed": 3
+      }
+    },
+    {
+      "id": "r4-sweet-noria",
+      "kind": "ferris",
+      "question": "Translate into Spanish:\n\"I used to play football.\"",
+      "at": [
+        225.0,
+        0.73
+      ],
+      "answers": [
+        "solía jugar al fútbol",
+        "jugaba al fútbol",
+        "yo jugaba al fútbol",
+        "yo solía jugar al fútbol",
+        "solía jugar fútbol",
+        "jugaba fútbol"
+      ],
+      "hint": "Page 2 - solía + infinitive, or the imperfect.",
+      "explanation": "Solía jugar al fútbol / Jugaba al fútbol."
+    },
+    {
+      "id": "r4-sweet-descansar",
+      "kind": "musician",
+      "question": "¿Qué vas a hacer el fin de semana que viene para descansar?",
+      "sentence": {
+        "question": "El músico asks: ¿Qué vas a hacer el fin de semana que viene para descansar?",
+        "tense": "future",
+        "topic_words": [
+          "tiempo libre",
+          "pasatiempo",
+          "juego",
+          "jugu",
+          "jugar",
+          "jugaba",
+          "toco",
+          "toqu",
+          "tocar",
+          "leo",
+          "leer",
+          "leí",
+          "novela",
+          "música",
+          "musica",
+          "concierto",
+          "festival",
+          "cine",
+          "película",
+          "pelicula",
+          "peli",
+          "serie",
+          "deporte",
+          "fútbol",
+          "futbol",
+          "baloncesto",
+          "natación",
+          "natacion",
+          "nadar",
+          "bailar",
+          "cantar",
+          "guitarra",
+          "piano",
+          "batería",
+          "bateria",
+          "videojuego",
+          "salir",
+          "amig",
+          "teatro",
+          "entrada",
+          "grupo",
+          "cantante",
+          "escucho",
+          "escuchar",
+          "equipo",
+          "partido",
+          "gimnasio",
+          "montar",
+          "patinar",
+          "dibujar",
+          "pintar",
+          "ocio",
+          "descansar",
+          "relajar",
+          "fui",
+          "vi",
+          "suelo",
+          "solía",
+          "solia",
+          "fin de semana",
+          "dormir",
+          "tranquil"
+        ],
+        "stars_needed": 3
+      }
+    }
+  ],
+  "prize": {
+    "name": "Estrella de Oro",
+    "message": "¡Bravo! You conquered Isla 4."
+  }
+}

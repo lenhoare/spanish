@@ -32,7 +32,25 @@ func _ready() -> void:
 	loader.set_script(LoaderScript)
 	add_child(loader)
 	loader.config_loaded.connect(_on_config_loaded)
-	loader.load_config()
+	loader.games_loaded.connect(_on_games_loaded, CONNECT_ONE_SHOT)
+	loader.load_games()
+
+
+## Which game? A ?game=... link (or a choice made earlier) skips the chooser.
+func _on_games_loaded(games: Array, preselected: String) -> void:
+	Game.games = games
+	var ids := games.map(func(g): return str(g.get("id", "")))
+	if preselected != "" and preselected in ids and Game.game_id == "":
+		Game.game_id = preselected
+		Game.game_locked = true
+	if Game.game_id == "" or not Game.game_id in ids:
+		if "--chooser-shot" in OS.get_cmdline_user_args():
+			get_tree().create_timer(1.5).timeout.connect(func():
+				get_viewport().get_texture().get_image().save_png(OS.get_user_data_dir().path_join("shots/chooser.png"))
+				get_tree().quit())
+		Game.game_id = ids[0] if games.size() == 1 else await ui.show_game_chooser(games)
+	var game: Dictionary = games[ids.find(Game.game_id)]
+	loader.load_config(str(game.get("config", "config.json")))
 
 
 func _process(delta: float) -> void:
@@ -89,6 +107,11 @@ func _on_lesson_loaded(data: Dictionary) -> void:
 	ui.character_picked.connect(_show_preview)
 	ui.play_pressed.connect(_on_play_pressed)
 	ui.island_picked.connect(_on_island_picked)
+	ui.games_pressed.connect(func():
+		# Back to the game chooser: forget the game and start over.
+		Game.game_id = ""
+		Game.current_island = 0
+		get_tree().reload_current_scene())
 	ui.show_title()
 	if Game.return_to_picker:
 		Game.return_to_picker = false
@@ -149,7 +172,9 @@ func _start_game() -> void:
 	world.card_touched.connect(_on_card)
 	world.chest_touched.connect(_on_chest)
 	world.sweet_touched.connect(_on_sweet)
+	world.reto_touched.connect(_on_reto)
 	world.whiteboard_touched.connect(_on_whiteboard)
+	world.read_panel.connect(func(title: String, text: String): ui.show_reading(title, text))
 	world.prize_claimed.connect(_on_prize)
 	world.bridge.completed.connect(func():
 		Game.show_toast("The bridge is complete! Cross it to reach Star Island!"))
@@ -231,7 +256,14 @@ func _unlock_next_chest_level(level: int) -> void:
 func _on_sweet(sweet: Node3D) -> void:
 	if _check_locked(sweet):
 		return
-	var result: String = await ui.ask_question(sweet.question, "sweet")
+	var result: String
+	if sweet.question.has("sentence"):
+		# Sentence-builder sweet: earn enough stars to take it.
+		var ch: Dictionary = sweet.question.sentence
+		var stars: int = await ui.ask_sentence(ch, "SWEET CHALLENGE")
+		result = "correct" if stars >= int(ch.get("stars_needed", 3)) else "skipped"
+	else:
+		result = await ui.ask_question(sweet.question, "sweet")
 	match result:
 		"correct":
 			Game.sweets += 1
@@ -280,6 +312,75 @@ func _on_whiteboard() -> void:
 	elif not _read_board:
 		Game.show_toast("Now go and find those question cards!")
 	_read_board = true
+
+
+## Retos: postcards (sentence builder), notice boards (verb gap-fill), detective (reading).
+func _on_reto(node: Node3D, part: int) -> void:
+	if node.done and not (node.has_method("record") and str(node.reto.get("kind", "")) == "postcard"):
+		node.rest()
+		return
+	match str(node.reto.get("kind", "postcard")):
+		"postcard":
+			var stars: int = await ui.ask_sentence(node.reto)
+			node.rest()
+			if stars > 0:
+				var first: bool = node.record(stars)
+				player.celebrate()
+				Game.sfx("win", 1.3, -4)
+				Game.add_coins(stars * 2)
+				if first:
+					_reto_done()
+				Game.show_toast("¡Postal enviada! %d estrellas, +%d coins%s" % [stars, stars * 2, "" if stars >= 5 else " - can you get 5?"])
+		"notice":
+			var fixed: bool = await ui.ask_notice(node.reto)
+			node.rest()
+			if fixed and node.record(1):
+				player.celebrate()
+				Game.add_coins(10)
+				_reto_done()
+				Game.show_toast("¡El tablón está arreglado! +10 coins")
+		"chat":
+			var ok: bool = await ui.ask_chat(node.reto)
+			node.rest()
+			if ok and node.record(1):
+				player.celebrate()
+				Game.add_coins(10)
+				_reto_done()
+				Game.show_toast("¡Qué buena conversación! +10 coins")
+		"detective":
+			if part >= 0:
+				var sp: Dictionary = node.reto.speakers[part]
+				await ui.show_reading(str(sp.get("name", "")), str(sp.get("review", "")))
+				node.rest()
+				node.mark_read(part)
+				if node.all_read():
+					Game.show_toast("You've read both reviews - now talk to the receptionist!")
+				return
+			if not node.all_read():
+				Game.sfx("click")
+				Game.show_toast("\"¿Quién lo dice?\" First read what the guests say - talk to them!")
+				return
+			node.rest()
+			for q in node.reto.get("questions", []):
+				var qq: Dictionary = preload("res://scripts/lesson_loader.gd")._question(q, "det")
+				var res: String = await ui.ask_question(qq, "detective")
+				if res != "correct":
+					node.rest()
+					return
+			node.finish()
+			player.celebrate()
+			Game.add_coins(15)
+			_reto_done()
+			Game.show_toast("¡Detective genial! Every answer right. +15 coins")
+
+
+func _reto_done() -> void:
+	Game.retos_done += 1
+	Game.retos_changed.emit()
+	if Game.retos_done == Game.total_retos:
+		Game.sfx("win")
+		await get_tree().create_timer(2.5).timeout
+		Game.show_toast("¡Todos los retos! Every challenge on the island complete!")
 
 
 func _on_prize() -> void:
