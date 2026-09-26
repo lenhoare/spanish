@@ -67,7 +67,11 @@ static func to_blocks(md: String, scale := 1.0) -> PackedStringArray:
 			while i < lines.size() and lines[i].strip_edges().begins_with(">"):
 				q.append(_inline(lines[i].strip_edges().substr(1).strip_edges()))
 				i += 1
-			out.append("[indent][color=%s][b]|[/b]  %s[/color][/indent]" % [QUOTE_COLOR, "\n[b]|[/b]  ".join(q)])
+			# A tip: each line softly highlighted, rather than a thin bar down the side.
+			var tip := PackedStringArray()
+			for tl in q:
+				tip.append("[bgcolor=#efe9ff][color=%s]  %s  [/color][/bgcolor]" % [QUOTE_COLOR, tl])
+			out.append("\n".join(tip))
 			continue
 
 		if s == "---" or s == "***" or s == "___":

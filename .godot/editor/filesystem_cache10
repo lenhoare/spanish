@@ -371,13 +371,13 @@ ship-ocean-liner.glb::PackedScene::4647367876828506017::1790347974::1790324593::
 ::res://assets/water/Textures/::1790248290
 colormap.png::CompressedTexture2D::4832581921302204383::1790189498::1790248290::1::::<><><>0<>0<>9eff1387371ab1bd56ea4cf3cc752ea1<>res://.godot/imported/colormap.png-1ea46e052dc1c7227ae89f98767cb6f2.ctex::
 ::res://build/::1790194581
-::res://build/web/::1790374328
+::res://build/web/::1790405638
 config.json::JSON::-1::1790266792::0::1::::<><><>0<>0<><>::
 config_retos.json::JSON::-1::1790351592::0::1::::<><><>0<>0<><>::
 games.json::JSON::-1::1790326216::0::1::::<><><>0<>0<><>::
-index.apple-touch-icon.png::CompressedTexture2D::4094147406994890436::1790374328::1790194602::1::::<><><>0<>0<>bd9d5177bc02eebc592bc893bd02df0d<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
-index.icon.png::CompressedTexture2D::1752243667571763349::1790374328::1790194602::1::::<><><>0<>0<>0e5a8c9a9eb6c48c41a58e5eb1799686<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
-index.png::CompressedTexture2D::5801743880127445057::1790374328::1790194602::1::::<><><>0<>0<>862792c03ebc6b65201855385bbadf52<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
+index.apple-touch-icon.png::CompressedTexture2D::4094147406994890436::1790405638::1790194602::1::::<><><>0<>0<>bd9d5177bc02eebc592bc893bd02df0d<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
+index.icon.png::CompressedTexture2D::1752243667571763349::1790405638::1790194602::1::::<><><>0<>0<>0e5a8c9a9eb6c48c41a58e5eb1799686<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
+index.png::CompressedTexture2D::5801743880127445057::1790405638::1790194602::1::::<><><>0<>0<>862792c03ebc6b65201855385bbadf52<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
 ::res://build/web/lessons/::1790266571
 sample_lesson.json::JSON::-1::1790190841::0::1::::<><><>0<>0<><>::
 ::res://build/web/lessons/igcse/::1790348907
@@ -421,7 +421,7 @@ marking_es.json::JSON::-1::1790348497::0::1::::<><><>0<>0<><>::
 06_tabla_de_verbos.json::JSON::-1::1790266792::0::1::::<><><>0<>0<><>::
 ::res://scenes/::1790190819
 main.tscn::PackedScene::-1::1790190819::0::1::::<><><>0<>0<><>::res://scripts/main.gd
-::res://scripts/::1790374322
+::res://scripts/::1790405521
 autotest.gd::GDScript::6217315268461299391::1790373640::0::1::::<>Node<><>0<>0<><>::
 bridge.gd::GDScript::5520109454274722356::1790191040::0::1::::<>Node3D<><>0<>0<><>::
 bus.gd::GDScript::356245417722760398::1790355498::0::1::::<>CharacterBody3D<><>0<>0<><>::
@@ -443,7 +443,7 @@ ingredient.gd::GDScript::6046212034349855115::1790243172::0::1::::<>Area3D<><>0<
 key_pickup.gd::GDScript::2180574505226238969::1790203405::0::1::::<>Area3D<><>0<>0<><>::
 lesson_loader.gd::GDScript::2450411035845343037::1790357513::0::1::::<>Node<><>0<>0<><>::
 main.gd::GDScript::786102037527810438::1790374609::0::1::::<>Node<><>0<>0<><>::
-markdown.gd::GDScript::3786297669096367663::1790201421::0::1::::Markdown<>RefCounted<><>0<>0<><>::
+markdown.gd::GDScript::3786297669096367663::1790405521::0::1::::Markdown<>RefCounted<><>0<>0<><>::
 market.gd::GDScript::8661849237067077397::1790325564::0::1::::<>Node3D<><>0<>0<><>::
 marking.gd::GDScript::5242960586826176394::1790265793::0::1::::Marking<>RefCounted<><>0<>0<><>::
 pinata.gd::GDScript::3946092854886904096::1790327402::0::1::::<>Node3D<><>0<>0<><>::
@@ -474,7 +474,7 @@ tomatina.gd::GDScript::8412517170606114103::1790327365::0::1::::<>Node3D<><>0<>0
 touch_controls.gd::GDScript::1458866716661044455::1790194545::0::1::::<>Control<><>0<>0<><>::
 tow.gd::GDScript::9070180718476904763::1790347434::0::1::::<>Node3D<><>0<>0<><>::
 town.gd::GDScript::5768395465203255054::1790343204::0::1::::<>Node3D<><>0<>0<><>::
-ui.gd::GDScript::1741621385165147407::1790374322::0::1::::<>CanvasLayer<><>0<>0<><>::
+ui.gd::GDScript::1741621385165147407::1790405693::0::1::::<>CanvasLayer<><>0<>0<><>::
 volcano.gd::GDScript::2357289126636621981::1790352187::0::1::::<>Node3D<><>0<>0<><>::
 whiteboard.gd::GDScript::3034637908538757458::1790207593::0::1::::<>Node3D<><>0<>0<><>::
 world.gd::GDScript::6212901612145233486::1790360664::0::1::::<>Node3D<><>0<>0<><>::

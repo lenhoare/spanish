@@ -521,10 +521,18 @@ func open_lesson(pages: Array, start := 0) -> void:
 	var sc := Game.text_scale()
 
 	var dim := _dim()
-	var board := _panel(Color.WHITE, Color("#8f73e6"), 26, 14)
+	if _hud:
+		_hud.visible = false
+	if touch:
+		touch.visible = false
+	var board := _panel(Color.WHITE, Color("#8f73e6"), 26, 12)
 	board.set_anchors_preset(Control.PRESET_FULL_RECT)
-	for side in ["left", "top", "right", "bottom"]:
-		board.set("offset_" + side, 22 if side in ["left", "top"] else -22)
+	var mx := maxf(22.0, root.size.x * 0.04)
+	var my := maxf(16.0, root.size.y * 0.035)
+	board.offset_left = mx
+	board.offset_right = -mx
+	board.offset_top = my
+	board.offset_bottom = -my
 	dim.add_child(board)
 
 	var v := VBoxContainer.new()
@@ -532,16 +540,27 @@ func open_lesson(pages: Array, start := 0) -> void:
 	board.add_child(v)
 
 	var top := HBoxContainer.new()
+	top.add_theme_constant_override("separation", 12)
 	v.add_child(top)
+	# The page title in a coloured tab (like the question cards' "Pregunta").
+	var tab := _panel(PURPLE, Color(0, 0, 0, 0), 14, 0)
+	var tsb := tab.get_theme_stylebox("panel") as StyleBoxFlat
+	tsb.content_margin_left = 16
+	tsb.content_margin_right = 16
+	tsb.content_margin_top = 3
+	tsb.content_margin_bottom = 3
+	top.add_child(tab)
 	var head := Label.new()
 	head.add_theme_font_override("font", _bold_font)
-	head.add_theme_font_size_override("font_size", 24)
-	head.add_theme_color_override("font_color", PURPLE)
-	head.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	head.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	top.add_child(head)
-	var close := _button("X", PINK)
-	close.custom_minimum_size = Vector2(60, 52)
+	head.add_theme_font_size_override("font_size", 22)
+	head.add_theme_color_override("font_color", Color.WHITE)
+	tab.add_child(head)
+	var gap := Control.new()
+	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top.add_child(gap)
+	var close := _button("X", Color("#9a94b8"))
+	close.add_theme_font_size_override("font_size", 22)
+	close.custom_minimum_size = Vector2(54, 46)
 	top.add_child(close)
 
 	var margin := MarginContainer.new()
@@ -562,8 +581,10 @@ func open_lesson(pages: Array, start := 0) -> void:
 	var prev := _button("< Back", PURPLE)
 	var dots := Label.new()
 	dots.add_theme_font_override("font", _bold_font)
-	dots.add_theme_font_size_override("font_size", 24)
+	dots.add_theme_font_size_override("font_size", 22)
 	dots.add_theme_color_override("font_color", PURPLE)
+	dots.custom_minimum_size.x = 70
+	dots.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var next := _button("Next >", PURPLE)
 	var done := _button("Let's play!", GREEN)
 	for b in [prev, dots, next, done]:
@@ -581,6 +602,13 @@ func open_lesson(pages: Array, start := 0) -> void:
 		s.page = p
 		head.text = sheets[p].title
 		text.text = sheets[p].bb
+		# Centre the text block: equal space either side of its widest line.
+		var spare := maxf(0.0, (margin.size.x - 36.0) - float(sheets[p].w) - 8.0)
+		margin.add_theme_constant_override("margin_left", 18 + int(spare / 2.0))
+		margin.add_theme_constant_override("margin_right", 18 + int(spare / 2.0))
+		# ...and vertically, so short pages don't leave a big gap at the bottom.
+		var spare_h := maxf(0.0, margin.size.y - float(sheets[p].h))
+		margin.add_theme_constant_override("margin_top", int(spare_h * 0.4))
 		dots.text = "%d / %d" % [p + 1, sheets.size()]
 		prev.disabled = p == 0
 		next.disabled = p == sheets.size() - 1
@@ -606,6 +634,10 @@ func open_lesson(pages: Array, start := 0) -> void:
 	_pop_in(board)
 	await _lesson_closed
 	_page_turn = Callable()
+	if _hud:
+		_hud.visible = true
+	if touch:
+		touch.visible = true
 	Game.sfx("close")
 	dim.queue_free()
 	Game.ui_open = false
@@ -674,7 +706,8 @@ func _paginate(pages: Array, area: Vector2, sc: float) -> Array:
 			var title: String = pages[pi].title
 			if parts.size() > 1:
 				title += "  (%d/%d)" % [k + 1, parts.size()]
-			sheets.append({"title": title, "bb": parts[k], "page": pi})
+			probe.text = parts[k]
+			sheets.append({"title": title, "bb": parts[k], "page": pi, "w": probe.get_content_width(), "h": probe.get_content_height()})
 	probe.queue_free()
 	return sheets
 
