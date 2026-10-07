@@ -2,6 +2,13 @@
 Source: lessons/spanish_igcse_summary.md.   Run:  python tools/make_igcse.py
 """
 import json, os, textwrap
+import sys
+
+# The lesson JSON files are now the master copy (they're edited with web/editor.html), so this
+# script would overwrite those edits. It only runs with --force, for rebuilding from scratch.
+if "--force" not in sys.argv:
+    sys.exit("make_igcse.py is retired: lessons/igcse/*.json are now edited directly (web/editor.html). "
+             "Run with --force only if you really want to regenerate them and lose any edits.")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "lessons", "igcse")

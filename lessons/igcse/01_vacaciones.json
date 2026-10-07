@@ -616,6 +616,25 @@
         ],
         "stars_needed": 3
       }
+    },
+    {
+      "id": "r1-sweet-arcoiris",
+      "kind": "rainbow",
+      "at": [
+        108.0,
+        0.6
+      ],
+      "question": "Translate into Spanish:\n\"Yesterday it rained, but then there was a rainbow.\"",
+      "answers": [
+        "ayer llovió, pero después hubo un arcoíris",
+        "ayer llovió pero luego hubo un arcoíris",
+        "ayer llovió, pero luego salió un arcoíris",
+        "ayer llovió pero después salió un arcoíris",
+        "ayer llovió, pero después hubo un arco iris",
+        "ayer llovió pero luego hubo un arco iris"
+      ],
+      "hint": "llover → llovió (preterite); there was = hubo; a rainbow = un arcoíris.",
+      "explanation": "Ayer llovió, pero después hubo un arcoíris."
     }
   ],
   "prize": {

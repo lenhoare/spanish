@@ -88,6 +88,49 @@ if (phone) {
   await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
 }
 await send("Page.navigate", { url });
+if (mode === "editor") {
+  const ev = async (e) => (await send("Runtime.evaluate", { expression: e, awaitPromise: true, returnByValue: true })).result.result.value;
+  await sleep(2500);
+  await shot("editor_1_lock.png");
+  await ev("document.getElementById('pw').value='wrong'; document.querySelector('#lockform button').click()");
+  await sleep(500);
+  console.log("WRONG PW:", await ev("document.getElementById('pwerr').textContent"));
+  await ev("document.getElementById('pw').value='cambiame'; document.querySelector('#lockform button').click()");
+  await sleep(2500);
+  console.log("GAMES:", await ev("[...document.querySelectorAll('#gamesel option')].map(o=>o.textContent).join(' | ')"));
+  console.log("FILES:", await ev("[...document.querySelectorAll('#files button')].length"));
+  await ev("document.getElementById('gamesel').value='1'; document.getElementById('gamesel').onchange()");
+  await sleep(1500);
+  await ev("document.querySelectorAll('#files button')[5].click()");
+  await sleep(1500);
+  await ev("document.querySelectorAll('details.section').forEach((d,i)=>d.open = i<4)");
+  await sleep(300);
+  await shot("editor_2_island.png");
+  // Break a card: empty its answers; and remove a gap marker from the notice board.
+  await ev("(()=>{const t=[...document.querySelectorAll('textarea')].find(x=>x.previousElementSibling && x.previousElementSibling.textContent.startsWith('Accepted answers')); t.value=''; t.dispatchEvent(new Event('input'));})()");
+  await sleep(300);
+  console.log("PROBLEMS:", await ev("document.getElementById('problems').innerText.replace(/\n/g,' / ')"));
+  console.log("DOWNLOAD DISABLED:", await ev("document.getElementById('dl').disabled"));
+  await shot("editor_3_problem.png");
+  await ev("(()=>{const t=[...document.querySelectorAll('textarea')].find(x=>x.previousElementSibling && x.previousElementSibling.textContent.startsWith('Accepted answers')); t.value='sigue todo recto'; t.dispatchEvent(new Event('input'));})()");
+  await sleep(300);
+  console.log("AFTER FIX:", await ev("document.getElementById('problems').innerText"), "| disabled:", await ev("document.getElementById('dl').disabled"));
+  console.log("ORANGE DOT:", await ev("!!document.querySelector('#files .dot')"));
+  // The edited file keeps everything else: compare structure.
+  console.log("SAME KEYS:", await ev("(()=>{const p=state.current; const a=state.edited[p], b=state.original[p]; return JSON.stringify(Object.keys(a))===JSON.stringify(Object.keys(b)) && JSON.stringify(a.sweets)===JSON.stringify(b.sweets) && JSON.stringify(a.retos)===JSON.stringify(b.retos)})()"));
+  await ev("document.querySelectorAll('details.section').forEach(d=>d.open=true); document.querySelector('.wb').scrollIntoView()");
+  await sleep(400);
+  await shot("editor_4_whiteboard.png");
+  await ev("[...document.querySelectorAll('.item h3')].find(h=>h.textContent.startsWith('Notice')).scrollIntoView()");
+  await sleep(300);
+  await shot("editor_5_notice.png");
+  await ev("[...document.querySelectorAll('.item h3')].find(h=>h.textContent.startsWith('Chest 1')).scrollIntoView()");
+  await sleep(300);
+  await shot("editor_6_chest.png");
+  await ev("localStorage.clear()");
+  ws.close();
+  process.exit(0);
+}
 // Wait until the Godot canvas is running (engine logs "Godot Engine v...")
 for (let i = 0; i < 120 && !logs.some((l) => l.includes("Godot Engine")); i++) await sleep(500);
 await sleep(6000);

@@ -47,6 +47,34 @@ func _run() -> void:
 	main._start_game()
 	await _wait(1.5)
 	await _shot("02_start")
+	if "--moodshot" in OS.get_cmdline_user_args():
+		var w = main.world
+		var pl: CharacterBody3D = main.player
+		await _wait(2.0)
+		await _shot("m1_start")
+		main.cam.yaw = PI * 0.75
+		await _wait(1.0)
+		await _shot("m2_turned")
+		await _aerial("m3_aerial", Vector3.ZERO, 70.0, Vector3(0, 0, 60))
+		var rbs = w.sweets.filter(func(sw): return is_instance_valid(sw) and str(sw.question.get("kind", "")) == "rainbow")
+		if rbs.size() > 0:
+			var top: Vector3 = rbs[0].global_position
+			var dir := Vector3(top.x, 0, top.z).normalized()
+			_teleport(pl, main.cam, top - dir * 40.0 + Vector3(0, -top.y + 0.4, 0), atan2(-dir.x, -dir.z) + PI)
+			main.cam.yaw = atan2(dir.x, dir.z) + PI
+			await _wait(1.2)
+			await _shot("m4_rainbow_road")
+			# Walk up it for real.
+			_teleport(pl, main.cam, top - dir * 37.0 + Vector3(0, -top.y + 0.4, 0), 0.0)
+			main.cam.yaw = atan2(-dir.x, -dir.z)
+			Input.action_press("move_forward")
+			await _wait(5.0)
+			Input.action_release("move_forward")
+			await _wait(0.6)
+			print("RAINBOW walk: y=%.1f (cloud top %.1f) sweet panel=%s" % [pl.global_position.y, top.y - 0.9, Game.ui_open])
+			await _shot("m5_on_rainbow")
+		get_tree().quit()
+		return
 	if "--phone" in OS.get_cmdline_user_args():
 		await _phone_pass()
 		return

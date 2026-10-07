@@ -249,6 +249,9 @@ var _sand: StandardMaterial3D
 var _foam: StandardMaterial3D
 var _rng := RandomNumberGenerator.new()
 var _keepout: Array = []   # [Vector2 center, radius]
+var _env: Environment
+var mood_night := false
+var mood_sparkle := false
 var _jetty_rects: Array = []   # every jetty, as a solid rectangle for boats that collide with them
 var _mover: AnimatableBody3D
 var _mover_t := 0.0
@@ -280,6 +283,15 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 	if t is String and THEMES.has(t):
 		theme_name = t
 	theme = THEMES.get(theme_name, THEMES.meadow)
+	# Special moods for this island (config.json "course": "night", "rainbow", "sparkle").
+	var ce: Dictionary = {}
+	if Game.config.has("course") and Game.current_island < Game.config.course.size():
+		ce = Game.config.course[Game.current_island]
+	mood_night = bool(ce.get("night", false))
+	mood_sparkle = bool(ce.get("sparkle", false))
+	var rb = ce.get("rainbow", false)
+	if mood_night:
+		theme = Atmosphere.night_theme(theme)
 	_grass = Props.mat(theme.grass)
 	_dirt = Props.mat(theme.dirt)
 	_sand = Props.mat(theme.sand)
@@ -287,6 +299,12 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 
 	_environment()
 	_sea()
+	if mood_night:
+		Atmosphere.night(self, _env, MAIN_R, false)
+	if rb:
+		Atmosphere.sky_rainbow(self, float(rb) if (rb is float or rb is int) else -90.0)   # behind Star Island
+	if mood_sparkle:
+		Atmosphere.sparkle(self, MAIN_R, _env)
 
 	# Islands
 	_island(Vector3.ZERO, MAIN_R, 96)
@@ -476,6 +494,8 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 			"volcano":
 				if volcano == null:
 					_build_volcano(q)
+			"rainbow":
+				_build_rainbow(q)
 			"climb":
 				if climb_wall == null:
 					_build_climb(q)
@@ -515,6 +535,8 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 	_build_retos(lesson.get("retos", []))
 	_stars()
 	_decorate()
+	if mood_night and not str(theme.get("props", "")).contains("lamp"):
+		_lanterns()
 	_make_clouds()
 
 	Game.total_cards = n_cards
@@ -531,6 +553,10 @@ func spawn_player(character_name: String) -> CharacterBody3D:
 	player.position = SPAWN
 	add_child(player)
 	player.setup(character_name, SPAWN)
+	if mood_night:
+		Atmosphere.hero_light(player)
+	if mood_sparkle:
+		Atmosphere.sparkle_trail(player)
 	return player
 
 
@@ -1354,6 +1380,33 @@ func _build_bus(q: Dictionary) -> void:
 	bus_route.sweet = s
 
 
+## Night: warm lanterns dotted around the island (themes without their own lamps).
+func _lanterns() -> void:
+	for i in 40:
+		var a := _rng.randf() * TAU
+		var d := _rng.randf_range(MAIN_R * 0.25, MAIN_R - 2.5)
+		var p := Vector2(cos(a), sin(a)) * d
+		if not _is_free(p, 1.0):
+			continue
+		_keep(Vector3(p.x, 0, p.y), 1.0)
+		Props.place(self, "proc/lantern", Vector3(p.x, 0, p.y), _rng.randf() * TAU, 1.6, "cyl")
+
+
+## The rainbow road: walk up it from the island to a cloud with a sweet on it.
+func _build_rainbow(q: Dictionary) -> void:
+	var start := _at(q.get("at", [75.0, 0.62]))
+	var dir := Vector3(start.x, 0, start.z).normalized()
+	var top := Atmosphere.rainbow_road(self, start, dir)
+	var n := int(MAIN_R - start.length()) + 2
+	for k in range(0, n, 2):
+		_keep(start + dir * k, 3.2)
+	_nostar.append([Vector2(start.x, start.z) + Vector2(dir.x, dir.z) * n * 0.5, n * 0.5 + 2.0])
+	_add_sweet(q, str(q.get("model", "food/lollypop")), top + Vector3(0, 0.9, 0), top, 4.0)
+	for s in [0.35, 0.65]:
+		var pp: Vector3 = start + dir * 34.0 * float(s) + Vector3(0, 11.0 * sin(float(s) * PI / 2.0) + 1.2, 0)
+		_star(pp)
+
+
 ## El volcán: cools as you finish retos; climb to the crater for the sweet.
 func _build_volcano(q: Dictionary) -> void:
 	var pos := _at(q.get("at", [150.0, 0.72]))
@@ -1775,6 +1828,7 @@ func _environment() -> void:
 	env.fog_light_color = theme.horizon
 	env.fog_density = 0.002
 	env.fog_sky_affect = 0.0
+	_env = env
 	var we := WorldEnvironment.new()
 	we.environment = env
 	add_child(we)
@@ -1799,6 +1853,11 @@ func _sea() -> void:
 	m.shader = preload("res://scripts/sea.gdshader")
 	m.set_shader_parameter("deep", theme.deep)
 	m.set_shader_parameter("shallow", theme.shallow)
+	if mood_sparkle:
+		m.set_shader_parameter("glint", 1.0)
+		m.set_shader_parameter("glint_from", 0.8)
+	elif mood_night:
+		m.set_shader_parameter("sparkle", Color(0.75, 0.82, 1.0))
 	plane.material = m
 	var mi := MeshInstance3D.new()
 	mi.mesh = plane

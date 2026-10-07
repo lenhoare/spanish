@@ -201,6 +201,24 @@
       "hint": "ir -> voy, beber -> bebo. 'Voy al gimnasio' is on page 5.",
       "explanation": "¡Genial! Voy al gimnasio y bebo agua.",
       "kind": "trainer"
+    },
+    {
+      "id": "s3-sweet-arcoiris",
+      "kind": "rainbow",
+      "at": [
+        75.0,
+        0.62
+      ],
+      "question": "Extension! Translate into Spanish:\n\"After school I always go running.\"",
+      "answers": [
+        "después del instituto siempre voy a correr",
+        "después del colegio siempre voy a correr",
+        "siempre voy a correr después del instituto",
+        "siempre voy a correr después del colegio",
+        "después de clase siempre voy a correr"
+      ],
+      "hint": "después del instituto + siempre + voy a + infinitive.",
+      "explanation": "Después del instituto siempre voy a correr. ¡Muy en forma!"
     }
   ],
   "prize": {

@@ -88,6 +88,11 @@ static func procedural(name: String) -> Node3D:
 		"tyre":         # una rueda
 			add.call(Vector3(0.34, 0.34, 0.14), Vector3(0, 0.17, 0), Color(0.15, 0.15, 0.18))
 			add.call(Vector3(0.18, 0.18, 0.15), Vector3(0, 0.17, 0), Color(0.75, 0.75, 0.8))
+		"lantern":      # a warm lantern on a post (for night islands)
+			add.call(Vector3(0.12, 1.5, 0.12), Vector3(0, 0.75, 0), Color(0.3, 0.25, 0.3))
+			add.call(Vector3(0.36, 0.06, 0.36), Vector3(0, 1.52, 0), Color(0.25, 0.2, 0.25))
+			glow.call(Vector3(0.28, 0.34, 0.28), Vector3(0, 1.73, 0), Color(1.0, 0.78, 0.4))
+			add.call(Vector3(0.36, 0.06, 0.36), Vector3(0, 1.93, 0), Color(0.25, 0.2, 0.25))
 		"bunting":      # papel picado: two poles with a string of coloured flags
 			for x in [-1.6, 1.6]:
 				add.call(Vector3(0.1, 2.8, 0.1), Vector3(x, 1.4, 0), Color(0.55, 0.4, 0.3))
