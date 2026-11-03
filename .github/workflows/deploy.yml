@@ -1,7 +1,7 @@
 # Builds the game with Godot and publishes it to Cloudflare.
 #
-#   push to main            -> live site (misscleary.com), using the top-level settings in cloudflare/wrangler.jsonc
-#   "Run workflow" button   -> choose live or staging (staging.misscleary.com)
+#   push to main            -> live site (mscleary.com), using the top-level settings in cloudflare/wrangler.jsonc
+#   "Run workflow" button   -> choose live or staging (staging.mscleary.com)
 #   pull request            -> build and test only, nothing is published
 #
 # Needs two repository secrets (Settings -> Secrets and variables -> Actions):

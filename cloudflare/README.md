@@ -1,11 +1,11 @@
-# Putting the game online (misscleary.com on Cloudflare)
+# Putting the game online (mscleary.com on Cloudflare)
 
 This is a step-by-step checklist. Do the steps in order; each one says what you'll see when it's
 worked. Nothing here needs your own computer except a web browser: GitHub builds the game and
 publishes it for you.
 
-- **Part 1 (tonight):** the game live at **https://misscleary.com** as an open website (no sign-in, no payments).
-- **Part 2 (tomorrow):** a private test copy at **https://staging.misscleary.com** with Google and
+- **Part 1 (tonight):** the game live at **https://mscleary.com** as an open website (no sign-in, no payments).
+- **Part 2 (tomorrow):** a private test copy at **https://staging.mscleary.com** with Google and
   Microsoft sign-in, Stripe payments (test mode, no real money) and class codes switched on.
 - **Part 3 (later):** switching features on and off for the real site.
 
@@ -17,7 +17,7 @@ publishes it for you.
  you push to GitHub (main)
         │
         ▼
- GitHub Actions: Godot exports the game ──► Cloudflare Worker "lesson-island"      ──► misscleary.com
+ GitHub Actions: Godot exports the game ──► Cloudflare Worker "lesson-island"      ──► mscleary.com
                  (.github/workflows/         + R2 storage for the 37 MB index.wasm
                   deploy.yml)               + D1 database (teachers, classes; unused while features are off)
 ```
@@ -37,7 +37,7 @@ dashboard once and never go in GitHub.
 
 If a switch is on but a secret it needs is missing, that feature quietly stays **off**, so a
 half-finished setup never locks students out. To see what's really on, visit
-`https://misscleary.com/api/features`.
+`https://mscleary.com/api/features`.
 
 Students never have accounts and no student data is stored. Teachers' name and email (and Stripe
 customer number, if they pay) are the only personal data.
@@ -46,20 +46,20 @@ customer number, if they pay) are the only personal data.
 
 # Part 1: the open website (tonight)
 
-### 1.1 Put misscleary.com on Cloudflare (≈15 min, then a wait)
+### 1.1 Put mscleary.com on Cloudflare (≈15 min, then a wait)
 
 1. Log in at [dash.cloudflare.com](https://dash.cloudflare.com) → **Add a domain** → type
-   `misscleary.com` → choose the **Free** plan.
+   `mscleary.com` → choose the **Free** plan.
 2. Cloudflare shows the DNS records it found at Porkbun. **Delete** any records for
-   `misscleary.com` and `www` (type A, AAAA, ALIAS or CNAME). They're Porkbun's "parked"
+   `mscleary.com` and `www` (type A, AAAA, ALIAS or CNAME). They're Porkbun's "parked"
    page and would block the game from using the address. Keep any **MX** or **TXT** records if
    you've set up email for the domain.
 3. Cloudflare shows **two nameservers**, like `xxx.ns.cloudflare.com`. Keep that tab open.
-4. In another tab, log in to **Porkbun** → **Domain Management** → misscleary.com → **Details**:
+4. In another tab, log in to **Porkbun** → **Domain Management** → mscleary.com → **Details**:
    - If **DNSSEC** is on, turn it **off** first. If it's left on, the domain stops working after the switch.
    - **Authoritative Nameservers** → **Edit** → delete Porkbun's ones, paste Cloudflare's two → **Submit**.
 5. Back in Cloudflare, click **Check nameservers**. It usually takes 10-60 minutes (occasionally
-   longer). Cloudflare emails you when misscleary.com is **Active**. You can carry on with 1.2-1.4 meanwhile.
+   longer). Cloudflare emails you when mscleary.com is **Active**. You can carry on with 1.2-1.4 meanwhile.
 
 ### 1.2 Turn on R2 storage (2 min)
 
@@ -76,7 +76,7 @@ This lets GitHub publish to your Cloudflare account, and nothing else.
 3. Under **Permissions**, click **+ Add more** and add these two (if they're not already there):
    - `Account` · `D1` · `Edit`
    - `Zone` · `DNS` · `Edit`
-4. **Account Resources**: Include → your account. **Zone Resources**: Include → Specific zone → `misscleary.com`.
+4. **Account Resources**: Include → your account. **Zone Resources**: Include → Specific zone → `mscleary.com`.
 5. **Continue to summary** → **Create Token** → **copy the token** (it's only shown once).
 6. Also copy your **Account ID**: dashboard home → **Workers & Pages**. It's in the right-hand column
    (or in the browser address bar: `dash.cloudflare.com/<this-long-number>/...`).
@@ -99,19 +99,19 @@ change that lands on `main` rebuilds and republishes the site.
 Watch it on github.com → **Actions** → **Build and deploy**. It takes about 3 minutes; a green tick
 means it's live. (The first run downloads Godot, so it's slower; later runs are quicker.)
 
-**Check:** open https://misscleary.com - the island picker should appear. https://www.misscleary.com
-should jump to the same place, and https://misscleary.com/api/features should say everything is `false`.
+**Check:** open https://mscleary.com - the island picker should appear. https://www.mscleary.com
+should jump to the same place, and https://mscleary.com/api/features should say everything is `false`.
 
 If the run goes red, click it, open the red step and read the last lines. Common ones:
 - *"Authentication error"*: the token or account ID in 1.4 is wrong, or missing a permission from 1.3.
-- *"…custom domain… zone…"*: misscleary.com isn't Active on Cloudflare yet (1.1). Wait, then
+- *"…custom domain… zone…"*: mscleary.com isn't Active on Cloudflare yet (1.1). Wait, then
   **Actions → Build and deploy → Re-run jobs**.
 - *R2 / "Please enable R2"*: do 1.2.
 
 ### 1.6 Make the staging copy (2 min)
 
 github.com → **Actions** → **Build and deploy** → **Run workflow** → target **staging** → **Run workflow**.
-When it's green, https://staging.misscleary.com shows the game, open to anyone, just like the
+When it's green, https://staging.mscleary.com shows the game, open to anyone, just like the
 real site. Its features are switched on but have no secrets yet, so they stay off (the
 "fails safe" rule). They come alive one by one in Part 2.
 
@@ -130,17 +130,17 @@ sign-in cookies. If you ever change it, everyone is signed out (harmless).
 
 ### 2.2 Google sign-in (≈15 min)
 
-1. [console.cloud.google.com](https://console.cloud.google.com) → project picker → **New project** → "Miss Cleary".
+1. [console.cloud.google.com](https://console.cloud.google.com) → project picker → **New project** → "Ms Cleary".
 2. **APIs & Services → OAuth consent screen** (may be called **Google Auth Platform → Branding**):
-   - App name `Miss Cleary`, support email: yours. **Don't upload a logo** (a logo makes Google
+   - App name `Ms Cleary`, support email: yours. **Don't upload a logo** (a logo makes Google
      review the app, which takes weeks).
-   - Audience: **External**. Authorised domain: `misscleary.com`.
+   - Audience: **External**. Authorised domain: `mscleary.com`.
    - Then **Audience → Publish app** ("In production"). Until then only listed test users can sign in.
      The app only asks for name and email, so Google doesn't need to review it.
-3. **Credentials** (or **Clients**) → **Create client** → **Web application**, name "misscleary.com".
+3. **Credentials** (or **Clients**) → **Create client** → **Web application**, name "mscleary.com".
    **Authorised redirect URIs**, add both:
-   - `https://staging.misscleary.com/auth/google/callback`
-   - `https://misscleary.com/auth/google/callback`
+   - `https://staging.mscleary.com/auth/google/callback`
+   - `https://mscleary.com/auth/google/callback`
 4. Copy the **Client ID** and **Client secret** into the staging Worker as secrets
    `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
 
@@ -151,12 +151,12 @@ sign-in cookies. If you ever change it, everyone is signed out (harmless).
    you don't have access, sign up for a free Azure account at [azure.microsoft.com/free](https://azure.microsoft.com/free),
    which creates your own directory (it asks for a card as an identity check).
 2. **Applications → App registrations → New registration**:
-   - Name: `Miss Cleary`
+   - Name: `Ms Cleary`
    - Supported account types: **Accounts in any organizational directory (Any Microsoft Entra ID tenant - Multitenant)**
-   - Redirect URI: platform **Web**, `https://staging.misscleary.com/auth/microsoft/callback`
+   - Redirect URI: platform **Web**, `https://staging.mscleary.com/auth/microsoft/callback`
    - **Register**.
 3. On the app's **Overview**, copy **Application (client) ID** → staging secret `MICROSOFT_CLIENT_ID`.
-4. **Authentication** → **Add URI** → `https://misscleary.com/auth/microsoft/callback` → **Save**.
+4. **Authentication** → **Add URI** → `https://mscleary.com/auth/microsoft/callback` → **Save**.
 5. **Certificates & secrets → New client secret** → expires in 24 months → copy the **Value**
    (not the "Secret ID") → staging secret `MICROSOFT_CLIENT_SECRET`.
    **Put a reminder in your calendar for 23 months' time**: sign-in stops when it expires.
@@ -164,7 +164,7 @@ sign-in cookies. If you ever change it, everyone is signed out (harmless).
    `xms_edov` → **Add** (accept the prompt about Graph permissions).
 7. Optional, makes the sign-in prompt show your domain: set `MICROSOFT_CLIENT_ID` on the **live**
    Worker (lesson-island) too, then **Branding & properties → Publisher domain → Verify a new domain** →
-   `misscleary.com`. The Worker already serves the file Microsoft checks.
+   `mscleary.com`. The Worker already serves the file Microsoft checks.
 
 **About school IT.** Many schools only let staff sign in to apps that their IT team has approved.
 If a teacher sees *"Need admin approval"*, the site shows a friendly message and they can use Google
@@ -185,11 +185,11 @@ client ID in):
 ### 2.4 Stripe, in test mode (≈20 min)
 
 1. Sign up at [stripe.com](https://dashboard.stripe.com/register). Make sure **Test mode** is on (toggle top right).
-2. **Product catalogue → + Add product**: "Miss Cleary for teachers", **Recurring**, **Monthly**,
+2. **Product catalogue → + Add product**: "Ms Cleary for teachers", **Recurring**, **Monthly**,
    e.g. **£3.00** → Save. Open the price and copy its ID (`price_…`). On github.com, edit
    `cloudflare/wrangler.jsonc` and put it in the **staging** section's `"STRIPE_PRICE_ID": ""`.
 3. **Developers → Webhooks → Add destination** (or "Add endpoint"):
-   - Endpoint URL: `https://staging.misscleary.com/api/billing/webhook`
+   - Endpoint URL: `https://staging.mscleary.com/api/billing/webhook`
    - Events: `checkout.session.completed`, `customer.subscription.created`,
      `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`
    - Then copy its **Signing secret** (`whsec_…`) → staging secret `STRIPE_WEBHOOK_SECRET`.
@@ -201,7 +201,7 @@ client ID in):
 Once you've saved `wrangler.jsonc` on GitHub, run **Actions → Build and deploy → Run workflow →
 staging** again so it picks up the price ID. Then:
 
-1. https://staging.misscleary.com/teachers → sign in with Google, and try Microsoft too.
+1. https://staging.mscleary.com/teachers → sign in with Google, and try Microsoft too.
 2. **Subscribe** → card `4242 4242 4242 4242`, any future date, any CVC, any postcode.
 3. Back on the teachers page: **Active**. **Add class** → copy the link.
 4. Open the link in a private/incognito window: the game should open, as a student would see it.
@@ -216,7 +216,7 @@ in the **top** section for the real site → **Commit changes** (to `main`). It 
 
 To set up the real site, add the same secrets to the **lesson-island** Worker (step 2's intro,
 but the other Worker). For real payments, use Stripe in **live mode** with its own price, webhook
-(`https://misscleary.com/api/billing/webhook`) and `sk_live_…` key. Stripe asks for your
+(`https://mscleary.com/api/billing/webhook`) and `sk_live_…` key. Stripe asks for your
 business details before live payments work.
 
 Other settings in `wrangler.jsonc`:

@@ -36,10 +36,10 @@
     "STRIPE_TRIAL_DAYS": "0",
     "STRIPE_AUTOMATIC_TAX": "off"
   },
-  // Your domain. Needs misscleary.com's DNS moved to Cloudflare first (README step 2).
+  // Your domain. Needs mscleary.com to be Active on Cloudflare (README step 1.1).
   "routes": [
-    { "pattern": "misscleary.com", "custom_domain": true },
-    { "pattern": "www.misscleary.com", "custom_domain": true }
+    { "pattern": "mscleary.com", "custom_domain": true },
+    { "pattern": "www.mscleary.com", "custom_domain": true }
   ],
   // Created automatically on the first deploy. Unused while FEATURE_AUTH is off.
   "d1_databases": [
@@ -54,7 +54,7 @@
     // ---------------------------------------------------------------- STAGING: try the features
     "staging": {
       "name": "lesson-island-staging",
-      "routes": [{ "pattern": "staging.misscleary.com", "custom_domain": true }],
+      "routes": [{ "pattern": "staging.mscleary.com", "custom_domain": true }],
       "vars": {
         "FEATURE_AUTH": "on",
         "SIGNIN_GOOGLE": "on",
