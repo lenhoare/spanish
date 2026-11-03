@@ -27,7 +27,7 @@ async function route(request, env) {
   const path = url.pathname;
   const flags = features(env);
 
-  // www.misscleary.com -> misscleary.com (one address, so sign-in cookies always match).
+  // www.mscleary.com -> mscleary.com (one address, so sign-in cookies always match).
   if (url.hostname.startsWith("www.")) {
     url.hostname = url.hostname.slice(4);
     return Response.redirect(url.toString(), 301);

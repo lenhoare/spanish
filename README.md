@@ -33,7 +33,7 @@ Then copy `config.json` and the `lessons` folder into `build/web/` (keeping the 
 and upload everything in `build/web/` to any static host (GitHub Pages, Netlify, Cloudflare Pages).
 To change lessons or islands later, just edit `config.json` / the lesson files on the server - no rebuild.
 
-### Cloudflare (recommended): misscleary.com
+### Cloudflare (recommended): mscleary.com
 Pushing to `main` on GitHub builds the game with Godot and publishes it to Cloudflare automatically
 (`.github/workflows/deploy.yml`). Setup checklist, and the optional teacher sign-in (Google and
 Microsoft), Stripe subscriptions and class codes, **all switched off by default**:
