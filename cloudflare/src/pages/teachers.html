@@ -34,6 +34,10 @@
   .err { color:var(--err); font-weight:700; }
   .note { background:#fff3c9; border-radius:12px; padding:10px 12px; margin-bottom:12px; }
   .hidden { display:none; }
+  .btn.google { background:#fff; color:#3c4043; border:2px solid #dadce0; border-bottom-width:4px; }
+  .btn.microsoft { background:#2f2f2f; }
+  .btn svg { vertical-align:-3px; margin-right:8px; }
+  .small-print { font-size:14px; opacity:.75; margin:12px 0 0; }
   @media (max-width:520px) { .hide-sm { display:none; } }
 </style>
 </head>
@@ -46,8 +50,9 @@
 
   <section class="card hidden" id="signed-out">
     <h2>Sign in</h2>
-    <p>Sign in with your Google account to set up classes. Students never need an account - they just use your class code.</p>
-    <a class="btn alt" href="/auth/google?next=%2Fteachers">Sign in with Google</a>
+    <p>Sign in to set up classes. Students never need an account - they just use your class code.</p>
+    <div class="row" id="signin-buttons"></div>
+    <p class="small-print">Use the same sign-in each time: a Google sign-in and a Microsoft sign-in are separate accounts here.</p>
   </section>
 
   <section class="card hidden" id="account">
@@ -93,14 +98,29 @@ function note(text, isErr) {
 }
 
 const q = new URLSearchParams(location.search);
+const nextRaw = q.get("next") || "/teachers";
+const next = nextRaw.startsWith("/") && !nextRaw.startsWith("//") ? nextRaw : "/teachers";
+const SIGNIN = {
+  google: ["Sign in with Google", '<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.2C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.8c4.3-4 6.9-9.9 6.9-17.2z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.2C1 16.5 0 20.1 0 24s1 7.5 2.7 10.7l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.8c-2.1 1.4-4.8 2.3-8.5 2.3-6.2 0-11.5-4.2-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>'],
+  microsoft: ["Sign in with Microsoft", '<svg width="16" height="16" viewBox="0 0 21 21"><path fill="#f25022" d="M0 0h10v10H0z"/><path fill="#7fba00" d="M11 0h10v10H11z"/><path fill="#00a4ef" d="M0 11h10v10H0z"/><path fill="#ffb900" d="M11 11h10v10H11z"/></svg>'],
+};
+const SIGNIN_ERRORS = {
+  failed: "Sign-in didn't work. Please try again.",
+  cancelled: "Sign-in was cancelled.",
+  "needs-admin": "Your school's IT team needs to approve this site for Microsoft sign-in first. You can sign in with Google instead, or ask IT to approve it.",
+  personal: "Please use your school Microsoft account (personal Outlook/Hotmail accounts aren't accepted).",
+};
 if (q.get("billing") === "success") note("Thank you! Your subscription is being set up - it can take a few seconds to show here.");
 if (q.get("billing") === "cancelled") note("No problem - you weren't charged.");
-if (q.get("signin") === "failed") note("Sign-in didn't work. Please try again.", true);
-if (q.toString()) history.replaceState(null, "", "/teachers");
+if (q.get("signin")) note(SIGNIN_ERRORS[q.get("signin")] || SIGNIN_ERRORS.failed, true);
+if (q.has("billing") || q.has("signin")) history.replaceState(null, "", q.has("next") ? "/teachers?next=" + encodeURIComponent(next) : "/teachers");
 
 async function load() {
   const me = await api("/api/me");
   show($("#signed-out"), !me.signedIn);
+  $("#signin-buttons").innerHTML = me.features.providers.map((p) =>
+    `<a class="btn ${p}" href="/auth/${p}?next=${encodeURIComponent(next)}">${SIGNIN[p][1]}${SIGNIN[p][0]}</a>`).join("");
+  if (me.signedIn && next !== "/teachers") { location.href = next; return; }
   for (const id of ["#account", "#plan", "#classes"]) show($(id), me.signedIn);
   if (!me.signedIn) return;
   $("#who").textContent = me.user.name || "Signed in";

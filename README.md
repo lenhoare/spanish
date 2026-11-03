@@ -33,11 +33,11 @@ Then copy `config.json` and the `lessons` folder into `build/web/` (keeping the 
 and upload everything in `build/web/` to any static host (GitHub Pages, Netlify, Cloudflare Pages).
 To change lessons or islands later, just edit `config.json` / the lesson files on the server - no rebuild.
 
-### Cloudflare (recommended)
-`cloudflare/` deploys the game as a Cloudflare Worker: `cd cloudflare`, `npm install`, `npm run deploy`.
-It does the copying above for you and handles Godot's large `index.wasm`. It also has optional teacher
-sign-in (Google), Stripe subscriptions and class codes. **All of these are switched off by default**, so
-the site is an open website until you turn them on. See [`cloudflare/README.md`](cloudflare/README.md).
+### Cloudflare (recommended): misscleary.com
+Pushing to `main` on GitHub builds the game with Godot and publishes it to Cloudflare automatically
+(`.github/workflows/deploy.yml`). Setup checklist, and the optional teacher sign-in (Google and
+Microsoft), Stripe subscriptions and class codes, **all switched off by default**:
+[`cloudflare/README.md`](cloudflare/README.md).
 
 ## Test on your phone at home
 Godot web games need HTTPS (or localhost), so use the HTTPS test server:

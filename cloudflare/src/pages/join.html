@@ -37,7 +37,7 @@
   const params = new URLSearchParams(location.search);
   const next = params.get("next") || "/";
   const safe = next.startsWith("/") && !next.startsWith("//") ? next : "/";
-  document.getElementById("teach").href = "/auth/google?next=" + encodeURIComponent(safe);
+  document.getElementById("teach").href = "/teachers?next=" + encodeURIComponent(safe);
   const code = document.getElementById("code");
   if (params.get("code")) {
     code.value = params.get("code");

@@ -21,17 +21,26 @@
 
   // ---------------------------------------------------------------- LIVE SITE: everything off
   "vars": {
-    "FEATURE_AUTH": "off",            // master switch: Google sign-in for teachers (off = all below off too)
+    "FEATURE_AUTH": "off",            // master switch: teachers can sign in (off = all below off too)
+    "SIGNIN_GOOGLE": "on",            // offer "Sign in with Google" (once its secrets are set)
+    "SIGNIN_MICROSOFT": "on",         // offer "Sign in with Microsoft" (once its secrets are set)
     "FEATURE_PAYMENTS": "off",        // Stripe monthly subscriptions for teachers
     "FEATURE_REQUIRE_ACCESS": "off",  // game needs a class code or a signed-in teacher
-    "FEATURE_PROTECT_EDITOR": "off",  // editor.html needs a Google sign-in from ADMIN_EMAILS
-    "PUBLIC_URL": "",                 // e.g. "https://lessonisland.co.uk" once you have a domain (blank = use the request's address)
+    "FEATURE_PROTECT_EDITOR": "off",  // editor.html needs a sign-in from ADMIN_EMAILS
+    "PUBLIC_URL": "",                 // leave blank: the site uses whichever address it was visited on
     "ADMIN_EMAILS": "",               // comma-separated
     "COMPLIMENTARY_EMAILS": "",       // teachers who get a free plan (e.g. your wife's colleagues)
+    "MICROSOFT_TENANT": "organizations",  // any school/work Microsoft account; or one school's tenant id to allow only that school
+    "MICROSOFT_TRUSTED_TENANTS": "",  // tenant ids of schools whose emails count for ADMIN/COMPLIMENTARY_EMAILS (see README)
     "STRIPE_PRICE_ID": "",            // price_... of the monthly plan
     "STRIPE_TRIAL_DAYS": "0",
     "STRIPE_AUTOMATIC_TAX": "off"
   },
+  // Your domain. Needs misscleary.com's DNS moved to Cloudflare first (README step 2).
+  "routes": [
+    { "pattern": "misscleary.com", "custom_domain": true },
+    { "pattern": "www.misscleary.com", "custom_domain": true }
+  ],
   // Created automatically on the first deploy. Unused while FEATURE_AUTH is off.
   "d1_databases": [
     { "binding": "DB", "database_name": "lesson-island", "migrations_dir": "migrations" }
@@ -45,14 +54,19 @@
     // ---------------------------------------------------------------- STAGING: try the features
     "staging": {
       "name": "lesson-island-staging",
+      "routes": [{ "pattern": "staging.misscleary.com", "custom_domain": true }],
       "vars": {
         "FEATURE_AUTH": "on",
+        "SIGNIN_GOOGLE": "on",
+        "SIGNIN_MICROSOFT": "on",
         "FEATURE_PAYMENTS": "on",
         "FEATURE_REQUIRE_ACCESS": "on",
         "FEATURE_PROTECT_EDITOR": "off",
         "PUBLIC_URL": "",
         "ADMIN_EMAILS": "",
         "COMPLIMENTARY_EMAILS": "",
+        "MICROSOFT_TENANT": "organizations",
+        "MICROSOFT_TRUSTED_TENANTS": "",
         "STRIPE_PRICE_ID": "",        // a TEST-mode price_...
         "STRIPE_TRIAL_DAYS": "0",
         "STRIPE_AUTOMATIC_TAX": "off"

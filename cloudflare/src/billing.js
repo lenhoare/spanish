@@ -6,7 +6,8 @@
 //
 // Stripe hosts the card forms, so card details never touch this site.
 
-import { listOf, isOn } from "./flags.js";
+import { emailIn } from "./auth.js";
+import { isOn } from "./flags.js";
 import { hmacHex, json, now, timingSafeEqual } from "./util.js";
 
 const API = "https://api.stripe.com/v1";
@@ -46,7 +47,7 @@ function siteUrl(env, request) {
 export async function planFor(env, flags, user) {
   if (!user) return { active: false, reason: "signed-out" };
   if (!flags.payments) return { active: true, reason: "payments-off" };
-  if (listOf(env.COMPLIMENTARY_EMAILS).includes(user.email.toLowerCase())) return { active: true, reason: "complimentary" };
+  if (emailIn(user, env.COMPLIMENTARY_EMAILS)) return { active: true, reason: "complimentary" };
   const sub = await env.DB.prepare("SELECT * FROM subscriptions WHERE user_id = ?").bind(user.id).first();
   if (!sub) return { active: false, reason: "no-subscription" };
   return {

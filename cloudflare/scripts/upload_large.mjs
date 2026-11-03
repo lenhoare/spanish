@@ -16,6 +16,11 @@ if (!files.length) {
   process.exit(0);
 }
 const wrangler = path.join(HERE, "node_modules", "wrangler", "bin", "wrangler.js");
+// First time only: make the bucket (an error just means it's already there).
+try {
+  execFileSync(process.execPath, [wrangler, "r2", "bucket", "create", BUCKET], { stdio: "pipe", cwd: HERE });
+  console.log(`Created R2 bucket ${BUCKET}.`);
+} catch {}
 for (const f of files) {
   console.log(`Uploading ${f} to R2 bucket ${BUCKET}...`);
   execFileSync(process.execPath, [wrangler, "r2", "object", "put", `${BUCKET}/${f}`, "--file", path.join(LARGE, f), "--remote"], {
