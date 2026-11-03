@@ -32,7 +32,7 @@ function copy(rel, filter = () => true) {
 
 for (const f of ["config.json", "config_retos.json", "games.json"]) copy(f);
 copy("lessons", (p) => p.endsWith(".json"));
-fs.copyFileSync(path.join(ROOT, "web", "editor.html"), path.join(WEB, "editor.html"));
+for (const page of ["editor.html", "privacy.html"]) fs.copyFileSync(path.join(ROOT, "web", page), path.join(WEB, page));
 
 fs.mkdirSync(LARGE, { recursive: true });
 let moved = 0;

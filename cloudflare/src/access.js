@@ -19,7 +19,7 @@ export async function grantAccess(env, data) {
 }
 
 // Paths that never need access: the sign-in / join pages and their APIs.
-const OPEN = [/^\/join$/, /^\/teachers$/, /^\/auth\//, /^\/api\//, /^\/favicon\.ico$/, /^\/robots\.txt$/];
+const OPEN = [/^\/join$/, /^\/teachers$/, /^\/privacy(\.html)?$/, /^\/auth\//, /^\/api\//, /^\/favicon\.ico$/, /^\/robots\.txt$/];
 
 function isPage(request, path) {
   return path === "/" || path.endsWith(".html") || request.headers.get("sec-fetch-mode") === "navigate";
