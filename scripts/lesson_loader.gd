@@ -65,6 +65,9 @@ func _fetch_json(path: String):
 			return u.href;
 		})()""" % JSON.stringify(path)))
 		var http := HTTPRequest.new()
+		# The browser already unzips compressed replies (Cloudflare gzips JSON); letting Godot
+		# try again fails with a stream_peer_gzip error and silently falls back to the bundled copy.
+		http.accept_gzip = false
 		add_child(http)
 		if http.request(url) == OK:
 			var res: Array = await http.request_completed

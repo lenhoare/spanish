@@ -33,6 +33,17 @@ Then copy `config.json` and the `lessons` folder into `build/web/` (keeping the 
 and upload everything in `build/web/` to any static host (GitHub Pages, Netlify, Cloudflare Pages).
 To change lessons or islands later, just edit `config.json` / the lesson files on the server - no rebuild.
 
+### Cloudflare Pages
+Pages won't take files over 25 MiB and `index.wasm` is ~38 MB, so use the helper, which splits it
+(a tiny Pages Function in `cloudflare/functions/` joins it back) and gathers config, lessons and the editor:
+```
+python tools\build_cloudflare.py
+cd cloudflare
+npx wrangler pages deploy
+```
+The first deploy asks you to log in and creates the `lesson-island` project (address in `cloudflare/wrangler.toml`).
+Run the same three lines again after any change. The editor is at `/editor`.
+
 ## Test on your phone at home
 Godot web games need HTTPS (or localhost), so use the HTTPS test server:
 ```

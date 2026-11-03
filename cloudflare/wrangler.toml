@@ -1,0 +1,6 @@
+# Cloudflare Pages project for the web build. Fill cloudflare/public with
+# `python tools/build_cloudflare.py`, then run `npx wrangler pages deploy` from this folder.
+# Change the name if you want a different address (<name>.pages.dev).
+name = "lesson-island"
+pages_build_output_dir = "public"
+compatibility_date = "2026-10-01"
