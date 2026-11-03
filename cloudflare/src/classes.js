@@ -35,13 +35,13 @@ async function uniqueCode(env) {
 /** The class for a code, if it exists and its teacher's plan is active. */
 export async function classForCode(env, flags, code) {
   const c = await env.DB.prepare(
-    `SELECT c.*, u.id AS u_id, u.email AS u_email FROM classes c JOIN users u ON u.id = c.teacher_id
+    `SELECT c.*, u.id AS u_id, u.email AS u_email, u.email_trusted AS u_trusted FROM classes c JOIN users u ON u.id = c.teacher_id
      WHERE c.join_code = ? AND c.archived = 0`,
   )
     .bind(normaliseCode(code))
     .first();
   if (!c) return null;
-  const plan = await planFor(env, flags, { id: c.u_id, email: c.u_email });
+  const plan = await planFor(env, flags, { id: c.u_id, email: c.u_email, email_trusted: c.u_trusted });
   return plan.active ? c : null;
 }
 
@@ -106,6 +106,7 @@ export async function handleClasses(request, env, flags, path, user) {
 export function publicFeatures(flags) {
   return {
     auth: flags.auth,
+    providers: flags.providers,
     payments: flags.payments,
     requireAccess: flags.requireAccess,
     protectEditor: flags.protectEditor,

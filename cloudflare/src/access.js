@@ -67,7 +67,7 @@ export async function gate(request, env, flags, path) {
 
 export async function classForClassId(env, flags, classId) {
   const c = await env.DB.prepare(
-    `SELECT u.id, u.email FROM classes c JOIN users u ON u.id = c.teacher_id WHERE c.id = ? AND c.archived = 0`,
+    `SELECT u.id, u.email, u.email_trusted FROM classes c JOIN users u ON u.id = c.teacher_id WHERE c.id = ? AND c.archived = 0`,
   )
     .bind(classId)
     .first();

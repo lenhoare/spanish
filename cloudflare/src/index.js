@@ -3,10 +3,10 @@
 // switches. With every switch off this is a plain static website.
 
 import { gate, grantAccess } from "./access.js";
-import { currentUser, handleAuth } from "./auth.js";
+import { currentUser, emailIn, handleAuth } from "./auth.js";
 import { handleBilling } from "./billing.js";
 import { classForCode, handleClasses, publicFeatures } from "./classes.js";
-import { features, listOf } from "./flags.js";
+import { features } from "./flags.js";
 import { html, json, notFound, redirect, safeNext, sameOrigin } from "./util.js";
 import teachersPage from "./pages/teachers.html";
 import joinPage from "./pages/join.html";
@@ -27,7 +27,18 @@ async function route(request, env) {
   const path = url.pathname;
   const flags = features(env);
 
+  // www.misscleary.com -> misscleary.com (one address, so sign-in cookies always match).
+  if (url.hostname.startsWith("www.")) {
+    url.hostname = url.hostname.slice(4);
+    return Response.redirect(url.toString(), 301);
+  }
+
   if (path === "/api/features") return json(publicFeatures(flags));
+
+  // Proves to Microsoft that this domain belongs to our app ("publisher domain" in Entra).
+  if (path === "/.well-known/microsoft-identity-association.json" && env.MICROSOFT_CLIENT_ID) {
+    return json({ associatedApplications: [{ applicationId: env.MICROSOFT_CLIENT_ID }] });
+  }
 
   const isApp = path === "/teachers" || path === "/join" || path.startsWith("/auth/") || path.startsWith("/api/");
   if (isApp) {
@@ -42,8 +53,8 @@ async function route(request, env) {
   // Cloudflare serves editor.html at /editor as well, so guard both.
   if (flags.protectEditor && (path === "/editor" || path === "/editor.html")) {
     const user = await currentUser(request, env);
-    if (!user) return redirect(`/auth/google?next=${encodeURIComponent("/editor")}`);
-    if (!listOf(env.ADMIN_EMAILS).includes(user.email.toLowerCase())) {
+    if (!user) return redirect(`/teachers?next=${encodeURIComponent("/editor")}`);
+    if (!emailIn(user, env.ADMIN_EMAILS)) {
       return html("<p style='font-family:sans-serif'>This page is for the site's admins.</p>", 403);
     }
   }
@@ -58,7 +69,7 @@ async function route(request, env) {
 }
 
 async function appRoute(request, env, flags, url, path) {
-  if (path.startsWith("/auth/")) return handleAuth(request, env, path);
+  if (path.startsWith("/auth/")) return handleAuth(request, env, flags, path);
 
   if (path === "/teachers") return html(teachersPage);
 

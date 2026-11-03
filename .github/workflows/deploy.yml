@@ -1,0 +1,99 @@
+# Builds the game with Godot and publishes it to Cloudflare.
+#
+#   push to main            -> live site (misscleary.com), using the top-level settings in cloudflare/wrangler.jsonc
+#   "Run workflow" button   -> choose live or staging (staging.misscleary.com)
+#   pull request            -> build and test only, nothing is published
+#
+# Needs two repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID   - see cloudflare/README.md
+
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Which site to publish
+        type: choice
+        options: [live, staging]
+        default: staging
+
+concurrency:
+  group: deploy-${{ github.event.inputs.target || (github.event_name == 'pull_request' && format('pr-{0}', github.event.number)) || 'live' }}
+  cancel-in-progress: false
+
+env:
+  GODOT_VERSION: "4.6.2"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: cloudflare/package-lock.json
+
+      # Godot and its web export templates (~20 MB once unpacked; the full download is 1.2 GB, so cache it).
+      - name: Cache Godot
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-web
+
+      - name: Install Godot
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          R=https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable
+          mkdir -p ~/godot && cd ~/godot
+          curl -sSfL -o godot.zip "$R/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q godot.zip && rm godot.zip
+          curl -sSfL -o templates.tpz "$R/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          T=~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          mkdir -p "$T"
+          unzip -ojq templates.tpz templates/web_nothreads_release.zip templates/web_release.zip templates/version.txt -d "$T"
+          rm templates.tpz
+
+      - name: Export the game for the web
+        run: |
+          mkdir -p build/web
+          ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless --path . --export-release "Web" build/web/index.html 2>&1 | grep -vE "savepack|Storing File" || true
+          test -f build/web/index.wasm || { echo "::error::Godot export failed - no index.wasm"; exit 1; }
+          ls -la build/web
+
+      - name: Install and test the Worker
+        working-directory: cloudflare
+        run: |
+          npm ci
+          npm test
+
+      - name: Prepare site files
+        run: node tools/prepare_site.mjs
+
+      - name: Deploy
+        if: github.event_name != 'pull_request'
+        working-directory: cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          TARGET: ${{ github.event.inputs.target || 'live' }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then echo "::error::Add the CLOUDFLARE_API_TOKEN secret first (cloudflare/README.md)"; exit 1; fi
+          if [ "$TARGET" = "staging" ]; then ENVFLAG="--env=staging"; else ENVFLAG="--env="; fi
+          echo "Publishing to: $TARGET"
+          # Files too big for Cloudflare's 25 MiB asset limit go to R2 first, then the site.
+          node scripts/upload_large.mjs
+          npx wrangler deploy $ENVFLAG
+          # Database tables (does nothing if they're already up to date).
+          npx wrangler d1 migrations apply DB --remote $ENVFLAG
+          echo "### Published to $TARGET :rocket:" >> "$GITHUB_STEP_SUMMARY"

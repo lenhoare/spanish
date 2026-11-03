@@ -6,10 +6,11 @@
 // (except /api/features, which reports that everything is off).
 //
 // The switches depend on each other, so a stray "on" can never half-enable something:
-//   FEATURE_AUTH             master switch - Google sign-in for teachers. Off = everything off.
+//   FEATURE_AUTH             master switch - teachers can sign in. Off = everything off.
+//     SIGNIN_GOOGLE / SIGNIN_MICROSOFT   which sign-in buttons to offer (each needs its client id + secret)
 //   FEATURE_PAYMENTS         Stripe subscriptions for teachers. Needs FEATURE_AUTH.
 //   FEATURE_REQUIRE_ACCESS   the game needs a class code (students) or a teacher sign-in. Needs FEATURE_AUTH.
-//   FEATURE_PROTECT_EDITOR   editor.html needs a Google sign-in from ADMIN_EMAILS. Needs FEATURE_AUTH.
+//   FEATURE_PROTECT_EDITOR   editor.html needs a sign-in from ADMIN_EMAILS. Needs FEATURE_AUTH.
 //
 // A feature that is switched on but missing a secret it needs stays OFF (and says why in the
 // Worker logs), so a half-finished setup fails open - the game stays playable - rather than
@@ -50,12 +51,24 @@ export function features(env) {
   };
 
   let auth = want.auth;
+  const providers = [];
   if (auth) {
-    const m = missing(env, ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET", "DB"]);
-    if (m.length) {
-      problems.push(`FEATURE_AUTH is on but ${m.join(", ")} is not set, so sign-in stays off.`);
-      auth = false;
+    const m = missing(env, ["SESSION_SECRET", "DB"]);
+    if (m.length) problems.push(`FEATURE_AUTH is on but ${m.join(", ")} is not set, so sign-in stays off.`);
+    for (const [name, sw, keys] of [
+      ["google", "SIGNIN_GOOGLE", ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]],
+      ["microsoft", "SIGNIN_MICROSOFT", ["MICROSOFT_CLIENT_ID", "MICROSOFT_CLIENT_SECRET"]],
+    ]) {
+      if (String(env[sw] ?? "on").trim().toLowerCase() === "off") continue;
+      const mk = missing(env, keys);
+      if (mk.length === keys.length) continue; // not set up at all: just don't offer it
+      if (mk.length) problems.push(`${sw}: ${mk.join(", ")} is not set, so that sign-in button is hidden.`);
+      else providers.push(name);
     }
+    if (!m.length && !providers.length) {
+      problems.push("FEATURE_AUTH is on but no sign-in (Google or Microsoft) is set up, so sign-in stays off.");
+    }
+    auth = !m.length && providers.length > 0;
   }
 
   const needsAuth = (name, wanted) => {
@@ -81,5 +94,5 @@ export function features(env) {
   }
 
   problems.forEach(warn);
-  return { auth, payments, requireAccess, protectEditor, problems };
+  return { auth, providers: auth ? providers : [], payments, requireAccess, protectEditor, problems };
 }

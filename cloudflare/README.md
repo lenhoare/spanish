@@ -1,149 +1,255 @@
-# Hosting on Cloudflare
+# Putting the game online (misscleary.com on Cloudflare)
 
-A small Cloudflare Worker serves the game. It also has some optional extras, and **every one of
-them is off unless you switch it on**:
+This is a step-by-step checklist. Do the steps in order; each one says what you'll see when it's
+worked. Nothing here needs your own computer except a web browser: GitHub builds the game and
+publishes it for you.
 
-| Switch (in `wrangler.jsonc`) | What it does when `"on"` |
-|---|---|
-| `FEATURE_AUTH` | **Master switch.** Teachers can sign in with Google at `/teachers`. While it's off, all the others are off too, and `/teachers`, `/join`, `/auth/*` and `/api/*` don't exist (404). |
-| `FEATURE_PAYMENTS` | Teachers subscribe monthly through Stripe. They need a subscription before they can make classes. |
-| `FEATURE_REQUIRE_ACCESS` | The game is no longer open: students need a class code from a teacher (or the teacher's join link), and teachers can play when signed in. |
-| `FEATURE_PROTECT_EDITOR` | `editor.html` needs a Google sign-in from someone in `ADMIN_EMAILS`. |
-
-With everything off (the live-site settings at the top of `wrangler.jsonc`), the site is a
-plain open website, just like any static host. Check what's on at any time:
-`https://<your-site>/api/features`.
-
-If a switch is on but a secret it needs is missing, that feature stays **off** (and the Worker
-logs say why). A half-finished setup leaves the game playable rather than locking everyone out.
-
-**Students never have accounts.** They type a class code, which sets a cookie. No student
-names, emails or other personal data are stored. Teachers' Google name/email and their Stripe
-customer id are the only personal data kept.
-
-There are two separate sites:
-- **live** (`npm run deploy`): top-level settings, everything off. Use it for alpha/beta.
-- **staging** (`npm run deploy:staging`): the `env.staging` settings, with sign-in, payments
-  and class codes on, using **Stripe test mode**. Use it to try the features without affecting
-  the real site. It gets its own address (`lesson-island-staging.<you>.workers.dev`) and its own
-  database.
+- **Part 1 (tonight):** the game live at **https://misscleary.com** as an open website (no sign-in, no payments).
+- **Part 2 (tomorrow):** a private test copy at **https://staging.misscleary.com** with Google and
+  Microsoft sign-in, Stripe payments (test mode, no real money) and class codes switched on.
+- **Part 3 (later):** switching features on and off for the real site.
 
 ---
 
-## 1. First deploy (open website, nothing else needed)
+## How it fits together
 
-You need [Node.js](https://nodejs.org) and a free Cloudflare account.
+```
+ you push to GitHub (main)
+        │
+        ▼
+ GitHub Actions: Godot exports the game ──► Cloudflare Worker "lesson-island"      ──► misscleary.com
+                 (.github/workflows/         + R2 storage for the 37 MB index.wasm
+                  deploy.yml)               + D1 database (teachers, classes; unused while features are off)
+```
 
-1. Export the game from Godot into `build/web` (see the main README).
-2. In a terminal:
-   ```
-   cd cloudflare
-   npm install
-   npx wrangler login
-   npm run deploy
-   ```
-   `npm run deploy` copies the config and lessons into `build/web`, uploads the site, and puts
-   any file over 25 MiB (Godot's `index.wasm` usually is) into R2 storage. Cloudflare doesn't
-   allow single site files over 25 MiB, so the Worker serves those from R2 instead. The
-   database and R2 bucket are created automatically the first time.
-3. The site is at `https://lesson-island.<your-subdomain>.workers.dev`. To use your own domain,
-   go to the Cloudflare dashboard → Workers & Pages → lesson-island → Settings → Domains & Routes.
+The **switches** (what's on/off) live in `cloudflare/wrangler.jsonc` in GitHub. Changing one is
+just editing that file on github.com and saving; the site updates itself a few minutes later.
+The **secrets** (passwords and keys from Google, Microsoft and Stripe) are typed into the Cloudflare
+dashboard once and never go in GitHub.
 
-Changing lessons or config later: edit the files, then `npm run deploy` again. You don't need to
-re-export from Godot.
+| Switch | When `"on"` |
+|---|---|
+| `FEATURE_AUTH` | **Master switch.** Teachers can sign in at `/teachers`. While it's `"off"`, everything below is off as well, and `/teachers`, `/join`, `/auth/…` and `/api/…` don't exist. |
+| `SIGNIN_GOOGLE`, `SIGNIN_MICROSOFT` | Which sign-in buttons to show (each also needs its secrets). |
+| `FEATURE_PAYMENTS` | Teachers subscribe monthly with Stripe before they can make classes. |
+| `FEATURE_REQUIRE_ACCESS` | The game stops being open: students need their teacher's class code or link. |
+| `FEATURE_PROTECT_EDITOR` | `/editor` needs a sign-in from someone in `ADMIN_EMAILS`. |
 
-If R2 isn't enabled on your account yet, the first deploy will ask you to enable it in the
-dashboard (R2 has a free allowance: 10 GB storage, with no charge for downloads).
+If a switch is on but a secret it needs is missing, that feature quietly stays **off**, so a
+half-finished setup never locks students out. To see what's really on, visit
+`https://misscleary.com/api/features`.
 
-## 2. Turning on Google sign-in
+Students never have accounts and no student data is stored. Teachers' name and email (and Stripe
+customer number, if they pay) are the only personal data.
 
-1. Go to [Google Cloud console](https://console.cloud.google.com/) → create a project →
-   **APIs & Services → OAuth consent screen**: External, app name "Lesson Island", your email.
-   Scopes: just the defaults (`openid`, `email`, `profile`). These are non-sensitive scopes, so
-   Google doesn't need to review the app.
-2. **Credentials → Create credentials → OAuth client ID → Web application.**
-   Authorised redirect URIs. Add one for each site you'll use:
-   - `https://lesson-island-staging.<your-subdomain>.workers.dev/auth/google/callback`
-   - `https://lesson-island.<your-subdomain>.workers.dev/auth/google/callback` (or your domain)
-   - `http://localhost:8787/auth/google/callback` (for local testing)
-3. Set the secrets (for staging, add `--env staging` to each command):
-   ```
-   npx wrangler secret put GOOGLE_CLIENT_ID
-   npx wrangler secret put GOOGLE_CLIENT_SECRET
-   npx wrangler secret put SESSION_SECRET      # any long random string
-   ```
-   To make a random string: `node -e "console.log(crypto.randomUUID()+crypto.randomUUID())"`
-4. Create the database tables (one time, and again whenever a new file appears in `migrations/`):
-   `npm run db:migrate` (or `npm run db:migrate:staging`).
-5. Set `"FEATURE_AUTH": "on"` in `wrangler.jsonc` and deploy.
+---
 
-## 3. Turning on Stripe subscriptions
+# Part 1: the open website (tonight)
 
-1. In the [Stripe dashboard](https://dashboard.stripe.com) (start in **Test mode**):
-   **Product catalogue → Add product**, e.g. "Lesson Island for teachers", recurring,
-   monthly, £3. Copy the **price id** (`price_...`) into `STRIPE_PRICE_ID` in `wrangler.jsonc`.
-2. **Developers → Webhooks → Add endpoint**:
-   - URL: `https://<your-site>/api/billing/webhook`
+### 1.1 Put misscleary.com on Cloudflare (≈15 min, then a wait)
+
+1. Log in at [dash.cloudflare.com](https://dash.cloudflare.com) → **Add a domain** → type
+   `misscleary.com` → choose the **Free** plan.
+2. Cloudflare shows the DNS records it found at Porkbun. **Delete** any records for
+   `misscleary.com` and `www` (type A, AAAA, ALIAS or CNAME). They're Porkbun's "parked"
+   page and would block the game from using the address. Keep any **MX** or **TXT** records if
+   you've set up email for the domain.
+3. Cloudflare shows **two nameservers**, like `xxx.ns.cloudflare.com`. Keep that tab open.
+4. In another tab, log in to **Porkbun** → **Domain Management** → misscleary.com → **Details**:
+   - If **DNSSEC** is on, turn it **off** first. If it's left on, the domain stops working after the switch.
+   - **Authoritative Nameservers** → **Edit** → delete Porkbun's ones, paste Cloudflare's two → **Submit**.
+5. Back in Cloudflare, click **Check nameservers**. It usually takes 10-60 minutes (occasionally
+   longer). Cloudflare emails you when misscleary.com is **Active**. You can carry on with 1.2-1.4 meanwhile.
+
+### 1.2 Turn on R2 storage (2 min)
+
+Godot's `index.wasm` is 37 MB, and Cloudflare only allows 25 MB per website file, so it's kept in
+Cloudflare's R2 storage instead. In the dashboard: **Storage & Databases → R2 → Purchase R2 Plan**
+(the free tier: 10 GB free, which is plenty). It asks for a card, but you won't be charged at this size.
+
+### 1.3 Make a Cloudflare API token for GitHub (5 min)
+
+This lets GitHub publish to your Cloudflare account, and nothing else.
+
+1. Cloudflare dashboard → your profile icon (top right) → **Profile** → **API Tokens** → **Create Token**.
+2. Next to **Edit Cloudflare Workers**, click **Use template**.
+3. Under **Permissions**, click **+ Add more** and add these two (if they're not already there):
+   - `Account` · `D1` · `Edit`
+   - `Zone` · `DNS` · `Edit`
+4. **Account Resources**: Include → your account. **Zone Resources**: Include → Specific zone → `misscleary.com`.
+5. **Continue to summary** → **Create Token** → **copy the token** (it's only shown once).
+6. Also copy your **Account ID**: dashboard home → **Workers & Pages**. It's in the right-hand column
+   (or in the browser address bar: `dash.cloudflare.com/<this-long-number>/...`).
+
+### 1.4 Give them to GitHub (3 min)
+
+On github.com → the `spanish` repository → **Settings** → **Secrets and variables** → **Actions**
+→ **New repository secret**, twice:
+
+| Name | Secret |
+|---|---|
+| `CLOUDFLARE_API_TOKEN` | the token from 1.3 |
+| `CLOUDFLARE_ACCOUNT_ID` | the account ID from 1.3 |
+
+### 1.5 Publish (wait for the "Active" email from 1.1 first)
+
+Merge the pull request with this work into `main`. That's the publish button from now on: every
+change that lands on `main` rebuilds and republishes the site.
+
+Watch it on github.com → **Actions** → **Build and deploy**. It takes about 3 minutes; a green tick
+means it's live. (The first run downloads Godot, so it's slower; later runs are quicker.)
+
+**Check:** open https://misscleary.com - the island picker should appear. https://www.misscleary.com
+should jump to the same place, and https://misscleary.com/api/features should say everything is `false`.
+
+If the run goes red, click it, open the red step and read the last lines. Common ones:
+- *"Authentication error"*: the token or account ID in 1.4 is wrong, or missing a permission from 1.3.
+- *"…custom domain… zone…"*: misscleary.com isn't Active on Cloudflare yet (1.1). Wait, then
+  **Actions → Build and deploy → Re-run jobs**.
+- *R2 / "Please enable R2"*: do 1.2.
+
+### 1.6 Make the staging copy (2 min)
+
+github.com → **Actions** → **Build and deploy** → **Run workflow** → target **staging** → **Run workflow**.
+When it's green, https://staging.misscleary.com shows the game, open to anyone, just like the
+real site. Its features are switched on but have no secrets yet, so they stay off (the
+"fails safe" rule). They come alive one by one in Part 2.
+
+---
+
+# Part 2: set up the features on staging (tomorrow)
+
+Secrets are added in the Cloudflare dashboard: **Workers & Pages** → **lesson-island-staging** →
+**Settings** → **Variables and Secrets** → **+ Add** → Type **Secret** → name and value → **Deploy**.
+(Use **Secret**, not "Text". Text values are replaced by `wrangler.jsonc` on every publish; secrets are kept.)
+
+### 2.1 Session secret
+
+Add `SESSION_SECRET`: any long random string (say 40+ random letters and numbers). It signs the
+sign-in cookies. If you ever change it, everyone is signed out (harmless).
+
+### 2.2 Google sign-in (≈15 min)
+
+1. [console.cloud.google.com](https://console.cloud.google.com) → project picker → **New project** → "Miss Cleary".
+2. **APIs & Services → OAuth consent screen** (may be called **Google Auth Platform → Branding**):
+   - App name `Miss Cleary`, support email: yours. **Don't upload a logo** (a logo makes Google
+     review the app, which takes weeks).
+   - Audience: **External**. Authorised domain: `misscleary.com`.
+   - Then **Audience → Publish app** ("In production"). Until then only listed test users can sign in.
+     The app only asks for name and email, so Google doesn't need to review it.
+3. **Credentials** (or **Clients**) → **Create client** → **Web application**, name "misscleary.com".
+   **Authorised redirect URIs**, add both:
+   - `https://staging.misscleary.com/auth/google/callback`
+   - `https://misscleary.com/auth/google/callback`
+4. Copy the **Client ID** and **Client secret** into the staging Worker as secrets
+   `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+
+### 2.3 Microsoft sign-in, for schools on Teams / Microsoft 365 (≈20 min)
+
+1. Go to [entra.microsoft.com](https://entra.microsoft.com) and sign in with a Microsoft account
+   (a personal one is fine; **not** the school's, since this is your app, not theirs). If it says
+   you don't have access, sign up for a free Azure account at [azure.microsoft.com/free](https://azure.microsoft.com/free),
+   which creates your own directory (it asks for a card as an identity check).
+2. **Applications → App registrations → New registration**:
+   - Name: `Miss Cleary`
+   - Supported account types: **Accounts in any organizational directory (Any Microsoft Entra ID tenant - Multitenant)**
+   - Redirect URI: platform **Web**, `https://staging.misscleary.com/auth/microsoft/callback`
+   - **Register**.
+3. On the app's **Overview**, copy **Application (client) ID** → staging secret `MICROSOFT_CLIENT_ID`.
+4. **Authentication** → **Add URI** → `https://misscleary.com/auth/microsoft/callback` → **Save**.
+5. **Certificates & secrets → New client secret** → expires in 24 months → copy the **Value**
+   (not the "Secret ID") → staging secret `MICROSOFT_CLIENT_SECRET`.
+   **Put a reminder in your calendar for 23 months' time**: sign-in stops when it expires.
+6. **Token configuration → Add optional claim → ID** → tick `email` and, if it's listed,
+   `xms_edov` → **Add** (accept the prompt about Graph permissions).
+7. Optional, makes the sign-in prompt show your domain: set `MICROSOFT_CLIENT_ID` on the **live**
+   Worker (lesson-island) too, then **Branding & properties → Publisher domain → Verify a new domain** →
+   `misscleary.com`. The Worker already serves the file Microsoft checks.
+
+**About school IT.** Many schools only let staff sign in to apps that their IT team has approved.
+If a teacher sees *"Need admin approval"*, the site shows a friendly message and they can use Google
+instead. To approve it for the whole school, the school's IT admin opens this link once (put your
+client ID in):
+`https://login.microsoftonline.com/organizations/adminconsent?client_id=YOUR_CLIENT_ID`
+
+**Optional settings** (in `wrangler.jsonc`, staging section):
+- `MICROSOFT_TENANT`: `"organizations"` (default: any school or work account) or one school's
+  tenant ID to allow only that school.
+- `MICROSOFT_TRUSTED_TENANTS`: a school's tenant ID, so its staff emails count for `ADMIN_EMAILS`
+  and `COMPLIMENTARY_EMAILS`. (Microsoft schools can put any email on an account without proving
+  it, so these lists ignore Microsoft emails unless Microsoft confirms them (`xms_edov`) or the
+  school is listed here.) To find a school's tenant ID, open
+  `https://login.microsoftonline.com/THEIRSCHOOL.org.uk/v2.0/.well-known/openid-configuration`
+  with the school's email domain in place of `THEIRSCHOOL.org.uk`. The long ID in `"issuer"` is it.
+
+### 2.4 Stripe, in test mode (≈20 min)
+
+1. Sign up at [stripe.com](https://dashboard.stripe.com/register). Make sure **Test mode** is on (toggle top right).
+2. **Product catalogue → + Add product**: "Miss Cleary for teachers", **Recurring**, **Monthly**,
+   e.g. **£3.00** → Save. Open the price and copy its ID (`price_…`). On github.com, edit
+   `cloudflare/wrangler.jsonc` and put it in the **staging** section's `"STRIPE_PRICE_ID": ""`.
+3. **Developers → Webhooks → Add destination** (or "Add endpoint"):
+   - Endpoint URL: `https://staging.misscleary.com/api/billing/webhook`
    - Events: `checkout.session.completed`, `customer.subscription.created`,
-     `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`,
-     `invoice.payment_failed`
-   - Copy the **signing secret** (`whsec_...`).
-3. **Settings → Billing → Customer portal**: turn it on. This lets teachers cancel and update
-   their card themselves.
-4. Secrets:
-   ```
-   npx wrangler secret put STRIPE_SECRET_KEY       # sk_test_... (sk_live_... for real money)
-   npx wrangler secret put STRIPE_WEBHOOK_SECRET
-   ```
-5. Set `"FEATURE_PAYMENTS": "on"` and deploy. To test a payment in test mode, use card
-   `4242 4242 4242 4242`, any future date and any CVC.
+     `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`
+   - Then copy its **Signing secret** (`whsec_…`) → staging secret `STRIPE_WEBHOOK_SECRET`.
+4. **Developers → API keys** → **Secret key** (`sk_test_…`) → staging secret `STRIPE_SECRET_KEY`.
+5. **Settings → Billing → Customer portal** → **Activate** (lets teachers cancel or change card themselves).
 
-Useful settings in `wrangler.jsonc`:
-- `COMPLIMENTARY_EMAILS`: teachers (comma-separated emails) who get a free plan. Good for
-  colleagues who helped with testing.
-- `STRIPE_TRIAL_DAYS`: free trial length for new subscriptions (`"0"` = none).
-- `STRIPE_AUTOMATIC_TAX`: `"on"` if you've set up Stripe Tax (for when you need to charge VAT).
-- Promotion codes are allowed at checkout, so you can make discount or free-month codes in Stripe.
+### 2.5 Try it all on staging
 
-Moving to real payments: make the same product/price and webhook in **live mode**, and put the
-live price id and live keys on the live site.
+Once you've saved `wrangler.jsonc` on GitHub, run **Actions → Build and deploy → Run workflow →
+staging** again so it picks up the price ID. Then:
 
-## 4. Requiring a class code
+1. https://staging.misscleary.com/teachers → sign in with Google, and try Microsoft too.
+2. **Subscribe** → card `4242 4242 4242 4242`, any future date, any CVC, any postcode.
+3. Back on the teachers page: **Active**. **Add class** → copy the link.
+4. Open the link in a private/incognito window: the game should open, as a student would see it.
+5. **Manage billing** → cancel. Students lose access on their next visit once it ends.
 
-Set `"FEATURE_REQUIRE_ACCESS": "on"`. Then:
-- Visitors without access are sent to `/join` to type a class code.
-- Teachers make classes at `/teachers`, and each class gets a code like `8RHNUZ` and a link
-  (`/join?code=8RHNUZ`) that lets students straight in. "New code" replaces a code that got
-  shared too widely, and "Remove" stops the code working.
-- If a teacher's subscription ends, their codes stop working on the students' next visit.
-  Stripe's retry period (`past_due`) still counts as active, so a failed card doesn't cut a
-  class off mid-lesson.
+---
 
-## Testing on your own computer
+# Part 3: switching features on and off
 
-```
-cd cloudflare
-npm run dev            # live settings (everything off) at http://localhost:8787
-npm test               # quick checks of the switches, signing and Stripe signatures
-```
-To try the features locally, copy `.dev.vars.example` to `.dev.vars.staging`, fill it in
-(Stripe test keys), then run `npm run dev:features`.
+On github.com, open `cloudflare/wrangler.jsonc` → pencil icon → change `"off"` to `"on"` (or back)
+in the **top** section for the real site → **Commit changes** (to `main`). It republishes in ~3 minutes.
 
-## Costs (free tiers, November 2026)
+To set up the real site, add the same secrets to the **lesson-island** Worker (step 2's intro,
+but the other Worker). For real payments, use Stripe in **live mode** with its own price, webhook
+(`https://misscleary.com/api/billing/webhook`) and `sk_live_…` key. Stripe asks for your
+business details before live payments work.
 
-The Workers free plan gives 100,000 requests a day. Loading the game takes about 15 requests, so
-that's roughly 6,000 game loads a day. D1 and R2 free allowances are far beyond what this uses.
-Stripe charges per transaction (around 1.5% + 20p for UK cards), and on a £3 payment that's
-about 25p.
+Other settings in `wrangler.jsonc`:
+- `COMPLIMENTARY_EMAILS`: teachers who get a free plan, e.g. your wife's colleagues during the beta.
+- `ADMIN_EMAILS`: who can use the editor when `FEATURE_PROTECT_EDITOR` is on.
+- `STRIPE_TRIAL_DAYS`: free trial for new subscribers (`"0"` = none).
+- `STRIPE_AUTOMATIC_TAX`: `"on"` once you're VAT-registered and have set up Stripe Tax.
+- Promotion codes made in Stripe (e.g. 3 months free) can be typed in at checkout.
 
-## Files
+**Before switching sign-in or payments on for the real site:** you'll want a short privacy
+notice page (what's stored: teachers' name, email and subscription; nothing about students), and,
+for payments, terms. Schools will ask.
 
-- `wrangler.jsonc`: switches, settings, the live and staging sites
+---
+
+## For later / reference
+
+**Costs** (free tiers, November 2026): Workers 100,000 requests/day (a game load is ~15, so roughly
+6,000 plays a day); R2 10 GB; D1 5 GB. Stripe takes about 1.5% + 20p per UK card payment (≈25p of £3).
+
+**Running it on your own computer** (optional, needs [Node.js](https://nodejs.org)): export from Godot
+into `build/web`, then in `cloudflare/`: `npm install`, `npm run dev` → http://localhost:8787.
+`npm test` runs the quick checks. `npm run deploy` publishes from your computer instead of GitHub
+(after `npx wrangler login`).
+
+**Files**
+- `wrangler.jsonc`: switches, settings, live and staging sites, domain
+- `../.github/workflows/deploy.yml`: the GitHub build-and-publish steps (Godot version is set here)
 - `src/flags.js`: how the switches combine
-- `src/index.js`: routing and serving game files (from R2 for the big ones)
-- `src/auth.js`: Google sign-in (OpenID Connect with PKCE). Microsoft can be added as another provider.
-- `src/billing.js`: Stripe Checkout, customer portal, webhook
+- `src/index.js`: routing, `www` → plain domain, serving the big files from R2
+- `src/auth.js`: Google and Microsoft sign-in (OpenID Connect + PKCE)
+- `src/billing.js`: Stripe checkout, customer portal, webhook
 - `src/classes.js`, `src/access.js`: classes, join codes, and the gate in front of the game
 - `src/pages/`: the `/teachers` and `/join` pages
-- `migrations/`: database tables
-- `../tools/prepare_site.mjs`: gets `build/web` ready (copies config/lessons/editor, moves big files)
+- `migrations/`: database tables (applied automatically on each publish)
+- `../tools/prepare_site.mjs`: copies config/lessons/editor next to the game, moves big files aside
