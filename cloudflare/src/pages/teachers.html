@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teachers</title>
+<style>
+  :root { --bg:#6a5acd; --card:#fffaf0; --ink:#2d2a4a; --accent:#7c6cf0; --go:#3cc47c; --soft:#b3a8e8; --muted:#9a94b8; --err:#d9466f; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; padding:24px 16px; background:var(--bg);
+         font-family:system-ui,"Segoe UI",Roboto,sans-serif; color:var(--ink); }
+  main { max-width:720px; margin:0 auto; }
+  .card { background:var(--card); border:5px solid var(--accent); border-radius:22px; padding:20px 22px;
+          box-shadow:0 8px 20px rgba(20,0,60,.35); margin-bottom:18px; }
+  h1 { margin:0 0 4px; color:#fff; font-size:30px; text-shadow:0 3px 0 rgba(0,0,0,.2); }
+  .sub { color:#fff; opacity:.9; margin:0 0 18px; }
+  h2 { margin:0 0 10px; color:#4b3aa8; font-size:21px; }
+  p { line-height:1.45; margin:0 0 12px; }
+  .btn { display:inline-block; font-size:17px; font-weight:800; border:0; border-radius:14px; padding:10px 18px;
+         background:var(--go); color:#fff; border-bottom:4px solid rgba(0,0,0,.2); cursor:pointer; text-decoration:none;
+         font-family:inherit; }
+  .btn.alt { background:var(--accent); } .btn.grey { background:var(--muted); } .btn.small { font-size:14px; padding:6px 12px; }
+  .btn:disabled { opacity:.6; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .pill { display:inline-block; padding:3px 10px; border-radius:999px; font-weight:700; font-size:14px; }
+  .ok { background:#d8f5e5; color:#1d7a48; } .no { background:#fde2e9; color:#a3264b; }
+  table { width:100%; border-collapse:collapse; margin-top:8px; }
+  td, th { text-align:left; padding:8px 6px; border-top:2px solid #eee6ff; vertical-align:middle; }
+  th { font-size:13px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); border-top:0; }
+  .code { font-family:ui-monospace,Consolas,monospace; font-size:20px; font-weight:800; letter-spacing:3px; color:#4b3aa8; }
+  input[type=text] { font-size:17px; padding:9px 12px; border:3px solid var(--soft); border-radius:12px; font-family:inherit;
+                     flex:1; min-width:160px; outline:none; }
+  input[type=text]:focus { border-color:var(--accent); }
+  .err { color:var(--err); font-weight:700; }
+  .note { background:#fff3c9; border-radius:12px; padding:10px 12px; margin-bottom:12px; }
+  .hidden { display:none; }
+  @media (max-width:520px) { .hide-sm { display:none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Teachers</h1>
+  <p class="sub">Make a class, share its code, and your students can play.</p>
+
+  <div id="msg"></div>
+
+  <section class="card hidden" id="signed-out">
+    <h2>Sign in</h2>
+    <p>Sign in with your Google account to set up classes. Students never need an account - they just use your class code.</p>
+    <a class="btn alt" href="/auth/google?next=%2Fteachers">Sign in with Google</a>
+  </section>
+
+  <section class="card hidden" id="account">
+    <div class="row" style="justify-content:space-between">
+      <div><strong id="who"></strong><br><span id="email" style="opacity:.75"></span></div>
+      <div class="row"><a class="btn small" href="/">Play the game</a><button class="btn grey small" id="logout">Sign out</button></div>
+    </div>
+  </section>
+
+  <section class="card hidden" id="plan">
+    <h2>Your plan</h2>
+    <p id="plan-text"></p>
+    <div class="row">
+      <button class="btn hidden" id="subscribe">Subscribe</button>
+      <button class="btn alt hidden" id="manage">Manage billing</button>
+    </div>
+  </section>
+
+  <section class="card hidden" id="classes">
+    <h2>Your classes</h2>
+    <p id="classes-help">Give students the code, or send them the link - it lets them straight in.</p>
+    <table id="class-table"><thead><tr><th>Class</th><th>Code</th><th class="hide-sm">Link</th><th></th></tr></thead><tbody></tbody></table>
+    <p id="no-classes" class="hidden" style="margin-top:10px;opacity:.75">No classes yet.</p>
+    <form class="row" id="new-class" style="margin-top:14px">
+      <input type="text" id="class-name" maxlength="60" placeholder="e.g. Year 9 Spanish" aria-label="Class name">
+      <button class="btn">Add class</button>
+    </form>
+  </section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const show = (el, on = true) => el.classList.toggle("hidden", !on);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+async function api(path, body) {
+  const r = await fetch(path, body === undefined ? {} : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || "Something went wrong.");
+  return d;
+}
+function note(text, isErr) {
+  $("#msg").innerHTML = text ? `<div class="card note ${isErr ? "err" : ""}">${esc(text)}</div>` : "";
+}
+
+const q = new URLSearchParams(location.search);
+if (q.get("billing") === "success") note("Thank you! Your subscription is being set up - it can take a few seconds to show here.");
+if (q.get("billing") === "cancelled") note("No problem - you weren't charged.");
+if (q.get("signin") === "failed") note("Sign-in didn't work. Please try again.", true);
+if (q.toString()) history.replaceState(null, "", "/teachers");
+
+async function load() {
+  const me = await api("/api/me");
+  show($("#signed-out"), !me.signedIn);
+  for (const id of ["#account", "#plan", "#classes"]) show($(id), me.signedIn);
+  if (!me.signedIn) return;
+  $("#who").textContent = me.user.name || "Signed in";
+  $("#email").textContent = me.user.email;
+
+  const p = me.plan, pay = me.features.payments;
+  show($("#plan"), pay);
+  if (pay) {
+    const until = p.currentPeriodEnd ? new Date(p.currentPeriodEnd * 1000).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" }) : "";
+    let text;
+    if (p.reason === "complimentary") text = `<span class="pill ok">Free account</span> No payment needed - thank you for helping!`;
+    else if (p.active && p.cancelAtPeriodEnd) text = `<span class="pill ok">Active</span> Ends on ${esc(until)} (cancelled).`;
+    else if (p.active && p.status === "past_due") text = `<span class="pill no">Payment problem</span> Please update your card.`;
+    else if (p.active) text = `<span class="pill ok">Active</span> ${p.status === "trialing" ? "Free trial" : "Renews"}${until ? " on " + esc(until) : ""}.`;
+    else text = `<span class="pill no">No subscription</span> Subscribe to set up classes for your students.`;
+    $("#plan-text").innerHTML = text;
+    show($("#subscribe"), !p.active);
+    show($("#manage"), p.reason === "subscription");
+  }
+
+  show($("#new-class"), p.active);
+  const tbody = $("#class-table tbody");
+  tbody.innerHTML = "";
+  for (const c of me.classes) {
+    const link = `${location.origin}/join?code=${c.join_code}`;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${esc(c.name)}</td><td class="code">${esc(c.join_code)}</td>
+      <td class="hide-sm"><button class="btn alt small" data-copy="${esc(link)}">Copy link</button></td>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="btn grey small" data-code="${c.id}" title="Make a new code (the old one stops working)">New code</button>
+        <button class="btn grey small" data-del="${c.id}" data-name="${esc(c.name)}">Remove</button></td>`;
+    tbody.appendChild(tr);
+  }
+  show($("#class-table"), me.classes.length > 0);
+  show($("#no-classes"), me.classes.length === 0);
+  show($("#classes-help"), me.features.requireAccess);
+}
+
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  try {
+    if (b.dataset.copy) {
+      await navigator.clipboard.writeText(b.dataset.copy);
+      b.textContent = "Copied!"; setTimeout(() => (b.textContent = "Copy link"), 1500);
+    } else if (b.dataset.code) {
+      if (!confirm("Make a new code? The old code and link will stop working.")) return;
+      await api(`/api/classes/${b.dataset.code}/new-code`, {}); await load();
+    } else if (b.dataset.del) {
+      if (!confirm(`Remove "${b.dataset.name}"? Its code will stop working.`)) return;
+      await api(`/api/classes/${b.dataset.del}/archive`, {}); await load();
+    } else if (b.id === "subscribe" || b.id === "manage") {
+      b.disabled = true;
+      const d = await api(b.id === "subscribe" ? "/api/billing/checkout" : "/api/billing/portal", {});
+      location.href = d.url;
+    } else if (b.id === "logout") {
+      await api("/auth/logout", {}); location.reload();
+    }
+  } catch (err) { note(err.message, true); b.disabled = false; }
+});
+
+$("#new-class").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  try { await api("/api/classes", { name: $("#class-name").value }); $("#class-name").value = ""; note(""); await load(); }
+  catch (err) { note(err.message, true); }
+});
+
+load().catch((err) => note(err.message, true));
+</script>
+</body>
+</html>

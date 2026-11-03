@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join your class</title>
+<style>
+  :root { --bg:#6a5acd; --card:#fffaf0; --ink:#2d2a4a; --accent:#7c6cf0; --go:#3cc47c; --soft:#b3a8e8; --err:#d9466f; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px;
+         background:var(--bg); font-family:system-ui,"Segoe UI",Roboto,sans-serif; color:var(--ink); }
+  .card { width:100%; max-width:420px; background:var(--card); border:5px solid var(--accent); border-radius:22px;
+          padding:24px 22px; box-shadow:0 8px 20px rgba(20,0,60,.35); text-align:center; }
+  h1 { margin:0 0 6px; font-size:28px; color:#4b3aa8; }
+  p { margin:0 0 16px; line-height:1.4; }
+  input { width:100%; font-size:28px; letter-spacing:6px; text-align:center; text-transform:uppercase; padding:10px;
+          border:3px solid var(--soft); border-radius:14px; font-family:inherit; color:var(--ink); outline:none; }
+  input:focus { border-color:var(--accent); }
+  button { margin-top:14px; width:100%; font-size:20px; font-weight:800; border:0; border-radius:14px; padding:12px;
+           background:var(--go); color:#fff; border-bottom:4px solid rgba(0,0,0,.2); cursor:pointer; font-family:inherit; }
+  button:disabled { opacity:.6; }
+  .err { color:var(--err); font-weight:700; min-height:1.4em; margin-top:10px; }
+  .small { margin-top:18px; font-size:14px; opacity:.8; }
+  a { color:#4b3aa8; }
+</style>
+</head>
+<body>
+<form class="card" id="f">
+  <h1>¡Hola! 👋</h1>
+  <p>Type the class code your teacher gave you.</p>
+  <input id="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" placeholder="ABC123" aria-label="Class code" required>
+  <button id="go">Play</button>
+  <div class="err" id="err" role="alert"></div>
+  <div class="small">Teacher? <a id="teach" href="/teachers">Sign in here</a></div>
+</form>
+<script>
+  const params = new URLSearchParams(location.search);
+  const next = params.get("next") || "/";
+  const safe = next.startsWith("/") && !next.startsWith("//") ? next : "/";
+  document.getElementById("teach").href = "/auth/google?next=" + encodeURIComponent(safe);
+  const code = document.getElementById("code");
+  if (params.get("code")) {
+    code.value = params.get("code");
+    document.getElementById("err").textContent = "That code didn't work. Check it with your teacher.";
+  }
+  document.getElementById("f").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("go"), err = document.getElementById("err");
+    btn.disabled = true; err.textContent = "";
+    try {
+      const r = await fetch("/api/join", { method: "POST", headers: { "content-type": "application/json" },
+                                            body: JSON.stringify({ code: code.value }) });
+      const d = await r.json();
+      if (d.ok) { location.href = safe; return; }
+      err.textContent = d.error || "That code didn't work.";
+    } catch { err.textContent = "Couldn't reach the server. Try again?"; }
+    btn.disabled = false;
+  });
+</script>
+</body>
+</html>
