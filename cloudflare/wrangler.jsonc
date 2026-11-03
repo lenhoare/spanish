@@ -1,0 +1,68 @@
+// Cloudflare Worker for Lesson Island. Full guide: cloudflare/README.md
+//
+//   npm run deploy           -> the live site (top-level settings below: everything OFF, open website)
+//   npm run deploy:staging   -> a separate test site (env.staging: features ON, Stripe test mode)
+//
+// Feature switches are plain text "on"/"off". Secrets (client secrets, Stripe keys) are never
+// written here - set them with `npx wrangler secret put NAME` (add `--env staging` for staging).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lesson-island",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+
+  // The Godot web export (plus config.json, lessons/, editor.html - see tools/prepare_site.mjs).
+  "assets": {
+    "directory": "../build/web",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+
+  // ---------------------------------------------------------------- LIVE SITE: everything off
+  "vars": {
+    "FEATURE_AUTH": "off",            // master switch: Google sign-in for teachers (off = all below off too)
+    "FEATURE_PAYMENTS": "off",        // Stripe monthly subscriptions for teachers
+    "FEATURE_REQUIRE_ACCESS": "off",  // game needs a class code or a signed-in teacher
+    "FEATURE_PROTECT_EDITOR": "off",  // editor.html needs a Google sign-in from ADMIN_EMAILS
+    "PUBLIC_URL": "",                 // e.g. "https://lessonisland.co.uk" once you have a domain (blank = use the request's address)
+    "ADMIN_EMAILS": "",               // comma-separated
+    "COMPLIMENTARY_EMAILS": "",       // teachers who get a free plan (e.g. your wife's colleagues)
+    "STRIPE_PRICE_ID": "",            // price_... of the monthly plan
+    "STRIPE_TRIAL_DAYS": "0",
+    "STRIPE_AUTOMATIC_TAX": "off"
+  },
+  // Created automatically on the first deploy. Unused while FEATURE_AUTH is off.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "lesson-island", "migrations_dir": "migrations" }
+  ],
+  // Game files over 25 MiB (Godot's index.wasm) - see "npm run upload-large".
+  "r2_buckets": [
+    { "binding": "LARGE_FILES", "bucket_name": "lesson-island-files" }
+  ],
+
+  "env": {
+    // ---------------------------------------------------------------- STAGING: try the features
+    "staging": {
+      "name": "lesson-island-staging",
+      "vars": {
+        "FEATURE_AUTH": "on",
+        "FEATURE_PAYMENTS": "on",
+        "FEATURE_REQUIRE_ACCESS": "on",
+        "FEATURE_PROTECT_EDITOR": "off",
+        "PUBLIC_URL": "",
+        "ADMIN_EMAILS": "",
+        "COMPLIMENTARY_EMAILS": "",
+        "STRIPE_PRICE_ID": "",        // a TEST-mode price_...
+        "STRIPE_TRIAL_DAYS": "0",
+        "STRIPE_AUTOMATIC_TAX": "off"
+      },
+      "d1_databases": [
+        { "binding": "DB", "database_name": "lesson-island-staging", "migrations_dir": "migrations" }
+      ],
+      "r2_buckets": [
+        { "binding": "LARGE_FILES", "bucket_name": "lesson-island-files" }
+      ]
+    }
+  }
+}

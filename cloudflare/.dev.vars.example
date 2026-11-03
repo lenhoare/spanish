@@ -1,0 +1,16 @@
+# Secrets for running locally with `npm run dev:features`.
+# Copy this file to `.dev.vars.staging` (never commit that file - it's in .gitignore) and fill it in.
+# For the real sites use `npx wrangler secret put NAME` (add `--env staging` for staging) instead.
+
+# Any long random string. Make one with:  node -e "console.log(crypto.randomUUID()+crypto.randomUUID())"
+SESSION_SECRET=
+
+# Google Cloud console -> APIs & Services -> Credentials -> OAuth client ID (Web application)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Stripe dashboard (TEST mode) -> Developers -> API keys / Webhooks
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+# Optional: overrides the price in wrangler.jsonc
+# STRIPE_PRICE_ID=price_...

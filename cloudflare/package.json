@@ -1,0 +1,20 @@
+{
+  "name": "lesson-island-cloudflare",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Worker that hosts Lesson Island, with optional teacher sign-in and subscriptions.",
+  "scripts": {
+    "site": "node ../tools/prepare_site.mjs",
+    "dev": "npm run site && wrangler dev --env=\"\"",
+    "dev:features": "npm run site && wrangler d1 migrations apply DB --local --env staging && wrangler dev --env staging",
+    "deploy": "npm run site && wrangler deploy --env=\"\" && npm run upload-large",
+    "deploy:staging": "npm run site && wrangler deploy --env staging && npm run upload-large",
+    "upload-large": "node scripts/upload_large.mjs",
+    "db:migrate": "wrangler d1 migrations apply DB --remote --env=\"\"",
+    "db:migrate:staging": "wrangler d1 migrations apply DB --remote --env staging",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "devDependencies": {
+    "wrangler": "4.157.0"
+  }
+}
