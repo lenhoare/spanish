@@ -51,7 +51,7 @@ Real hosting (GitHub Pages, Netlify, Cloudflare Pages) gives proper HTTPS with n
 
 ## Dev tools
 - `godot --path . -- --autotest` plays through the game and saves screenshots to
-  `%APPDATA%\Godot\app_userdata\Lesson Island\shots` (add `--phone --touch` with `--resolution 844x390` for a phone layout pass).
+  `%APPDATA%\Godot\app_userdata\Ms Cleary\shots` (add `--phone --touch` with `--resolution 844x390` for a phone layout pass).
 - `godot --path . -- --islandshots` visits every island and screenshots it.
 - `node tools/webtest.mjs http://localhost:8060/index.html <outdir> [phone]` smoke-tests the web build in headless Chrome
   (only ever one test Chrome; it is always closed afterwards).
