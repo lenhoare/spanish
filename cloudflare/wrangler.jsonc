@@ -67,7 +67,7 @@
         "COMPLIMENTARY_EMAILS": "",
         "MICROSOFT_TENANT": "common",
         "MICROSOFT_TRUSTED_TENANTS": "",
-        "STRIPE_PRICE_ID": "",        // a TEST-mode price_...
+        "STRIPE_PRICE_ID": "price_1UYB6XCPY2fH7NFfGO3ymq2S",  // TEST-mode (sandbox) price: "Ms Cleary for teachers", £3/month
         "STRIPE_TRIAL_DAYS": "0",
         "STRIPE_AUTOMATIC_TAX": "off"
       },
