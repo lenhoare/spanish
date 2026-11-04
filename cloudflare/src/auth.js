@@ -34,8 +34,9 @@ export const PROVIDERS = {
   },
 
   microsoft: {
-    // MICROSOFT_TENANT: "organizations" (any school/work account - the default), "common" (also
-    // personal accounts), or one school's tenant id to allow only that school.
+    // MICROSOFT_TENANT: "common" (school/work and personal accounts - the default),
+    // "organizations" (school/work only), or one school's tenant id to allow only that school.
+    // The Microsoft app's "supported account types" must allow the same accounts.
     authorize: (env) => `https://login.microsoftonline.com/${msTenant(env)}/oauth2/v2.0/authorize`,
     token: (env) => `https://login.microsoftonline.com/${msTenant(env)}/oauth2/v2.0/token`,
     clientId: (env) => env.MICROSOFT_CLIENT_ID,
@@ -58,7 +59,7 @@ export const PROVIDERS = {
 };
 
 function msTenant(env) {
-  return String(env.MICROSOFT_TENANT || "organizations").trim();
+  return String(env.MICROSOFT_TENANT || "common").trim();
 }
 
 function callbackUrl(env, request, provider) {

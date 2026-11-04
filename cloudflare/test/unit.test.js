@@ -109,8 +109,10 @@ test("Microsoft: issuer, tenant and personal-account checks", () => {
   assert.equal(ms({ email: "a@b.c" }, { MICROSOFT_TENANT: TID }).error, undefined);
   const consumer = "9188040d-6c67-4c5b-b112-36a304b66dad";
   const personal = { tid: consumer, iss: `https://login.microsoftonline.com/${consumer}/v2.0`, email: "x@outlook.com" };
-  assert.equal(PROVIDERS.microsoft.identity(personal, {}).error, "personal account");
-  assert.equal(PROVIDERS.microsoft.identity(personal, { MICROSOFT_TENANT: "common" }).error, undefined);
+  // Personal accounts: allowed by default ("common"), refused when set to school/work only.
+  assert.equal(PROVIDERS.microsoft.identity(personal, {}).error, undefined);
+  assert.equal(PROVIDERS.microsoft.identity(personal, {}).emailTrusted, false);
+  assert.equal(PROVIDERS.microsoft.identity(personal, { MICROSOFT_TENANT: "organizations" }).error, "personal account");
   assert.equal(ms({}).error, "no email address");
 });
 
