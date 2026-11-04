@@ -30,7 +30,7 @@
     "PUBLIC_URL": "",                 // leave blank: the site uses whichever address it was visited on
     "ADMIN_EMAILS": "",               // comma-separated
     "COMPLIMENTARY_EMAILS": "",       // teachers who get a free plan (e.g. your wife's colleagues)
-    "MICROSOFT_TENANT": "organizations",  // any school/work Microsoft account; or one school's tenant id to allow only that school
+    "MICROSOFT_TENANT": "common",     // "common" = school/work AND personal Microsoft accounts; "organizations" = school/work only; or one school's tenant id
     "MICROSOFT_TRUSTED_TENANTS": "",  // tenant ids of schools whose emails count for ADMIN/COMPLIMENTARY_EMAILS (see README)
     "STRIPE_PRICE_ID": "",            // price_... of the monthly plan
     "STRIPE_TRIAL_DAYS": "0",
@@ -65,7 +65,7 @@
         "PUBLIC_URL": "",
         "ADMIN_EMAILS": "",
         "COMPLIMENTARY_EMAILS": "",
-        "MICROSOFT_TENANT": "organizations",
+        "MICROSOFT_TENANT": "common",
         "MICROSOFT_TRUSTED_TENANTS": "",
         "STRIPE_PRICE_ID": "",        // a TEST-mode price_...
         "STRIPE_TRIAL_DAYS": "0",

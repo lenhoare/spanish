@@ -152,7 +152,8 @@ sign-in cookies. If you ever change it, everyone is signed out (harmless).
    which creates your own directory (it asks for a card as an identity check).
 2. **Applications → App registrations → New registration**:
    - Name: `Ms Cleary`
-   - Supported account types: **Accounts in any organizational directory (Any Microsoft Entra ID tenant - Multitenant)**
+   - Supported account types: **Multiple Entra ID tenants**, allow **all tenants**, **and personal Microsoft accounts**
+     (wording varies: "Accounts in any organizational directory and personal Microsoft accounts")
    - Redirect URI: platform **Web**, `https://staging.mscleary.com/auth/microsoft/callback`
    - **Register**.
 3. On the app's **Overview**, copy **Application (client) ID** → staging secret `MICROSOFT_CLIENT_ID`.
@@ -173,8 +174,11 @@ client ID in):
 `https://login.microsoftonline.com/organizations/adminconsent?client_id=YOUR_CLIENT_ID`
 
 **Optional settings** (in `wrangler.jsonc`, staging section):
-- `MICROSOFT_TENANT`: `"organizations"` (default: any school or work account) or one school's
-  tenant ID to allow only that school.
+- `MICROSOFT_TENANT`: `"common"` (school/work **and** personal Microsoft accounts, as set now),
+  `"organizations"` (school/work only), or one school's tenant ID to allow only that school.
+  Whatever you pick, the app's **Supported account types** in Microsoft must allow the same accounts.
+  Personal Microsoft accounts can sign in and use everything, but their emails don't count for
+  `ADMIN_EMAILS` / `COMPLIMENTARY_EMAILS` (use Google or a school account for those).
 - `MICROSOFT_TRUSTED_TENANTS`: a school's tenant ID, so its staff emails count for `ADMIN_EMAILS`
   and `COMPLIMENTARY_EMAILS`. (Microsoft schools can put any email on an account without proving
   it, so these lists ignore Microsoft emails unless Microsoft confirms them (`xms_edov`) or the
