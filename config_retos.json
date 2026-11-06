@@ -13,6 +13,8 @@
   "beacons": false,
   "text_scale": 0.7,
   "text_scale_touch": 0.9,
+  "sparkles_desktop": true,
+  "sparkles_mobile": false,
   "world_scale": 1.5,
   "diamond": true,
   "marking": "lessons/igcse/marking_es.json",

@@ -25,6 +25,8 @@ const DEFAULT_CONFIG := {
 	"beacons": true,
 	"text_scale": 0.7,
 	"text_scale_touch": 0.9,
+	"sparkles_desktop": true,
+	"sparkles_mobile": false,
 	"course": [{"file": "lessons/sample_lesson.json", "title": "Sample", "theme": "meadow"}],
 }
 const PROGRESS_FILE := "user://progress.json"
@@ -117,6 +119,12 @@ func heroes() -> Array:
 
 func text_scale() -> float:
 	return float(config.get("text_scale_touch", 0.9)) if is_touch() else float(config.get("text_scale", 0.7))
+
+
+## Whether "sparkle" islands get their sparkles (glitter, twinkles, hero trail, glow, glinting
+## sea) on this device. They're heavy for phones, so each kind of device has its own setting.
+func sparkles_on() -> bool:
+	return bool(config.get("sparkles_mobile", false)) if is_touch() else bool(config.get("sparkles_desktop", true))
 
 
 func reset_progress() -> void:
