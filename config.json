@@ -12,7 +12,7 @@
   "beacons": false,
   "text_scale": 0.7,
   "text_scale_touch": 0.9,
-  "sparkles_desktop": true,
+  "sparkles_desktop": false,
   "sparkles_mobile": false,
 
   "course": [
