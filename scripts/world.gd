@@ -288,7 +288,7 @@ func build(lesson: Dictionary, theme_name := "meadow") -> void:
 	if Game.config.has("course") and Game.current_island < Game.config.course.size():
 		ce = Game.config.course[Game.current_island]
 	mood_night = bool(ce.get("night", false))
-	mood_sparkle = bool(ce.get("sparkle", false))
+	mood_sparkle = bool(ce.get("sparkle", false)) and Game.sparkles_on()   # see sparkles_desktop / sparkles_mobile
 	var rb = ce.get("rainbow", false)
 	if mood_night:
 		theme = Atmosphere.night_theme(theme)

@@ -17,6 +17,8 @@ list of islands. Edit it and re-upload - no rebuild needed.
   "accents": "lenient",             // "lenient": jugue counts for jugué (with a gentle note); "strict": it doesn't
   "text_scale": 0.7,                // whiteboard text size on computers
   "text_scale_touch": 0.9,          // ...and on phones
+  "sparkles_desktop": true,         // sparkles on "sparkle" islands, on computers...
+  "sparkles_mobile": false,         // ...and on phones/tablets (off: they can slow phones down)
   "course": [                       // the islands, in order
     { "file": "lessons/spanish/01_somos_asi.json", "title": "Somos así", "theme": "meadow" }
   ]

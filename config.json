@@ -12,6 +12,8 @@
   "beacons": false,
   "text_scale": 0.7,
   "text_scale_touch": 0.9,
+  "sparkles_desktop": false,
+  "sparkles_mobile": false,
 
   "course": [
     { "file": "lessons/spanish/01_somos_asi.json",          "title": "Somos así",              "theme": "meadow" },
