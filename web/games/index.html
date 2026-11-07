@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teacher Games · Ms Cleary</title>
+<!--
+  The Teacher Games page (mscleary.com/games/). The list of games is in games.json next to this
+  file (web/games/games.json in the repository). Each game is published from its own repository
+  to mscleary.com/games/<id>/ - see cloudflare/game-template/README.md.
+-->
+<style>
+  :root { --bg:#6a5acd; --card:#fffaf0; --ink:#2d2a4a; --accent:#7c6cf0; --head:#4b3aa8; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; padding:28px 16px 40px; background:var(--bg); color:var(--ink);
+         font-family:system-ui,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:980px; margin:0 auto; }
+  h1 { margin:0 0 4px; color:#fff; font-size:34px; text-shadow:0 3px 0 rgba(0,0,0,.2); }
+  .sub { color:#fff; opacity:.92; margin:0 0 22px; font-size:17px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:18px; }
+  .game { display:flex; flex-direction:column; text-decoration:none; color:var(--ink); background:var(--card);
+          border:5px solid var(--c, var(--accent)); border-radius:22px; overflow:hidden;
+          box-shadow:0 8px 20px rgba(20,0,60,.35); transition:transform .12s ease; }
+  .game:hover, .game:focus-visible { transform:translateY(-4px); outline:none; }
+  .art { height:120px; display:flex; align-items:center; justify-content:center; font-size:64px;
+         background:var(--c, var(--accent)); }
+  .art img { width:100%; height:100%; object-fit:cover; }
+  .body { padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; }
+  .body h2 { margin:0 0 6px; font-size:20px; color:var(--head); }
+  .body p { margin:0 0 12px; line-height:1.4; flex:1; }
+  .play { align-self:flex-start; font-weight:800; color:#fff; background:var(--c, var(--accent));
+          border-radius:12px; padding:7px 16px; border-bottom:4px solid rgba(0,0,0,.2); }
+  .empty { background:var(--card); border:5px solid var(--accent); border-radius:22px; padding:26px 22px;
+           text-align:center; box-shadow:0 8px 20px rgba(20,0,60,.35); }
+  .empty .big { font-size:54px; margin-bottom:6px; }
+  .empty h2 { margin:0 0 6px; color:var(--head); }
+  .back { display:inline-block; margin-top:24px; color:#fff; font-weight:700; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Teacher Games</h1>
+  <p class="sub">Games to play together in class.</p>
+  <div id="list" class="grid" aria-live="polite"></div>
+  <a class="back" href="/">← Back to the islands</a>
+</main>
+<script>
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+const safeColor = (c) => /^#[0-9a-f]{3,8}$/i.test(c || "") ? c : "";
+const safeUrl = (u) => /^(\/|https:\/\/)/.test(u || "") && !/^\/\//.test(u) ? u : "";
+
+function empty(title, text) {
+  const list = document.getElementById("list");
+  list.className = "";
+  list.innerHTML = `<div class="empty"><div class="big">🎲</div><h2>${esc(title)}</h2><p>${esc(text)}</p></div>`;
+}
+
+fetch("games.json?t=" + Date.now(), { cache: "no-store" })
+  .then((r) => r.ok ? r.json() : Promise.reject())
+  .then((data) => {
+    const games = (data.games || []).filter((g) => g && g.id && g.title && g.hidden !== true);
+    if (!games.length) return empty("Coming soon!", "New games are on their way.");
+    document.getElementById("list").innerHTML = games.map((g) => {
+      const url = safeUrl(g.url) || `/games/${encodeURIComponent(g.id)}/`;
+      const color = safeColor(g.color);
+      const art = g.image ? `<img src="${esc(safeUrl(g.image) || "")}" alt="">` : esc(g.emoji || "🎮");
+      return `<a class="game" href="${esc(url)}" ${color ? `style="--c:${color}"` : ""}>
+        <div class="art">${art}</div>
+        <div class="body"><h2>${esc(g.title)}</h2><p>${esc(g.description || "")}</p><span class="play">Play ▶</span></div>
+      </a>`;
+    }).join("");
+  })
+  .catch(() => empty("Couldn't load the games", "Please refresh the page to try again."));
+</script>
+</body>
+</html>

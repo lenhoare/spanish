@@ -22,7 +22,7 @@ export async function grantAccess(env, data) {
 const OPEN = [/^\/join$/, /^\/teachers$/, /^\/auth\//, /^\/api\//, /^\/favicon\.ico$/, /^\/robots\.txt$/];
 
 function isPage(request, path) {
-  return path === "/" || path.endsWith(".html") || request.headers.get("sec-fetch-mode") === "navigate";
+  return path.endsWith("/") || path.endsWith(".html") || request.headers.get("sec-fetch-mode") === "navigate";
 }
 
 /**

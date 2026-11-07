@@ -1,0 +1,106 @@
+# Publishes this game to https://mscleary.com/games/<GAME_ID>/ (and staging.mscleary.com).
+# Copy this file into the game's repository as .github/workflows/publish.yml
+# Setup steps: see README.md in the spanish repository, cloudflare/game-template/.
+#
+#   push to main           -> builds and publishes
+#   "Run workflow" button  -> the same, on demand
+#
+# Works for both kinds of game:
+#   - HTML games: the files in public/ (with public/index.html) are published as they are.
+#   - Godot games (project.godot in the repository root): exported with the "Web" export preset.
+
+name: Publish game
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+env:
+  # The address: mscleary.com/games/<GAME_ID>/. Defaults to the repository name; to choose
+  # another, add a repository *variable* GAME_ID (Settings -> Secrets and variables -> Actions -> Variables).
+  GAME_ID: ${{ vars.GAME_ID || github.event.repository.name }}
+  GODOT_VERSION: "4.6.2"
+  R2_BUCKET: lesson-island-files
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check settings
+        run: |
+          if ! [[ "$GAME_ID" =~ ^[a-z0-9][a-z0-9-]{0,40}$ ]]; then
+            echo "::error::GAME_ID '$GAME_ID' must be lowercase letters, numbers and hyphens (e.g. battleships)."; exit 1
+          fi
+          for s in R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY CLOUDFLARE_ACCOUNT_ID; do
+            if [ -z "${!s}" ]; then echo "::error::Add the $s repository secret first (see the setup steps)."; exit 1; fi
+          done
+          echo "Publishing to https://mscleary.com/games/$GAME_ID/"
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # ---------------------------------------------------------------- HTML games
+      - name: Collect the HTML game
+        if: hashFiles('project.godot') == ''
+        run: |
+          if [ ! -f public/index.html ]; then
+            echo "::error::Put the game's files in a folder called public/, with the start page at public/index.html."; exit 1
+          fi
+          mkdir -p dist && cp -R public/. dist/
+
+      # ---------------------------------------------------------------- Godot games
+      - name: Cache Godot
+        if: hashFiles('project.godot') != ''
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-web
+
+      - name: Install Godot
+        if: hashFiles('project.godot') != '' && steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          R=https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable
+          mkdir -p ~/godot && cd ~/godot
+          curl -sSfL -o godot.zip "$R/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q godot.zip && rm godot.zip
+          curl -sSfL -o templates.tpz "$R/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          T=~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          mkdir -p "$T"
+          unzip -ojq templates.tpz templates/web_nothreads_release.zip templates/web_release.zip templates/version.txt -d "$T"
+          rm templates.tpz
+
+      - name: Export the Godot game
+        if: hashFiles('project.godot') != ''
+        run: |
+          mkdir -p dist
+          ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless --path . --import 2>&1 | tail -3 || true
+          ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless --path . --export-release "Web" dist/index.html 2>&1 | grep -vE "savepack|Storing File" || true
+          test -f dist/index.wasm || { echo "::error::Godot export failed. Is there an export preset called \"Web\"?"; exit 1; }
+
+      # ---------------------------------------------------------------- publish
+      - name: Upload to mscleary.com/games/${{ env.GAME_ID }}/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          # R2 doesn't use the newer AWS checksum headers.
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+          ENDPOINT: https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
+        run: |
+          test -f dist/index.html || { echo "::error::Nothing to publish (no index.html)."; exit 1; }
+          # --delete removes files this game no longer has, inside games/$GAME_ID/ only.
+          aws s3 sync dist/ "s3://$R2_BUCKET/games/$GAME_ID/" --delete --endpoint-url "$ENDPOINT" --only-show-errors
+          echo "### Published to https://mscleary.com/games/$GAME_ID/ :rocket:" >> "$GITHUB_STEP_SUMMARY"
