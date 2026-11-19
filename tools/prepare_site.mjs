@@ -1,5 +1,6 @@
 // Gets build/web ready to upload, after the Godot export (see README "Build the web version"):
-//   - copies config.json, config_retos.json, games.json, the lessons folder and the editor
+//   - copies config.json, config_retos.json, games.json, the lessons folder, the editor and the
+//     Teacher Games page (web/games/)
 //     next to index.html (the game fetches these from the server, so they can change without
 //     a rebuild)
 //   - moves any file over Cloudflare's 25 MiB per-file limit (usually index.wasm) to
@@ -33,6 +34,9 @@ function copy(rel, filter = () => true) {
 for (const f of ["config.json", "config_retos.json", "games.json"]) copy(f);
 copy("lessons", (p) => p.endsWith(".json"));
 fs.copyFileSync(path.join(ROOT, "web", "editor.html"), path.join(WEB, "editor.html"));
+// The Teacher Games page (mscleary.com/games/) and its list. The games themselves are published
+// to R2 from their own repositories (cloudflare/game-template/README.md).
+fs.cpSync(path.join(ROOT, "web", "games"), path.join(WEB, "games"), { recursive: true });
 
 fs.mkdirSync(LARGE, { recursive: true });
 let moved = 0;

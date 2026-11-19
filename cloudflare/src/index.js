@@ -98,25 +98,62 @@ const TYPES = {
   wasm: "application/wasm",
   pck: "application/octet-stream",
   js: "text/javascript; charset=utf-8",
+  mjs: "text/javascript; charset=utf-8",
   json: "application/json; charset=utf-8",
   html: "text/html; charset=utf-8",
+  css: "text/css; charset=utf-8",
+  txt: "text/plain; charset=utf-8",
+  svg: "image/svg+xml",
   png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  gif: "image/gif",
+  webp: "image/webp",
+  ico: "image/x-icon",
   ogg: "audio/ogg",
+  mp3: "audio/mpeg",
+  wav: "audio/wav",
+  m4a: "audio/mp4",
+  mp4: "video/mp4",
+  webm: "video/webm",
+  woff: "font/woff",
+  woff2: "font/woff2",
+  ttf: "font/ttf",
+  otf: "font/otf",
 };
 
 async function serveFile(request, env, path) {
   const res = await env.ASSETS.fetch(request);
   if (res.status !== 404 || !env.LARGE_FILES || !["GET", "HEAD"].includes(request.method)) return res;
 
-  // Files over Cloudflare's 25 MiB asset limit (usually Godot's index.wasm, maybe index.pck)
-  // live in R2 instead - tools/prepare_site.mjs moves them and `npm run upload-large` uploads them.
-  const key = decodeURIComponent(path.replace(/^\/+/, ""));
+  // R2 holds two kinds of file that aren't in the uploaded site:
+  //  - files over Cloudflare's 25 MiB asset limit (Godot's index.wasm) - tools/prepare_site.mjs
+  //    moves them and `npm run upload-large` uploads them;
+  //  - teacher games under games/<name>/, each published from its own repository
+  //    (see cloudflare/game-template/README.md). The games list page itself, /games/, is part
+  //    of this site.
+  let key;
+  try {
+    key = decodeURIComponent(path.replace(/^\/+/, ""));
+  } catch {
+    return res;
+  }
+  if (key.startsWith("games/")) {
+    if (key.endsWith("/")) {
+      key += "index.html";
+    } else if (!key.split("/").pop().includes(".") && (await env.LARGE_FILES.head(key + "/index.html"))) {
+      // /games/battleships -> /games/battleships/ so the game's relative links work.
+      const url = new URL(request.url);
+      url.pathname += "/";
+      return Response.redirect(url.toString(), 301);
+    }
+  }
   const obj = await env.LARGE_FILES.get(key, { onlyIf: request.headers });
   if (!obj) return res;
   const headers = new Headers();
   obj.writeHttpMetadata(headers);
   headers.set("etag", obj.httpEtag);
-  headers.set("content-type", TYPES[key.split(".").pop()] || headers.get("content-type") || "application/octet-stream");
+  headers.set("content-type", TYPES[key.split(".").pop().toLowerCase()] || headers.get("content-type") || "application/octet-stream");
   // Same file names after every re-export, so always revalidate (cheap 304 when unchanged).
   headers.set("cache-control", "public, max-age=0, must-revalidate");
   if (!("body" in obj)) return new Response(null, { status: 304, headers });

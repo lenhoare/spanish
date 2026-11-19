@@ -236,6 +236,13 @@ for payments, terms. Schools will ask.
 
 ---
 
+## Teacher games
+
+Extra games (HTML or Godot) each live in **their own repository** and publish themselves to
+`mscleary.com/games/<name>/`. They're listed on the Teacher Games page, `mscleary.com/games/`
+(`web/games/` here), which the game's "Teacher Games" button opens once `games.json` has
+`"teacher_games": "/games/"`. Step-by-step setup: [`game-template/README.md`](game-template/README.md).
+
 ## For later / reference
 
 **Costs** (free tiers, November 2026): Workers 100,000 requests/day (a game load is ~15, so roughly
@@ -256,4 +263,6 @@ into `build/web`, then in `cloudflare/`: `npm install`, `npm run dev` → http:/
 - `src/classes.js`, `src/access.js`: classes, join codes, and the gate in front of the game
 - `src/pages/`: the `/teachers` and `/join` pages
 - `migrations/`: database tables (applied automatically on each publish)
-- `../tools/prepare_site.mjs`: copies config/lessons/editor next to the game, moves big files aside
+- `../tools/prepare_site.mjs`: copies config/lessons/editor/games page next to the game, moves big files aside
+- `game-template/`: the publish workflow and setup guide for teacher games in their own repositories
+- `../web/games/`: the Teacher Games page and its list (`games.json`)
